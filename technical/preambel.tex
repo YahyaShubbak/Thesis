@@ -1,0 +1,168 @@
+\documentclass[
+  ukcolor,       % remove for less red,
+  BCOR=12mm,     % 12mm binding corrections, adjust to fit your binding
+  parskip=half,  % new paragraphs start with half line vertical space
+  open=any,      % chapters start on both odd and even pages
+  cleardoublepage=plain,  % no header/footer on blank pages
+]{technical/agethesis}
+
+
+% Warning, if another latex run is needed
+\usepackage[aux]{rerunfilecheck}
+
+% just list chapters and sections in the toc, not subsections or smaller
+\setcounter{tocdepth}{1}
+
+\graphicspath{
+{Abbildungen/},
+{Abbildungen/01_Einfuehrung/},
+{Abbildungen/02_Theorie/},
+{Abbildungen/03_Exp/},
+{Abbildungen/04_Ergebnisse/},
+{Abbildungen/05_Auswertung/},
+{Abbildungen/06_Diskussion/}
+}
+
+%------------------------------------------------------------------------------
+%------------------------------ Fonts, Unicode, Language ----------------------
+%------------------------------------------------------------------------------
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}  % -- becomes en-dash etc.
+
+% load english (for abstract) and ngerman language
+% the main language has to come last
+\usepackage[american, ngerman]{babel}
+
+% intelligent quotation marks, language and nesting sensitive
+\usepackage[autostyle]{csquotes}
+
+% microtypographical features, makes the text look nicer on the small scale
+\usepackage{microtype}
+
+%------------------------------------------------------------------------------
+%------------------------ Math Packages and settings --------------------------
+%------------------------------------------------------------------------------
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% Enable Unicode-Math and follow the ISO-Standards for typesetting math
+\usepackage[
+  math-style=ISO,
+  bold-style=ISO,
+  sans-style=italic,
+  nabla=upright,
+  partial=upright,
+  warnings-off={mathtools-colon,mathtools-overbracket}, % suppress some unnecessary warnings
+]{unicode-math}
+\setmathfont{Latin Modern Math}
+
+% nice, small fracs for the text with \sfrac{}{}
+\usepackage{xfrac}
+
+
+%------------------------------------------------------------------------------
+%---------------------------- Numbers and Units -------------------------------
+%------------------------------------------------------------------------------
+
+\usepackage[
+  locale=DE,
+  exponent-product=\cdot,
+  separate-uncertainty=true,
+  per-mode=symbol-or-fraction,
+]{siunitx}
+
+%------------------------------------------------------------------------------
+%-------------------------------- tables  -------------------------------------
+%------------------------------------------------------------------------------
+
+\usepackage{booktabs}       % \toprule, \midrule, \bottomrule, etc
+
+%------------------------------------------------------------------------------
+%-------------------------------- graphics -------------------------------------
+%------------------------------------------------------------------------------
+
+\usepackage{graphicx}
+% currently broken
+% \usepackage{grffile}
+
+% allow figures to be placed in the running text by default:
+\usepackage{scrhack}
+\usepackage{float}
+\floatplacement{figure}{htbp}
+\floatplacement{table}{htbp}
+
+% keep figures and tables in the section
+\usepackage[section, below]{placeins}
+
+% allows to include PDFs as full pages
+\usepackage{pdfpages}
+
+% Set the PDF Version of this document to 1.7 (1.4 is the current default)
+% This is needed so that PDFs with Version >1.5 can be included
+\pdfvariable minorversion=7
+
+
+%------------------------------------------------------------------------------
+%---------------------- customize list environments ---------------------------
+%------------------------------------------------------------------------------
+
+\usepackage{enumitem}
+
+%------------------------------------------------------------------------------
+%------------------------------ Bibliographie ---------------------------------
+%------------------------------------------------------------------------------
+
+\usepackage[
+  backend=biber,   % use modern biber backend
+  autolang=hyphen, % load hyphenation rules for if language of bibentry is not
+                   % german, has to be loaded with \setotherlanguages
+                   % in the references.bib use langid={en} for english sources
+
+	%sorting=nyt,  % try out those 4 lines
+	%style=alphabetic,
+%%	style=numeric-comp,
+	%backend=biber
+
+]{biblatex}
+\addbibresource{references.bib}  % the bib file to use
+\DefineBibliographyStrings{german}{andothers = {{et\,al\adddot}}}  % replace u.a. with et al.
+
+
+% Last packages, do not change order or insert new packages after these ones
+\usepackage[
+    pdfusetitle,
+    unicode,
+    linkbordercolor=ukruby,
+    citebordercolor=ukruby,
+]{hyperref}
+
+%\usepackage[
+	%colorlinks=true,
+	%linkcolor=black,
+	%citecolor=black,
+	%urlcolor=black,
+%]{hyperref}
+
+\usepackage{bookmark}
+\usepackage[shortcuts]{extdash}
+
+%------------------------------------------------------------------------------
+%-------------------------    Angaben zur Arbeit   ----------------------------
+%------------------------------------------------------------------------------
+
+\author{Abdulrahman Shubbak}
+\title{Titel}
+\date{\today} %TODO
+\birthplace{Kassel}
+\supervisor{Unter~Anleitung~von~MSc.~Adrian~Peter~Krone~und~MSc.~Johannes~Heinrich~Viehmann}
+\chair{AG Ehresmann}
+\division{Institut für Physik\\FB 10 - Mathematik und Naturwissenschaften}
+\thesisclass{Master of Science} % Change to Master of Science for master thesis
+\submissiondate{\today} %TODO
+\firstcorrector{Prof.~Dr.~Erstgutachter} %TODO
+\secondcorrector{Prof.~Dr.~Zweitgutachter} %TODO
+
+% uk logo on top of the titlepage
+\titlehead{\centering\includegraphics[height=2.5cm]{Abbildungen/logos/uk-logo.png}}
