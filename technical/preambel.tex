@@ -13,15 +13,6 @@
 % just list chapters and sections in the toc, not subsections or smaller
 \setcounter{tocdepth}{1}
 
-\graphicspath{
-{Abbildungen/},
-{Abbildungen/01_Einfuehrung/},
-{Abbildungen/02_Theorie/},
-{Abbildungen/03_Exp/},
-{Abbildungen/04_Ergebnisse/},
-{Abbildungen/05_Auswertung/},
-{Abbildungen/06_Diskussion/}
-}
 
 %------------------------------------------------------------------------------
 %------------------------------ Fonts, Unicode, Language ----------------------
@@ -119,14 +110,12 @@
   autolang=hyphen, % load hyphenation rules for if language of bibentry is not
                    % german, has to be loaded with \setotherlanguages
                    % in the references.bib use langid={en} for english sources
-
 	%sorting=nyt,  % try out those 4 lines
 	%style=alphabetic,
 %%	style=numeric-comp,
 	%backend=biber
-
 ]{biblatex}
-\addbibresource{references.bib}  % the bib file to use
+\addbibresource{technical/references.bib}  % the bib file to use
 \DefineBibliographyStrings{german}{andothers = {{et\,al\adddot}}}  % replace u.a. with et al.
 
 
@@ -166,3 +155,13 @@
 
 % uk logo on top of the titlepage
 \titlehead{\centering\includegraphics[height=2.5cm]{Abbildungen/logos/uk-logo.png}}
+
+\graphicspath{
+{Abbildungen/},
+{Abbildungen/01_Einfuehrung/},
+{Abbildungen/02_Theorie/},
+{Abbildungen/03_Exp/},
+{Abbildungen/04_Ergebnisse/},
+{Abbildungen/05_Auswertung/},
+{Abbildungen/06_Diskussion/}
+}
