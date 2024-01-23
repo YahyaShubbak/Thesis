@@ -1,2 +1,8 @@
-build/
+technical/build/
 *.swp
+*.aux
+*.bcf
+*.log
+*.pdf
+*.run.xml
+*.toc
