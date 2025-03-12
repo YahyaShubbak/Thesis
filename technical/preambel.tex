@@ -7,6 +7,15 @@
 ]{technical/agethesis}
 
 
+% This project is meant to be run with LuaLaTeX, but it should also work with pdfLaTeX
+% When setting commands that are only available in LuaLaTeX, use the following:
+%   \ifx\luatexversion\undefined
+        % pdfLaTeX
+%   \else
+        % LuaLaTeX
+%   \fi
+
+
 % Warning, if another latex run is needed
 \usepackage[aux]{rerunfilecheck}
 
@@ -17,8 +26,18 @@
 %------------------------------------------------------------------------------
 %------------------------------ Fonts, Unicode, Language ----------------------
 %------------------------------------------------------------------------------
-\usepackage{fontspec}
-\defaultfontfeatures{Ligatures=TeX}  % -- becomes en-dash etc.
+
+% luaLaTeX
+\ifx\luatexversion\undefined
+    % pdfLaTeX
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+\else
+    % luaLaTeX
+    \usepackage{fontspec}
+    \defaultfontfeatures{Ligatures=TeX}  % -- becomes en-dash etc.
+\fi
+
 
 % load english (for abstract) and ngerman language
 % the main language has to come last
@@ -38,16 +57,20 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 
-% Enable Unicode-Math and follow the ISO-Standards for typesetting math
-\usepackage[
-  math-style=ISO,
-  bold-style=ISO,
-  sans-style=italic,
-  nabla=upright,
-  partial=upright,
-  warnings-off={mathtools-colon,mathtools-overbracket}, % suppress some unnecessary warnings
-]{unicode-math}
-\setmathfont{Latin Modern Math}
+ %Enable Unicode-Math and follow the ISO-Standards for typesetting math. Diable for pdfLaTeX.
+\ifx\luatexversion\undefined
+    % pdfLaTeX -- do nothing
+\else
+    \usepackage[
+        math-style=ISO,
+        bold-style=ISO,
+        sans-style=italic,
+        nabla=upright,
+        partial=upright,
+        warnings-off={mathtools-colon,mathtools-overbracket}, % suppress some unnecessary warnings
+        ]{unicode-math}
+    \setmathfont{Latin Modern Math} % or any other OpenType math font
+\fi
 
 % nice, small fracs for the text with \sfrac{}{}
 \usepackage{xfrac}
@@ -63,6 +86,13 @@
   separate-uncertainty=true,
   per-mode=symbol-or-fraction,
 ]{siunitx}
+\usepackage{physics}
+
+\ifx\luatexversion\undefined
+    % pdfLaTeX
+\else
+    \renewcommand{\vb}[1]{\symbf{#1}}
+\fi
 
 %------------------------------------------------------------------------------
 %-------------------------------- tables  -------------------------------------
@@ -92,7 +122,12 @@
 
 % Set the PDF Version of this document to 1.7 (1.4 is the current default)
 % This is needed so that PDFs with Version >1.5 can be included
-\pdfvariable minorversion=7
+% Disable for pdfLaTeX
+\ifx\luatexversion\undefined
+    % pdfLaTeX -- do nothing
+\else
+    \pdfvariable minorversion=7
+\fi
 
 
 %------------------------------------------------------------------------------
