@@ -85,6 +85,9 @@
   separate-uncertainty=true,
   per-mode=symbol-or-fraction,
 ]{siunitx}
+
+\DeclareSIUnit\angstrom{\text {Å}}
+
 \usepackage{physics}
 
 \ifx\luatexversion\undefined
@@ -134,8 +137,11 @@
 
 \usepackage{tikz}
 \usepackage{pgfplots}
-\usetikzlibrary{positioning}
+\usetikzlibrary{positioning, math, intersections, calc}
 
+\usetikzlibrary{external}
+\tikzexternalize[prefix=TikZ/]
+\pgfplotsset{compat=1.18}
 
 
 %------------------------------------------------------------------------------

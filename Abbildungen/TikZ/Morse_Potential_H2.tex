@@ -1,0 +1,48 @@
+
+\tikzmath{
+    function morse(\x, \De, \a, \re, \v1, \r1) {
+        return \v1 + \De * (1 - exp(-\a * (\x - (\re + \r1))))^2;
+    };
+    \DX = 4.52;  % = equil. En.
+    \DB = 4.1;  % = equil. En.
+    \rX = 0.741; % = equil. distance
+    \rB = 0.732; % = equil. distance
+    \a = 1.942; % spring const.
+    \aB = 2.014; % spring const.
+    \x1 = 0.2; % domain
+    \x2 = 3;   % domain
+    \r1 = 0.1; % translation of equil. distance
+    \v1 = 6;    % translation of equil. energy
+}
+
+
+\tikzmath{\x0 = 0.7; \x3 = 0.9; \x4 = 1.1;} % fixed points
+
+\begin{tikzpicture}
+    \begin{axis}[
+        %title={Morse Potential for $\mathrm{H_2}$ in the $X$ and $B$-States},
+        xlabel={$\sfrac{r}{\si{\angstrom}}$},
+        ylabel={$\sfrac{V(r)}{\si{\eV}}$},
+        ylabel style={rotate=-90},
+        domain=0.5:5, samples=100
+        ]
+        \addplot[name path = X, thick, samples=1000, domain=\x1:\x2]
+            {morse(x, \DX, \a, \rX, 0, 0)}
+            node[below,  pos=0.95]{$X$};
+        \addplot[name path = B, thick, red, samples=1000, domain=\x1 + \r1:\x2]
+            {morse(x, \DB, \aB, \rB, \v1,0)}
+            node[below, pos=0.95] {$B$};
+        % \draw[->, thick] let \p1 = (X), \p2 = (B) in (\p1) -- (\p2) ;
+
+        % \draw[->, dashed] 
+            % (axis cs: \x0 , {morse(\x0, \DX, \a, \rX, \v1, \r1)}) --
+            % (axis cs: \x0 , {morse(\x0, \DX, \a, \rX, 0, 0)});
+        % \draw[->, dotted] 
+            % (axis cs: \x3 , {morse(\x3, \DX, \a, \rX, \v1, \r1)}) --
+            % (axis cs: \x3, {morse(\x3, \DX, \a, \rX, 0, 0)});
+        % \draw[->, dashdotted] 
+            % (axis cs: \x4 , {morse(\x4, \DX, \a, \rX, \v1, \r1)}) --
+            % (axis cs: \x4 , {morse(\x4, \DX, \a, \rX, 0, 0)});
+    \end{axis}
+\end{tikzpicture}
+
