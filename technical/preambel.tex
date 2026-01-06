@@ -40,7 +40,7 @@
 
 % load english (for abstract) and ngerman language
 % the main language has to come last
-\usepackage[american, ngerman]{babel}
+\usepackage[ngerman, american]{babel}
 
 % intelligent quotation marks, language and nesting sensitive
 \usepackage[autostyle]{csquotes}
@@ -80,13 +80,14 @@
 %------------------------------------------------------------------------------
 
 \usepackage[
-  locale=DE,
+  locale=US,
   exponent-product=\cdot,
   separate-uncertainty=true,
   per-mode=symbol-or-fraction,
 ]{siunitx}
 
 \DeclareSIUnit\angstrom{\text {Å}}
+\DeclareSIUnit\pixel{px}  
 
 \usepackage{physics}
 
@@ -131,6 +132,8 @@
     \pdfvariable minorversion=7
 %\fi
 
+\usepackage{cprotect} % to include verb in caption \cprotect\caption{... \verb|trackpy|...}
+
 %------------------------------------------------------------------------------
 %--------------------------- TikZ and Pgfplots --------------------------------
 %------------------------------------------------------------------------------
@@ -164,7 +167,7 @@
 %%	style=numeric-comp,
 	%backend=biber
 ]{biblatex}
-\addbibresource{technical/references.bib}  % the bib file to use
+\addbibresource{technical/Particle_Transport.bib}  % the bib file to use
 \DefineBibliographyStrings{german}{andothers = {{et\,al\adddot}}}  % replace u.a. with et al.
 
 
@@ -172,9 +175,10 @@
 \usepackage[
     pdfusetitle,
     unicode,
-    linkbordercolor=ukruby,
-    citebordercolor=ukruby,
+    % linkbordercolor=white,
+    % citebordercolor=white, % if color is needed: ukruby
 ]{hyperref}
+\hypersetup{colorlinks=false, linkbordercolor={white}}
 
 %\usepackage[
 	%colorlinks=true,
@@ -194,7 +198,7 @@
 \title{Traveling wave magnetophoresis for Lab-on-a-Chip applications}
 \date{\today} %TODO
 \birthplace{Kassel}
-\supervisor{Unter~Anleitung~von~MSc.~Adrian~Peter~Krone~und~MSc.~Johannes~Heinrich~Viehmann}
+\supervisor{Unter~Anleitung~von~Prof.~Arno~Ehresmann~und~Dr.~Rico~Huhnstock}
 \chair{AG Ehresmann}
 \division{Institut für Physik\\FB 10 - Mathematik und Naturwissenschaften}
 \thesisclass{Doktor der Naturwissenschaften (Dr. rer. nat.)} % Change to Master of Science for master thesis
