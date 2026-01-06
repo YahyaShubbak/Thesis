@@ -27,15 +27,15 @@
 %------------------------------ Fonts, Unicode, Language ----------------------
 %------------------------------------------------------------------------------
 
-\ifx\luatexversion\undefined
+%\ifx\luatexversion\undefined
     % pdfLaTeX
-    \usepackage[utf8]{inputenc}
-    \usepackage[T1]{fontenc}
-\else
+%    \usepackage[utf8]{inputenc}
+%    \usepackage[T1]{fontenc}
+%\else
     % luaLaTeX
     \usepackage{fontspec}
     \defaultfontfeatures{Ligatures=TeX}  % -- becomes en-dash etc.
-\fi
+%\fi
 
 
 % load english (for abstract) and ngerman language
@@ -57,9 +57,9 @@
 \usepackage{mathtools}
 
  %Enable Unicode-Math and follow the ISO-Standards for typesetting math. Diable for pdfLaTeX.
-\ifx\luatexversion\undefined
+%\ifx\luatexversion\undefined
     % pdfLaTeX -- do nothing
-\else
+%\else
     \usepackage[
         math-style=ISO,
         bold-style=ISO,
@@ -68,8 +68,8 @@
         partial=upright,
         warnings-off={mathtools-colon,mathtools-overbracket}, % suppress some unnecessary warnings
         ]{unicode-math}
-    \setmathfont{Latin Modern Math} % or any other OpenType math font
-\fi
+ %   \setmathfont{Latin Modern Math} % or any other OpenType math font
+%\fi
 
 % nice, small fracs for the text with \sfrac{}{}
 \usepackage{xfrac}
@@ -91,11 +91,11 @@
 
 \usepackage{physics}
 
-\ifx\luatexversion\undefined
+%\ifx\luatexversion\undefined
     % pdfLaTeX
-\else
+%\else
     \renewcommand{\vb}[1]{\symbf{#1}}
-\fi
+%\fi
 
 %------------------------------------------------------------------------------
 %-------------------------------- tables  -------------------------------------
@@ -126,11 +126,11 @@
 % Set the PDF Version of this document to 1.7 (1.4 is the current default)
 % This is needed so that PDFs with Version >1.5 can be included
 % Disable for pdfLaTeX
-\ifx\luatexversion\undefined
+%\ifx\luatexversion\undefined
     % pdfLaTeX -- do nothing
-\else
+%\else
     \pdfvariable minorversion=7
-\fi
+%\fi
 
 \usepackage{cprotect} % to include verb in caption \cprotect\caption{... \verb|trackpy|...}
 
@@ -138,13 +138,13 @@
 %--------------------------- TikZ and Pgfplots --------------------------------
 %------------------------------------------------------------------------------
 
-\usepackage{tikz}
-\usepackage{pgfplots}
-\usetikzlibrary{positioning, math, intersections, calc}
+%\usepackage{tikz}
+%\usepackage{pgfplots}
+%\usetikzlibrary{positioning, math, intersections, calc}
 
-\usetikzlibrary{external}
-\tikzexternalize[prefix=TikZ/]
-\pgfplotsset{compat=1.18}
+%\usetikzlibrary{external}
+%\tikzexternalize[prefix=TikZ/]
+%\pgfplotsset{compat=1.18}
 
 
 %------------------------------------------------------------------------------
@@ -211,10 +211,10 @@
 
 \graphicspath{
 {Abbildungen/},
-{Abbildungen/01_Einfuehrung/},
+{Abbildungen/01_Einfuehrung/,
 {Abbildungen/02_Theorie/},
 {Abbildungen/03_Exp/},
 {Abbildungen/04_Ergebnisse/},
 {Abbildungen/05_Auswertung/},
 {Abbildungen/06_Diskussion/}
-}
+}}
