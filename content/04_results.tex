@@ -1,0 +1,69 @@
+\chapter{Particle transport evaluation software}
+\section{Trackpy and its implication}
+The following chapter will shed light on the most important steps of analysis using the fantastic Python library \verb|trackpy| version 0.6.2\cite{Allan2024}.
+
+
+
+The evaluation pipeline is as follows:
+
+The image series is loaded, containing the particles as features.
+Features will from hereafter be called particles for simplicity. 
+Initial parameters are tested until particles are found using \verb|trackpy.locate|
+The fundamental parameters are: 
+\begin{verbatim} 
+    diameter
+    minmass
+    separation.
+\end{verbatim}
+The \verb|diameter| is given in pixels and will look for particles of spherical dimensions in a given box of $d^2$ pixels.
+For particles of unequal dimensions, a tuple can be given as \verb|(z, y, x)| or \verb|(y,x)|. 
+The \verb|minmass| parameter represents the minimum integrated brightness of bright (dark) particles against a dark (bright) background. 
+It is therefore important to specify whether the images were taken using dark-field or bright-field microscopy.
+Since dark-field will be the default for tracking, \verb|invert| as \verb|trackpy.locate| parameter would be needed for bright field images.
+A good starting point for feature finding for images of bright, well-resolved spherical particles against a dark, static background is:  
+\begin{verbatim} 
+    diameter    :   13
+    minmass     : 2000
+    separation  :   12
+\end{verbatim}
+An example of such an image is found in Fig. 
+
+\ref{fig:darkfield_tracekd_COOH}.
+\begin{figure}[bth]
+    \centering
+    \includegraphics[width=.8\linewidth]{Abbildungen/Theory/COOH_DestH2O_PMMA700nm_2mT_100ms_1000fps_0_features_2800_with_insert.png}
+    \cprotect\caption{Example dark-field microscope image of bright particles marked as features using \verb|trackpy|.
+    The parameters used were: diameter 13, minmass 2000 and separation 12.}
+    \label{fig:darkfield_tracekd_COOH}
+\end{figure}
+
+\verb|trackpy.locate| allows far more options to be tweaked to enhance the linking after the particles have been found.
+These include, but are not limited to:
+% \verb|threshold|, which clips the bandpass result below the given value, default is 1. 
+\verb|separation|, which is a minimum separation in pixels between particles with the default value of \verb|diameter +1|. 
+\verb|percentile|, which is a threshold value of the particles' brightness compared to the mean overall brightness of all pixels in the image, that has to be exceeded for them to be recognized as such. 
+
+
+\verb|trackpy| then starts linking the particles together to form coherent trajectories. 
+For that, a second set of parameters can be optimized, including
+\verb|search range|, which is the maximum distance particles can move between frames.  
+\verb|memory|, which is the maximum number of frames during which a particle can vanish, then reappear nearby, and be considered the same particle. 
+% \verb|adaptive_stop|:
+% \verb|adaptive_step|:
+
+The result is a table in H5 format containing \verb|frame|, \verb|x|, and \verb|y| position per given particle.
+From that, a map of all trajectories can be plotted, which can be seen in Fig. \ref{fig:trajectory_plot_example}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Theory/Trajectory_typeCOOH_tquarter0.1.png}
+    \caption{Trajecories after linking particles, \SI{5}{\s} long video.}
+    \label{fig:trajectory_plot_example}
+\end{figure}
+
+To evaluate the velocity, two conversion factors are implemented, as the temporal information is given in milliseconds rather than seconds, and the spatial information in pixels, rather than (micro)meters.  
+Conversion to seconds is self-explanatory. 
+To convert from pixels to micrometers, the pixel pitch must be known.
+This is a simple translation from the distance between pixels into a length, since a monochrome sensor is used and, therefore, the individual color-pixels do not need to be taken into account. 
+For the used camera and the two used microscope objectives, the following conversion factors are used: \SI{0.5}{\micro\meter\per\pixel} for the $20\times$objective, and \SI{0.2}{\micro\meter\per\pixel} for the $50\times$objective. 
+Then, a series of filtering and outlier removal must be conducted due to the polydisperse nature of the particles. 
