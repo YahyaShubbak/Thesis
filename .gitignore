@@ -1,8 +1,25 @@
 technical/build/
-*.swp
+
+# LaTeX build artifacts
 *.aux
-*.bcf
+*.fdb_latexmk
+*.fls
 *.log
-*.pdf
-*.run.xml
+*.out
 *.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.synctex.gz
+*.synctex(busy)
+
+# Editor swap files
+*.swp
+
+# Root-level PDF output (keep figure PDFs in Abbildungen/)
+/thesis.pdf
+/thesis-1.cpt
+/thesis.synctex.gz
