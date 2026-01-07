@@ -1,0 +1,33 @@
+{
+  "latex-workshop.latex.rootFile": "${workspaceFolder}/thesis.tex",
+  "latex-workshop.latex.search.rootFiles.useDefaultAndWorkspaceRoot": false,
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.autoBuild.interval": 1000,
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.view.pdf.ref.viewer": "tab",
+  "latex-workshop.latex.outputDir": "technical/build",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-pdf",
+        "-outdir=technical/build",
+        "%DOCFILE%"
+      ],
+      "cwd": "%DIR%",
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk",
+      "tools": [
+        "latexmk"
+      ]
+    }
+  ],
+  "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click"
+}
