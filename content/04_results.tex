@@ -6,34 +6,28 @@ The following chapter will shed light on the most important steps of analysis us
 
 The evaluation pipeline is as follows:
 
-The image series is loaded, containing the particles as features.
-Features will from hereafter be called particles for simplicity. 
-Initial parameters are tested until particles are found using \verb|trackpy.locate|
-The fundamental parameters are: 
-\begin{verbatim} 
-    diameter
-    minmass
-    separation.
-\end{verbatim}
+The image series is loaded, containing the particles as bright features against a dark background.
+Features will be called from hereafter particles for simplicity. 
+Initial parameters are tested until particles are found using \verb|trackpy.locate|.
+The fundamental parameters are \verb|diameter|,\verb| minmass|, and \verb|separation|. 
 The \verb|diameter| is given in pixels and will look for particles of spherical dimensions in a given box of $d^2$ pixels.
 For particles of unequal dimensions, a tuple can be given as \verb|(z, y, x)| or \verb|(y,x)|. 
 The \verb|minmass| parameter represents the minimum integrated brightness of bright (dark) particles against a dark (bright) background. 
 It is therefore important to specify whether the images were taken using dark-field or bright-field microscopy.
-Since dark-field will be the default for tracking, \verb|invert| as \verb|trackpy.locate| parameter would be needed for bright field images.
+Since dark-field will be the default for tracking, \verb|invert| as a \verb|trackpy.locate| parameter would be needed for bright field images.
 A good starting point for feature finding for images of bright, well-resolved spherical particles against a dark, static background is:  
 \begin{verbatim} 
     diameter    :   13
     minmass     : 2000
     separation  :   12
 \end{verbatim}
-An example of such an image is found in Fig. 
+An example of such an image is found in Fig. \ref{fig:darkfield_tracekd_COOH}.
 
-\ref{fig:darkfield_tracekd_COOH}.
 \begin{figure}[bth]
     \centering
     \includegraphics[width=.8\linewidth]{Abbildungen/Theory/COOH_DestH2O_PMMA700nm_2mT_100ms_1000fps_0_features_2800_with_insert.png}
     \cprotect\caption{Example dark-field microscope image of bright particles marked as features using \verb|trackpy|.
-    The parameters used were: diameter 13, minmass 2000 and separation 12.}
+    The parameters used were: diameter 13, minmass 2000, and separation 12.}
     \label{fig:darkfield_tracekd_COOH}
 \end{figure}
 
@@ -46,24 +40,49 @@ These include, but are not limited to:
 
 \verb|trackpy| then starts linking the particles together to form coherent trajectories. 
 For that, a second set of parameters can be optimized, including
-\verb|search range|, which is the maximum distance particles can move between frames.  
-\verb|memory|, which is the maximum number of frames during which a particle can vanish, then reappear nearby, and be considered the same particle. 
+\verb|search range|, which is the maximum distance particles can move between frames, and \verb|memory|, which is the maximum number of frames during which a particle can vanish, then reappear nearby, and be considered the same particle. 
 % \verb|adaptive_stop|:
 % \verb|adaptive_step|:
 
 The result is a table in H5 format containing \verb|frame|, \verb|x|, and \verb|y| position per given particle.
-From that, a map of all trajectories can be plotted, which can be seen in Fig. \ref{fig:trajectory_plot_example}.
+From that, a map of all trajectories can be plotted, which can be seen in Fig. \ref{fig:Traj_no_filter}.
+
+
+To evaluate the velocity, two conversion factors are implemented, as the temporal information is given in frames rather than seconds, and the spatial information in pixels, rather than (micro)meters.  
+Conversion to seconds is self-explanatory, as the chosen frame rate of 1000 FPS translates to a temporal resolution of 1 millisecond per frame. 
+To convert from pixels to micrometers, the pixel pitch resulting from the combination of the camera sensor and microscope objective must be measured.
+Since a monochrome sensor is used, no color filter for the pixels is present, meaning that the calculation is a simple translation from the distance between two given pixels into length.
+For the used camera and the two used microscope objectives, the following conversion factors are used: \SI{0.5}{\micro\meter\per\pixel} for the $20\times$objective, and \SI{0.2}{\micro\meter\per\pixel} for the $50\times$objective. 
+
+
+Then, a series of filtering and outlier removal must be conducted due to the polydisperse nature of the particles and the linking algorithm of \verb|trackpy|. 
+Fig. \ref{fig:Traj_no_filter} shows a trajectory map of \ch{COOH} MPs at $\nu=\SI{3.01}{\Hz}$, prior to filtering.
+It contains 2567 unique particles. 
+It becomes obvious that some trajectories are fragmented, as highlighted in the red box. 
+This happens when MPs are too close together as they move along $x$, which causes the 
+Since this is in the linear regime (Eq. TODO), MPs do not perform any oscillatory motion around a DW.
+Trajectories should therefore have the length in accordance with Eq. TODO with the given duration of \SI{5}{\s} and a period length $d=\SI{10}{\micro\m}$ be \SI{150.6}{\micro\m}.
+This, of course, is only true for MPs who are present for the whole duration.
+Shorter trajectories are possible if MPs leave the ROI or enter it at a given time.
+However, short trajectories in the center of the ROI, which often present themselves as circles, are unphysical.
+These are MPs often stuck to defects on the substrate in some form and are, in fact, able to move, which spares them from being identified as static background.  
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_no_filter.pdf}
+    \caption{Trajectory map of COOH MPs at $\nu=\SI{3.01}{\Hz}$, no filtering applied.}
+    \label{fig:Traj_no_filter}
+\end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\linewidth]{Abbildungen/Theory/Trajectory_typeCOOH_tquarter0.1.png}
-    \caption{Trajecories after linking particles, \SI{5}{\s} long video.}
-    \label{fig:trajectory_plot_example}
+    \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_2000filter.pdf}
+    \caption{Trajectory map of COOH MPs at $\nu=\SI{3.01}{\Hz}$, MPs present for less than 2000 frames removed.}
+    \label{fig:Traj_2000filter}
 \end{figure}
 
-To evaluate the velocity, two conversion factors are implemented, as the temporal information is given in milliseconds rather than seconds, and the spatial information in pixels, rather than (micro)meters.  
-Conversion to seconds is self-explanatory. 
-To convert from pixels to micrometers, the pixel pitch must be known.
-This is a simple translation from the distance between pixels into a length, since a monochrome sensor is used and, therefore, the individual color-pixels do not need to be taken into account. 
-For the used camera and the two used microscope objectives, the following conversion factors are used: \SI{0.5}{\micro\meter\per\pixel} for the $20\times$objective, and \SI{0.2}{\micro\meter\per\pixel} for the $50\times$objective. 
-Then, a series of filtering and outlier removal must be conducted due to the polydisperse nature of the particles. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_2000filter_20micometer.pdf}
+    \caption{Trajectory map of COOH MPs at $\nu=\SI{3.01}{\Hz}$, MPs present for less than 2000 frames and transported for less than \SI{20}{\micro\meter} removed.}
+    \label{fig:Traj_2000filter_20micometer}
+\end{figure}
