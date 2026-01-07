@@ -80,9 +80,19 @@ These are MPs often stuck to defects on the substrate in some form and are, in f
     \label{fig:Traj_2000filter}
 \end{figure}
 
+<<<<<<< Updated upstream
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_2000filter_20micometer.pdf}
     \caption{Trajectory map of COOH MPs at $\nu=\SI{3.01}{\Hz}$, MPs present for less than 2000 frames and transported for less than \SI{20}{\micro\meter} removed.}
     \label{fig:Traj_2000filter_20micometer}
 \end{figure}
+=======
+To evaluate the velocity, two conversion factors are implemented, as the temporal information is given in milliseconds rather than seconds, and the spatial information in pixels, rather than (micro)meters.  
+Conversion to seconds is self-explanatory. 
+To convert from pixels to micrometers, the pixel pitch must be known.
+This is a simple translation from the distance between pixels into a length, since a monochrome sensor is used and, therefore, the individual color-pixels do not need to be taken into account. 
+For the used camera and the two used microscope objectives, the following conversion factors are used: \SI{0.5}{\micro\meter\per\pixel} for the $20\times$objective, and \SI{0.2}{\micro\meter\per\pixel} for the $50\times$objective. 
+Then, a series of filtering and outlier removal must be conducted due to the polydisperse nature of the particles. 
+
+>>>>>>> Stashed changes
