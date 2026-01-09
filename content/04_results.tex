@@ -1,11 +1,12 @@
 \chapter{Particle transport evaluation software}
-\section{Trackpy and its implication}
-The following chapter will shed light on the most important steps of analysis using the fantastic Python library \verb|trackpy| version 0.6.2\cite{Allan2024}.
+\section{Trackpy and the Crocker-Grier algorithm}
+The following chapter will shed light on the most important computational steps of analysis using the fantastic Python library \verb|trackpy| version 0.6.2\cite{Allan2024}.
 
 
 
-The evaluation pipeline is as follows:
-
+In general, the evaluation consists of location of features and subsequent temporal linking.
+The process is as follows:
+\paragraph{Feature location}
 The image series is loaded, containing the particles as bright features against a dark background.
 Features will be called from hereafter particles for simplicity. 
 Initial parameters are tested until particles are found using \verb|trackpy.locate|.
@@ -15,7 +16,9 @@ For particles of unequal dimensions, a tuple can be given as \verb|(z, y, x)| or
 The \verb|minmass| parameter represents the minimum integrated brightness of bright (dark) particles against a dark (bright) background. 
 It is therefore important to specify whether the images were taken using dark-field or bright-field microscopy.
 Since dark-field will be the default for tracking, \verb|invert| as a \verb|trackpy.locate| parameter would be needed for bright field images.
-A good starting point for feature finding for images of bright, well-resolved spherical particles against a dark, static background is:  
+Here, \verb|trackpy| uses the Crocker-Grier algorithm to locate the particles, where first a bandpass filter is applied to the image to remove both long wavelength background variations such as uneven lighting and short wavelength noise such as camera noise\cite{Crocker1996}.
+Then, local maxima are identified as particle centers using the brightness of the particles, and the brightness and size of each particle is measured\cite{Crocker1996}.
+A good starting point for feature finding for images of bright, well-resolved spherical particles of several micrometer in diameter against a dark, static background, using a 20$\times$ objective and a 1920$\times$1080 resolution camera, is:  
 \begin{verbatim} 
     diameter    :   13
     minmass     : 2000
@@ -37,17 +40,19 @@ These include, but are not limited to:
 \verb|separation|, which is a minimum separation in pixels between particles with the default value of \verb|diameter +1|. 
 \verb|percentile|, which is a threshold value of the particles' brightness compared to the mean overall brightness of all pixels in the image, that has to be exceeded for them to be recognized as such. 
 
-
+\paragraph{Linking}
 \verb|trackpy| then starts linking the particles together to form coherent trajectories. 
 For that, a second set of parameters can be optimized, including
 \verb|search range|, which is the maximum distance particles can move between frames, and \verb|memory|, which is the maximum number of frames during which a particle can vanish, then reappear nearby, and be considered the same particle. 
 % \verb|adaptive_stop|:
 % \verb|adaptive_step|:
+Again, \verb|trackpy| uses the Crocker-Grier algorithm, which uses proximity among particles from one frame to the next, based on Brownian motion of the particle to diffuse without interacting with other particles\cite{Crocker1996}.
+This Brownian motion Ansatz then works with the \verb|search range| to allow for particles to move a certain distance between frames in a directed manner as they carry a velocity and are not only diffusing randomly.  
 
 The result is a table in H5 format containing \verb|frame|, \verb|x|, and \verb|y| position per given particle.
 From that, a map of all trajectories can be plotted, which can be seen in Fig. \ref{fig:Traj_no_filter}.
 
-
+\paragraph{Mean particle velocity - or trajecto maps}
 To evaluate the velocity, two conversion factors are implemented, as the temporal information is given in frames rather than seconds, and the spatial information in pixels, rather than (micro)meters.  
 Conversion to seconds is self-explanatory, as the chosen frame rate of 1000 FPS translates to a temporal resolution of 1 millisecond per frame. 
 To convert from pixels to micrometers, the pixel pitch resulting from the combination of the camera sensor and microscope objective must be measured.
@@ -101,4 +106,18 @@ Filtering for MPs $<\SI{10}{\micro\m}$ tend to keep some of the osccilating MPs,
     \label{fig:Traj_2000filter_20micometer}
 \end{figure}
 
-Table x show a small summary of the filtering steps and the resulting number of trajectories kept. 
+Table \ref{Table:filtering_summary} show a small summary of the filtering steps and the resulting number of trajectories kept. 
+
+\begin{table}[htb]
+\caption{Summary of filtering steps and resulting number of trajectories and mean velocity for \ch{COOH} MPs at \SI{5}{\Hz} \SI{30}{\Hz} driving frequency, representing linear and non-linear regimes respectively.}
+\label{Table:filtering_summary}
+\begin{tabular}{lllll}
+Experiment & Regime    & Trajectories removed                    & n Trajectories & v mean (expected) / $\si{\micro\m\per\s}$ \\
+\SI{5}{\Hz}       & linear     & No filtering                            & xxx            & y                        \\
+           &            & $<\SI{2000}{\frames}$                    & xxx            & y                        \\
+           &            & $<\SI{20}{\micro\m}$                        & xxx            & y                        \\
+           &            & $<\SI{2000}{\frames}$ + $<\SI{20}{\micro\m}$ & xxx            & y                        \\
+\SI{30}{\Hz}      & non-linear & No filtering                            & xxx            & y                        \\
+           &            & $<\SI{2000}{\frames}$                  & xxx            & y                       
+\end{tabular}
+\end{table}
