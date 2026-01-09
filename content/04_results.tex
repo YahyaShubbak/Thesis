@@ -53,19 +53,6 @@ Conversion to seconds is self-explanatory, as the chosen frame rate of 1000 FPS 
 To convert from pixels to micrometers, the pixel pitch resulting from the combination of the camera sensor and microscope objective must be measured.
 Since a monochrome sensor is used, no color filter for the pixels is present, meaning that the calculation is a simple translation from the distance between two given pixels into length.
 For the used camera and the two used microscope objectives, the following conversion factors are used: \SI{0.5}{\micro\meter\per\pixel} for the $20\times$objective, and \SI{0.2}{\micro\meter\per\pixel} for the $50\times$objective. 
-
-
-Then, a series of filtering and outlier removal must be conducted due to the polydisperse nature of the particles and the linking algorithm of \verb|trackpy|. 
-Fig. \ref{fig:Traj_no_filter} shows a trajectory map of \ch{COOH} MPs at $\nu=\SI{3.01}{\Hz}$, prior to filtering.
-It contains 2567 unique particles. 
-It becomes obvious that some trajectories are fragmented, as highlighted in the red box. 
-This happens when MPs are too close together as they move along $x$, which causes the 
-Since this is in the linear regime (Eq. TODO), MPs do not perform any oscillatory motion around a DW.
-Trajectories should therefore have the length in accordance with Eq. TODO with the given duration of \SI{5}{\s} and a period length $d=\SI{10}{\micro\m}$ be \SI{150.6}{\micro\m}.
-This, of course, is only true for MPs who are present for the whole duration.
-Shorter trajectories are possible if MPs leave the ROI or enter it at a given time.
-However, short trajectories in the center of the ROI, which often present themselves as circles, are unphysical.
-These are MPs often stuck to defects on the substrate in some form and are, in fact, able to move, which spares them from being identified as static background.  
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_no_filter.pdf}
@@ -73,6 +60,20 @@ These are MPs often stuck to defects on the substrate in some form and are, in f
     \label{fig:Traj_no_filter}
 \end{figure}
 
+Then, a series of filtering and outlier removal must be conducted due to the polydisperse nature of the particles and the linking algorithm of \verb|trackpy|. 
+Fig. \ref{fig:Traj_no_filter} shows a trajectory map of \ch{COOH} MPs at $\nu=\SI{3.01}{\Hz}$, prior to filtering.
+It contains 2567 unique particles. 
+It becomes obvious that some trajectories are fragmented, as highlighted in the red box. 
+This happens when MPs are too close together as they move along $x$, which causes the \verb|diameter| of the two MPs to overlap in the linking step.
+The algorithm then looses track of one or both MPs, causing fragmented trajectories.
+Very short, individual trajectories are produced out of mostly two MPs together.
+These otherwise valid trajectories have to be removed, as they lack spatial and temporal information and cause the number of trajectories to be unphysically high. 
+Fig. \ref{fig:Traj_2000filter} shows a trajectory map after such a filtering step.
+Here, trajectories that are shorter than \SI{2000}{\frames}, which represents \SI{40}{\percent} of the total duration, are removed.
+Removing shorter trajectories already eliminates the very short ..
+Filtering out less heavy, e.g., trajectories $<\SI{500}{\frames}$, already removes the fragmented trajectories.
+However, it was found that the theoretical fit of the overall mean velocity is represented better when filtering heavier. 
+This could be avoided if a smaller density of MPs have been choosen for the experiment and will be discussed later.
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_2000filter.pdf}
@@ -80,9 +81,24 @@ These are MPs often stuck to defects on the substrate in some form and are, in f
     \label{fig:Traj_2000filter}
 \end{figure}
 
+
+Alongside the fragmentation, which is an caused by the linking algorith of \verb|trackpy|, Fig. \ref{fig:Traj_2000filter} shows a physical artifact as well.
+Even after filtering for short temporal trajectories, short spatial trajectories remain.
+These are essential in the non-linear regime where MPs can not follow the moving potential energy landscape linearly, some are only oscillating above a DW. 
+In the linear regime however (Eq. TODO), MPs do not perform any oscillatory motion around a DW and do follow the changing potential energy landscape.
+Trajectories should therefore have the length in accordance with Eq. TODO with the given duration of \SI{5}{\s} and a period length $d=\SI{10}{\micro\m}$ be \SI{150.6}{\micro\m}.
+This, of course, is only true for MPs who are present for the whole duration, e.g., in a initial left to right transport (positive $x-$direction), MPs start near $x=0$ and move to higher $x$ before the phase relation change flips the transport direction and the MPs are tranpsorted back.
+Shorter trajectories are possible if MPs leave the ROI by starting at higher $x$, or enter it at a given time.
+However, short trajectories that present themselves as circles, are, at least in the linear regime, actually pinned and therefore, falsly lower the mean velocity of the ensemble in the linear regime.
+These are MPs often stuck to defects on the substrate in some form and are, in fact, able to move, which spares them from being identified as static background.  
+Therefore, another filtering step is performed.
+In Fig. \ref{fig:Traj_2000filter_20micometer}, these oscillating MPs are removed by filtering for MPs that have been transported for less than \SI{20}{\micro\m} which, in this case is twice the period $d$. 
+Filtering for MPs $<\SI{10}{\micro\m}$ tend to keep some of the osccilating MPs, if the total oscillation duration lasts for more than \SI{10}{\micro\m}, which is the reason \SI{20}{\micro\m} is choosen.
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_2000filter_20micometer.pdf}
     \caption{Trajectory map of COOH MPs at $\nu=\SI{3.01}{\Hz}$, MPs present for less than 2000 frames and transported for less than \SI{20}{\micro\meter} removed.}
     \label{fig:Traj_2000filter_20micometer}
 \end{figure}
+
+Table x show a small summary of the filtering steps and the resulting number of trajectories kept. 
