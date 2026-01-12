@@ -1,3 +1,4 @@
+% !TEX root = ../thesis.tex
 \chapter{Particle transport evaluation software}
 \section{Trackpy and the Crocker-Grier algorithm}
 The following chapter will shed light on the most important computational steps of analysis using the fantastic Python library \verb|trackpy| version 0.6.2\cite{Allan2024}.
@@ -67,13 +68,13 @@ For the used camera and the two used microscope objectives, the following conver
 
 Then, a series of filtering and outlier removal must be conducted due to the polydisperse nature of the particles and the linking algorithm of \verb|trackpy|. 
 Fig. \ref{fig:Traj_no_filter} shows a trajectory map of \ch{COOH} MPs at $\nu=\SI{3.01}{\Hz}$, prior to filtering.
-It contains 2567 unique particles. 
+It contains 2959 unique trajectories. 
 It becomes obvious that some trajectories are fragmented, as highlighted in the red box. 
 This happens when MPs are too close together as they move along $x$, which causes the \verb|diameter| of the two MPs to overlap in the linking step.
 The algorithm then looses track of one or both MPs, causing fragmented trajectories.
 Very short, individual trajectories are produced out of mostly two MPs together.
 These otherwise valid trajectories have to be removed, as they lack spatial and temporal information and cause the number of trajectories to be unphysically high. 
-Fig. \ref{fig:Traj_2000filter} shows a trajectory map after such a filtering step.
+Fig. \ref{fig:Traj_2000filter} shows a trajectory map after such a filtering step, keeping  417 trajectories.
 Here, trajectories that are shorter than \SI{2000}{\frames}, which represents \SI{40}{\percent} of the total duration, are removed.
 Removing shorter trajectories already eliminates the very short ..
 Filtering out less heavy, e.g., trajectories $<\SI{500}{\frames}$, already removes the fragmented trajectories.
@@ -98,6 +99,7 @@ However, short trajectories that present themselves as circles, are, at least in
 These are MPs often stuck to defects on the substrate in some form and are, in fact, able to move, which spares them from being identified as static background.  
 Therefore, another filtering step is performed.
 In Fig. \ref{fig:Traj_2000filter_20micometer}, these oscillating MPs are removed by filtering for MPs that have been transported for less than \SI{20}{\micro\m} which, in this case is twice the period $d$. 
+This leaves the map with 341 trajectories.
 Filtering for MPs $<\SI{10}{\micro\m}$ tend to keep some of the osccilating MPs, if the total oscillation duration lasts for more than \SI{10}{\micro\m}, which is the reason \SI{20}{\micro\m} is choosen.
 \begin{figure}
     \centering
@@ -109,15 +111,15 @@ Filtering for MPs $<\SI{10}{\micro\m}$ tend to keep some of the osccilating MPs,
 Table \ref{Table:filtering_summary} show a small summary of the filtering steps and the resulting number of trajectories kept. 
 
 \begin{table}[htb]
-\caption{Summary of filtering steps and resulting number of trajectories and mean velocity for \ch{COOH} MPs at \SI{5}{\Hz} \SI{30}{\Hz} driving frequency, representing linear and non-linear regimes respectively.}
+\caption{Summary of filtering steps and resulting number of trajectories and mean velocity for \ch{COOH} MPs at \SI{3.01}{\Hz} and \SI{10}{\Hz} driving frequency, representing linear and non-linear regimes respectively.}
 \label{Table:filtering_summary}
 \begin{tabular}{lllll}
-Experiment & Regime    & Trajectories removed                    & n Trajectories & v mean (expected) / $\si{\micro\m\per\s}$ \\
-\SI{5}{\Hz}       & linear     & No filtering                            & xxx            & y                        \\
-           &            & $<\SI{2000}{\frames}$                    & xxx            & y                        \\
-           &            & $<\SI{20}{\micro\m}$                        & xxx            & y                        \\
-           &            & $<\SI{2000}{\frames}$ + $<\SI{20}{\micro\m}$ & xxx            & y                        \\
-\SI{30}{\Hz}      & non-linear & No filtering                            & xxx            & y                        \\
-           &            & $<\SI{2000}{\frames}$                  & xxx            & y                       
+Experiment    & Regime     & Trajectories removed                       & n Trajectories    & v mean (expected) / $\si{\micro\m\per\s}$ \\
+\SI{3.01}{\Hz}& linear     & No filtering                               & 2959              & \SI{34.37}{\micro\m\per\s} (\SI{30.10}{\micro\m\per\s})\\
+              &            & $<\SI{2000}{\frames}$                      & 417               & \SI{24.55}{\micro\m\per\s} (\SI{30.10}{\micro\m\per\s})\\
+              &            & $<\SI{20}{\micro\m}$                       & 495               & \SI{30.11}{\micro\m\per\s} (\SI{30.10}{\micro\m\per\s})\\
+              &            & $<\SI{2000}{\frames}$ + $<\SI{20}{\micro\m}$ & 341             & \SI{30.05}{\micro\m\per\s} (\SI{30.10}{\micro\m\per\s})\\
+\SI{10}{\Hz}  & non-linear & No filtering                               & 4626              & \SI{43.28}{\micro\m\per\s} (\SI{23.75}{\micro\m\per\s})\\
+              &            & $<\SI{2000}{\frames}$                      & 380               & \SI{24.84}{\micro\m\per\s} (\SI{23.75}{\micro\m\per\s})                       
 \end{tabular}
 \end{table}
