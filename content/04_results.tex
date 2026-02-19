@@ -5,7 +5,7 @@ The following chapter will shed light on the most important computational steps 
 
 
 
-In general, the evaluation consists of location of features and subsequent temporal linking.
+In general, the evaluation consists of feature location and subsequent temporal linking.
 The process is as follows:
 \paragraph{Feature location}
 The image series is loaded, containing the particles as bright features against a dark background.
@@ -17,9 +17,9 @@ For particles of unequal dimensions, a tuple can be given as \verb|(z, y, x)| or
 The \verb|minmass| parameter represents the minimum integrated brightness of bright (dark) particles against a dark (bright) background. 
 It is therefore important to specify whether the images were taken using dark-field or bright-field microscopy.
 Since dark-field will be the default for tracking, \verb|invert| as a \verb|trackpy.locate| parameter would be needed for bright field images.
-Here, \verb|trackpy| uses the Crocker-Grier algorithm to locate the particles, where first a bandpass filter is applied to the image to remove both long wavelength background variations such as uneven lighting and short wavelength noise such as camera noise\cite{Crocker1996}.
-Then, local maxima are identified as particle centers using the brightness of the particles, and the brightness and size of each particle is measured\cite{Crocker1996}.
-A good starting point for feature finding for images of bright, well-resolved spherical particles of several micrometer in diameter against a dark, static background, using a 20$\times$ objective and a 1920$\times$1080 resolution camera, is:  
+Here, \verb|trackpy| uses the Crocker-Grier algorithm to locate the particles, where first a bandpass filter is applied to the image to remove both long wavelength background variations, such as uneven lighting, and short wavelength noise, such as camera noise\cite{Crocker1996}.
+Then, local maxima are identified as particle centers using the brightness of the particles, and the brightness and size of each particle are measured\cite{Crocker1996}.
+A good starting point for feature finding for images of bright, well-resolved spherical particles of several micrometers in diameter against a dark, static background, using a 20$\times$ objective and a 1920$\times$1080 resolution camera, is:  
 \begin{verbatim} 
     diameter    :   13
     minmass     : 2000
@@ -53,7 +53,7 @@ This Brownian motion Ansatz then works with the \verb|search range| to allow for
 The result is a table in H5 format containing \verb|frame|, \verb|x|, and \verb|y| position per given particle.
 From that, a map of all trajectories can be plotted, which can be seen in Fig. \ref{fig:Traj_no_filter}.
 
-\paragraph{Mean particle velocity - or trajecto maps}
+\paragraph{Mean particle velocity - or trajectory maps}
 To evaluate the velocity, two conversion factors are implemented, as the temporal information is given in frames rather than seconds, and the spatial information in pixels, rather than (micro)meters.  
 Conversion to seconds is self-explanatory, as the chosen frame rate of 1000 FPS translates to a temporal resolution of 1 millisecond per frame. 
 To convert from pixels to micrometers, the pixel pitch resulting from the combination of the camera sensor and microscope objective must be measured.
@@ -71,15 +71,15 @@ Fig. \ref{fig:Traj_no_filter} shows a trajectory map of \ch{COOH} MPs at $\nu=\S
 It contains 2959 unique trajectories. 
 It becomes obvious that some trajectories are fragmented, as highlighted in the red box. 
 This happens when MPs are too close together as they move along $x$, which causes the \verb|diameter| of the two MPs to overlap in the linking step.
-The algorithm then looses track of one or both MPs, causing fragmented trajectories.
+The algorithm then loses track of one or both MPs, causing fragmented trajectories.
 Very short, individual trajectories are produced out of mostly two MPs together.
 These otherwise valid trajectories have to be removed, as they lack spatial and temporal information and cause the number of trajectories to be unphysically high. 
 Fig. \ref{fig:Traj_2000filter} shows a trajectory map after such a filtering step, keeping  417 trajectories.
-Here, trajectories that are shorter than \SI{2000}{\frames}, which represents \SI{40}{\percent} of the total duration, are removed.
+Here, trajectories that are shorter than \SI{2000}{\frames}, which represent \SI{40}{\percent} of the total duration, are removed.
 Removing shorter trajectories already eliminates the very short ..
 Filtering out less heavy, e.g., trajectories $<\SI{500}{\frames}$, already removes the fragmented trajectories.
-However, it was found that the theoretical fit of the overall mean velocity is represented better when filtering heavier. 
-This could be avoided if a smaller density of MPs have been choosen for the experiment and will be discussed later.
+However, it was found that the theoretical fit of the overall mean velocity is represented better when filtering more heavily. 
+This could have been avoided if a smaller density of MPs had been chosen for the experiment, and this will be discussed later.
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_2000filter.pdf}
@@ -88,19 +88,19 @@ This could be avoided if a smaller density of MPs have been choosen for the expe
 \end{figure}
 
 
-Alongside the fragmentation, which is an caused by the linking algorith of \verb|trackpy|, Fig. \ref{fig:Traj_2000filter} shows a physical artifact as well.
+Alongside the fragmentation, which is caused by the linking algorithm of \verb|trackpy|, Fig. \ref{fig:Traj_2000filter} shows a physical artifact as well.
 Even after filtering for short temporal trajectories, short spatial trajectories remain.
 These are essential in the non-linear regime where MPs can not follow the moving potential energy landscape linearly, some are only oscillating above a DW. 
-In the linear regime however (Eq. TODO), MPs do not perform any oscillatory motion around a DW and do follow the changing potential energy landscape.
+In the linear regime, however (Eq. TODO), MPs do not perform any oscillatory motion around a DW and do follow the changing potential energy landscape.
 Trajectories should therefore have the length in accordance with Eq. TODO with the given duration of \SI{5}{\s} and a period length $d=\SI{10}{\micro\m}$ be \SI{150.6}{\micro\m}.
-This, of course, is only true for MPs who are present for the whole duration, e.g., in a initial left to right transport (positive $x-$direction), MPs start near $x=0$ and move to higher $x$ before the phase relation change flips the transport direction and the MPs are tranpsorted back.
-Shorter trajectories are possible if MPs leave the ROI by starting at higher $x$, or enter it at a given time.
-However, short trajectories that present themselves as circles, are, at least in the linear regime, actually pinned and therefore, falsly lower the mean velocity of the ensemble in the linear regime.
+This, of course, is only true for MPs who are present for the whole duration, e.g., in an initial left-to-right transport (positive $x-$direction), MPs start near $x=0$ and move to higher $x$ before the phase relation change flips the transport direction, and the MPs are transported back.
+Shorter trajectories are possible if MPs leave the ROI by starting at a higher $x$, or enter it at a given time.
+However, short trajectories that present themselves as circles are, at least in the linear regime, actually pinned and therefore falsely lower the mean velocity of the ensemble in the linear regime.
 These are MPs often stuck to defects on the substrate in some form and are, in fact, able to move, which spares them from being identified as static background.  
 Therefore, another filtering step is performed.
-In Fig. \ref{fig:Traj_2000filter_20micometer}, these oscillating MPs are removed by filtering for MPs that have been transported for less than \SI{20}{\micro\m} which, in this case is twice the period $d$. 
+In Fig. \ref{fig:Traj_2000filter_20micometer}, these oscillating MPs are removed by filtering for MPs that have been transported for less than \SI{20}{\micro\m}, which, in this case, is twice the period $d$. 
 This leaves the map with 341 trajectories.
-Filtering for MPs $<\SI{10}{\micro\m}$ tend to keep some of the osccilating MPs, if the total oscillation duration lasts for more than \SI{10}{\micro\m}, which is the reason \SI{20}{\micro\m} is choosen.
+Filtering for MPs $<\SI{10}{\micro\m}$ tends to keep some of the oscillating MPs, if the total oscillation duration lasts for more than \SI{10}{\micro\m}, which is the reason \SI{20}{\micro\m} is chosen.
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Abbildungen/Theory/Traj_2000filter_20micometer.pdf}
@@ -108,7 +108,7 @@ Filtering for MPs $<\SI{10}{\micro\m}$ tend to keep some of the osccilating MPs,
     \label{fig:Traj_2000filter_20micometer}
 \end{figure}
 
-Table \ref{Table:filtering_summary} show a small summary of the filtering steps and the resulting number of trajectories kept. 
+Table \ref{Table:filtering_summary} shows a small summary of the filtering steps and the resulting number of trajectories kept. 
 
 \begin{table}[htb]
 \caption{Summary of filtering steps and resulting number of trajectories and mean velocity for \ch{COOH} MPs at \SI{3.01}{\Hz} and \SI{10}{\Hz} driving frequency, representing linear and non-linear regimes respectively.}
