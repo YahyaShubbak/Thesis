@@ -32,11 +32,31 @@ This introduces both energy and defect in the unmasked portion of the substrate,
 While this is happening, a magnetic field opposing the magentic moment of the substrate then turns the now freed magnetic moments. 
 After He irradiation, the magentic moments are now pinned by the Af in the oppoisng directoin, creating the stripe domain pattern we know and love. 
 \subsection{Thin film sputter deposition}
-Sputter deposition is most commonly used to achieve monolayer accuracy in thickness, creating the magnetic thin film stack \cite{Seshan2012}.    
-Sputtering, in a nutshell, is the process of accelerating ionized atoms, often argon, into a surface of desired material called a target, which can be metals or insulators, with high enough kinetic energy to physically remove some target atoms and condense them onto a substrate.
-This creates thin films with minimum thicknisses of x nm
+Sputter deposition is most commonly used to achieve monolayer accuracy in thickness, creating the magnetic thin film stack used in this work \cite{Seshan2012}.    
+Sputtering, in a nutshell, is the process of accelerating ionized atoms, often \ac{Ar}, into a surface of desired material referred to as the target, which can be metals or insulators, with high enough kinetic energy to physically remove some target atoms and condense them onto a substrate.
+\ch{Ar} is usually used as it is cost-effective, chemically inert, and its atomic mass is in the same order as desired metals that are used in thin film applications\cite{Seshan2012}.  
+When non-inert gases, such as oxygen or nitrogen, are used, the process is then called reactive sputtering, which is typically used to deposit oxides or nitrides.
+Since the bombardment of ions physically removes target atoms, this technique is classified as a \ac{PVD} technique\cite{Seshan2012}. 
+However, compared to evaporation, sputter deposition produces a high-energy flux with high surface mobility, allowing atoms to condense into smooth, dense, conformal, and continuous films more easily than evaporated films\cite{Seshan2012}.
 
+Linked to the apparatus used, three main sputtering mechanisms are available: \ac{DC} diode sputtering, \ac{RF} sputtering, and magnetron sputtering.
+They all share the same core principles, and the aufbau is similar, which can be seen in Figure x. 
+For \ac{DC} diode sputtering, two plates working as the anode and the cathode connected to a power supply are placed in a vacuum.
+\ac{Ar}, as the typical sputtering gas, is introduced in the pressure range of \SI{e-3}{mbar}, and a voltage across the plates is applied\cite{Seshan2012}.  
+Above a certain breakdown voltage, a plasma is ignited, creating free electrons and accelerating \ch{Ar+} towards the negative cathode in the electric field.
+Since the electrons are much lighter than the ions, they experience a much higher velocity, which results in a thin sheath layer next to the cathode, an area of electron depletion causing most of the potential drop between anode and cathode\cite{Seshan2012}. 
+Secondary electrons are created upon impact, which are accelerated through the sheath layer towards the anode, ionizing more \ac{Ar} in the path, which sustains the plasma.   
+Electrons that do not collide with \ch{Ar} are absorbed by the anode and the apparatus walls, not contributing to ionization\cite{Seshan2012}.
+Generally, the sputter yield is proportional to the power supplied to create the plasma.
+Ionization cross section peaks for electron energies of about \SI{100}{eV} and then drops, meaning that the process cannot be scaled by simply applying more power\cite{Seshan2012}. 
+For this reason, \ac{RF} sputtering was utilized in this work.
 
+In \ac{RF} sputtering, the \ac{DC} power supply is replaced by an \ac{AC} \ac{RF} source\cite{Seshan2012}.
+The supplied \ac{RF} is typically \SI{13.56}{MHz} or some multiple\cite{Seshan2012}.
+This \ac{RF} power couples to the electron motion in the plasma, resulting in longer residence times in the plasma, higher collisional ionization, and higher plasma densities\cite{Seshan2012}.
+To maximize the energy transfer, impedance-matching hardware is installed to tune the output impedance of the power supply to impedance-match the plasma impedance\cite{Seshan2012}.
+Additionally, the \ac{RF} sputtering allows for sputtering insulators such as silicon dioxide.
+This is due to the \ac{AC} applied to the diodes, preventing charge buildup\cite{Seshan2012}. 
 
 \subsection{Ion bombardment induced magnetic patterning}
 
