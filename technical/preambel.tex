@@ -1,5 +1,6 @@
 % !TEX root = ../thesis.tex
 \documentclass[
+  12pt,
   ukcolor,       % remove for less red,
   BCOR=12mm,     % 12mm binding corrections, adjust to fit your binding
   parskip=half,  % new paragraphs start with half line vertical space
@@ -34,12 +35,16 @@
     % pdfLaTeX
 %    \usepackage[utf8]{inputenc}
 %    \usepackage[T1]{fontenc}
+
 %\else
     % luaLaTeX
     \usepackage{fontspec}
     \defaultfontfeatures{Ligatures=TeX}  % -- becomes en-dash etc.
 %\fi
 
+                                       
+% % set single line spacing throughout the document
+% \usepackage[onehalfspacing]{setspace}
 
 % load english (for abstract) and ngerman language
 % the main language has to come last
@@ -194,6 +199,10 @@
 
 \usepackage{bookmark}
 \usepackage[shortcuts]{extdash}
+
+\makeatletter
+\typeout{Dokument‑Schriftgröße: \f@size pt}
+\makeatother
 
 %------------------------------------------------------------------------------
 %-------------------------    Angaben zur Arbeit   ----------------------------
