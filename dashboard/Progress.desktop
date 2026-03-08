@@ -4,6 +4,6 @@ Type=Application
 Name=Thesis Progress
 Comment=Generate and open the thesis writing dashboard
 Icon=accessories-text-editor
-Exec=bash -lc 'cd /home/yahya/Dokumente/GitHub/Thesis && bash dashboard/run_local.sh; read -p "Press Enter to close..."'
+Exec=bash -ic 'cd /home/yahya/Dokumente/GitHub/Thesis && bash dashboard/run_local.sh; read -p "Press Enter to close..."'
 Terminal=true
 Categories=Utility;
