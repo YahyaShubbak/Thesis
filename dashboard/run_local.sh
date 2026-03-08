@@ -24,7 +24,7 @@ fi
 # Install deps if needed
 if ! python3 -c "import plotly" 2>/dev/null; then
     echo "Installing Python dependencies..."
-    pip3 install -r dashboard/requirements.txt
+    python3 -m pip install -r dashboard/requirements.txt
 fi
 
 echo "[1/3] Collecting data from git history..."
