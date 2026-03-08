@@ -85,7 +85,7 @@ def make_cumulative_word_chart(daily, word_target):
         fillcolor="rgba(78, 204, 163, 0.1)",
     ))
 
-    # Milestone lines
+    # Milestone lines as separate traces (toggleable via legend)
     milestones = [
         (10000, "10k", "rgba(255,255,255,0.2)"),
         (25000, "25k", "rgba(255,255,255,0.2)"),
@@ -94,9 +94,16 @@ def make_cumulative_word_chart(daily, word_target):
     ]
     for val, label, color in milestones:
         if val <= max(words) * 1.5 or val == word_target:
-            fig.add_hline(y=val, line_dash="dash", line_color=color,
-                          annotation_text=label, annotation_position="top right",
-                          annotation_font_color=color)
+            visible = True if val != word_target else "legendonly"
+            fig.add_trace(go.Scatter(
+                x=[dates[0], dates[-1]], y=[val, val],
+                mode="lines",
+                name=label,
+                line=dict(color=color, width=2, dash="dash"),
+                showlegend=True,
+                visible=visible,
+                hoverinfo="name+y",
+            ))
 
     fig.update_layout(
         **PLOTLY_LAYOUT_DEFAULTS,
@@ -206,21 +213,23 @@ def make_daily_activity_chart(daily):
 
     fig.update_layout(
         **PLOTLY_LAYOUT_DEFAULTS,
-        title=dict(text="📊 Daily Writing Activity", font=dict(size=18)),
+        title=dict(text="📊 Daily Writing Activity", font=dict(size=18), x=0.5, xanchor="center"),
         barmode="relative",
         yaxis_title="Words",
         updatemenus=[dict(
             type="buttons",
             direction="right",
-            x=0.0, y=1.15,
+            x=0.0, y=1.22,
+            xanchor="left", yanchor="top",
             buttons=buttons,
             bgcolor=CARD_BG,
-            font=dict(color=TEXT_COLOR),
+            font=dict(color=TEXT_COLOR, size=11),
             bordercolor="rgba(255,255,255,0.2)",
         )],
         xaxis=dict(gridcolor="rgba(255,255,255,0.08)"),
         yaxis=dict(gridcolor="rgba(255,255,255,0.08)"),
     )
+    fig.update_layout(margin=dict(l=50, r=30, t=80, b=40))
 
     return fig.to_html(full_html=False, include_plotlyjs=False, div_id="chart-activity")
 

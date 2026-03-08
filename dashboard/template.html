@@ -23,6 +23,8 @@
             --bronze: #cd7f32;
             --silver: #c0c0c0;
             --diamond: #b9f2ff;
+            --mythic: #ff6ec7;
+            --transcendent: #ff4500;
             --border: rgba(255,255,255,0.08);
             --shadow: 0 4px 24px rgba(0,0,0,0.4);
         }
@@ -261,6 +263,8 @@
         .achievement-card.unlocked.silver { --tier-color: var(--silver); }
         .achievement-card.unlocked.gold { --tier-color: var(--gold); }
         .achievement-card.unlocked.diamond { --tier-color: var(--diamond); }
+        .achievement-card.unlocked.mythic { --tier-color: var(--mythic); }
+        .achievement-card.unlocked.transcendent { --tier-color: var(--transcendent); }
 
         /* Glow effect for diamond */
         .achievement-card.unlocked.diamond {
@@ -269,6 +273,25 @@
         @keyframes diamond-glow {
             from { box-shadow: 0 0 5px rgba(185, 242, 255, 0.2); }
             to { box-shadow: 0 0 20px rgba(185, 242, 255, 0.4); }
+        }
+
+        /* Mythic: pulsing pink glow */
+        .achievement-card.unlocked.mythic {
+            animation: mythic-glow 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes mythic-glow {
+            from { box-shadow: 0 0 8px rgba(255, 110, 199, 0.3); }
+            to { box-shadow: 0 0 25px rgba(255, 110, 199, 0.6); }
+        }
+
+        /* Transcendent: fiery rainbow shimmer */
+        .achievement-card.unlocked.transcendent {
+            animation: transcendent-glow 2s ease-in-out infinite alternate;
+            background: linear-gradient(135deg, rgba(255,69,0,0.15), rgba(255,215,0,0.1), rgba(255,69,0,0.15));
+        }
+        @keyframes transcendent-glow {
+            from { box-shadow: 0 0 10px rgba(255, 69, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.2); }
+            to { box-shadow: 0 0 30px rgba(255, 69, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.3); }
         }
 
         .ach-emoji {
@@ -300,6 +323,8 @@
         .ach-tier.silver { color: var(--silver); }
         .ach-tier.gold { color: var(--gold); }
         .ach-tier.diamond { color: var(--diamond); }
+        .ach-tier.mythic { color: var(--mythic); }
+        .ach-tier.transcendent { color: var(--transcendent); }
 
         .ach-date {
             font-size: 0.65rem;
@@ -342,10 +367,30 @@
             border: 2px solid var(--gold);
             border-radius: 10px;
             padding: 1rem 1.5rem;
+            padding-right: 2.6rem;
             box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
-            animation: toast-in 0.5s ease forwards, toast-out 0.5s ease 4.5s forwards;
+            animation: toast-in 0.5s ease forwards;
             max-width: 320px;
+            position: relative;
         }
+        .toast.dismissing {
+            animation: toast-out 0.35s ease forwards;
+        }
+        .toast-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.6rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.2rem 0.3rem;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+        .toast-close:hover { color: var(--text); }
         .toast-title {
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -550,7 +595,7 @@
         const achList = Object.values(ACHIEVEMENTS);
 
         // Sort: unlocked first (by tier: diamond > gold > silver > bronze), then locked
-        const tierRank = { diamond: 4, gold: 3, silver: 2, bronze: 1 };
+        const tierRank = { transcendent: 6, mythic: 5, diamond: 4, gold: 3, silver: 2, bronze: 1 };
         achList.sort((a, b) => {
             if (a.unlocked !== b.unlocked) return b.unlocked - a.unlocked;
             return (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0);
@@ -629,6 +674,7 @@
                 const toast = document.createElement('div');
                 toast.className = 'toast';
                 toast.innerHTML = `
+                    <button class="toast-close" title="Dismiss">✕</button>
                     <div class="toast-title">🏆 Achievement Unlocked!</div>
                     <div class="toast-content">
                         <span class="toast-emoji">${ach.emoji}</span>
@@ -640,8 +686,11 @@
                 `;
                 container.appendChild(toast);
 
-                // Remove toast after animation
-                setTimeout(() => { toast.remove(); }, 5500);
+                // Dismiss only on close button click
+                toast.querySelector('.toast-close').addEventListener('click', () => {
+                    toast.classList.add('dismissing');
+                    setTimeout(() => toast.remove(), 380);
+                });
             }, idx * 800);
         });
 

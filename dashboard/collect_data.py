@@ -21,6 +21,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = Path(__file__).resolve().parent / "data"
 HISTORY_FILE = DATA_DIR / "history.json"
 
+# Only count commits by these authors (the thesis owner, not the forked template)
+AUTHOR_PATTERNS = ["NanoYahya", "Shubbak", "Abdulrahman"]
+
 # .tex content files to track (relative to repo root)
 CONTENT_FILES = [
     "content/00_abstract.tex",
@@ -64,20 +67,30 @@ def git(*args, cwd=None):
 
 
 def get_all_commits():
-    """Get all commits in chronological order: [(sha, datetime_str, hour, weekday)]."""
-    log = git("log", "--format=%H %aI", "--reverse")
+    """Get all commits in chronological order, filtered to thesis owner only."""
+    log = git("log", "--format=%H %aN %aI", "--reverse")
     if not log:
         return []
     commits = []
     for line in log.splitlines():
         parts = line.split(" ", 1)
-        if len(parts) == 2:
-            sha, iso_date = parts
-            try:
-                dt = datetime.fromisoformat(iso_date)
-                commits.append((sha, dt.strftime("%Y-%m-%d"), dt.hour, dt.weekday()))
-            except ValueError:
-                continue
+        if len(parts) < 2:
+            continue
+        sha = parts[0]
+        rest = parts[1]  # "AuthorName YYYY-MM-DDTHH:MM:SS+TZ"
+        # The ISO date is always the last token (contains T and + or -)
+        tokens = rest.rsplit(" ", 1)
+        if len(tokens) != 2:
+            continue
+        author_name, iso_date = tokens
+        # Filter: only keep commits by the thesis owner
+        if not any(pat.lower() in author_name.lower() for pat in AUTHOR_PATTERNS):
+            continue
+        try:
+            dt = datetime.fromisoformat(iso_date)
+            commits.append((sha, dt.strftime("%Y-%m-%d"), dt.hour, dt.weekday()))
+        except ValueError:
+            continue
     return commits
 
 
