@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis Dashboard — Traveling Wave Magnetophoresis</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        /* ================================================================
+           DARK THEME — Cookie Clicker meets Academia
+           ================================================================ */
+        :root {
+            --bg: #1a1a2e;
+            --card-bg: #16213e;
+            --plot-bg: #0f3460;
+            --text: #e0e0e0;
+            --text-muted: #8899aa;
+            --accent: #e94560;
+            --accent2: #0fa3b1;
+            --green: #4ecca3;
+            --red: #e94560;
+            --gold: #ffd700;
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --diamond: #b9f2ff;
+            --border: rgba(255,255,255,0.08);
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 50%, #0f3460 100%);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(233,69,96,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            position: relative;
+        }
+        .header h1 span { color: var(--accent); }
+        .header .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            position: relative;
+        }
+        .header .generated {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            position: relative;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.2rem 2rem;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .stat-item {
+            text-align: center;
+            min-width: 100px;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+        .stat-value.accent { color: var(--accent); }
+        .stat-value.gold { color: var(--gold); }
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        /* Progress bar */
+        .progress-section {
+            padding: 1rem 2rem;
+            background: var(--bg);
+        }
+        .progress-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .progress-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .progress-pct {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+        .progress-bar-bg {
+            height: 8px;
+            background: var(--plot-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Main grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 0.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+        .chart-card.third-width {
+            /* For gauge + heatmap side by side */
+        }
+
+        /* Plotly responsive */
+        .chart-card .js-plotly-plot, .chart-card .plotly {
+            width: 100% !important;
+        }
+
+        /* Achievement section */
+        .achievements-section {
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .achievements-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .achievements-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .achievements-title span { color: var(--gold); }
+        .achievements-count {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .achievements-count strong {
+            color: var(--green);
+            font-size: 1.1rem;
+        }
+
+        /* Category filter buttons */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--accent);
+            color: var(--text);
+            background: rgba(233, 69, 96, 0.15);
+        }
+
+        /* Achievement grid */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .achievement-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .achievement-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--border);
+        }
+        .achievement-card.unlocked::before {
+            background: var(--tier-color, var(--bronze));
+        }
+        .achievement-card.locked {
+            opacity: 0.5;
+            filter: grayscale(0.7);
+        }
+        .achievement-card.locked:hover {
+            opacity: 0.7;
+        }
+        .achievement-card.unlocked:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border-color: var(--tier-color, var(--bronze));
+        }
+        .achievement-card.unlocked.bronze { --tier-color: var(--bronze); }
+        .achievement-card.unlocked.silver { --tier-color: var(--silver); }
+        .achievement-card.unlocked.gold { --tier-color: var(--gold); }
+        .achievement-card.unlocked.diamond { --tier-color: var(--diamond); }
+
+        /* Glow effect for diamond */
+        .achievement-card.unlocked.diamond {
+            animation: diamond-glow 3s ease-in-out infinite alternate;
+        }
+        @keyframes diamond-glow {
+            from { box-shadow: 0 0 5px rgba(185, 242, 255, 0.2); }
+            to { box-shadow: 0 0 20px rgba(185, 242, 255, 0.4); }
+        }
+
+        .ach-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.4rem;
+        }
+        .ach-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .ach-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+        .ach-tier {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            background: rgba(0,0,0,0.3);
+        }
+        .ach-tier.bronze { color: var(--bronze); }
+        .ach-tier.silver { color: var(--silver); }
+        .ach-tier.gold { color: var(--gold); }
+        .ach-tier.diamond { color: var(--diamond); }
+
+        .ach-date {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .achievement-card.unlocked:hover .ach-date {
+            opacity: 1;
+        }
+
+        /* Shadow achievement special style */
+        .achievement-card.locked.shadow {
+            border-style: dashed;
+            border-color: rgba(255, 215, 0, 0.15);
+        }
+        .achievement-card.unlocked.shadow::after {
+            content: '🔓 SECRET';
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            font-size: 0.55rem;
+            color: var(--gold);
+            opacity: 0.7;
+        }
+
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .toast {
+            background: var(--card-bg);
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
+            animation: toast-in 0.5s ease forwards, toast-out 0.5s ease 4.5s forwards;
+            max-width: 320px;
+        }
+        .toast-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .toast-emoji { font-size: 1.5rem; }
+        .toast-text .toast-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .toast-text .toast-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes toast-out {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100px); }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                padding: 0.5rem;
+            }
+            .achievement-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            .stats-bar {
+                padding: 1rem;
+            }
+            .achievements-section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<div class="header">
+    <h1>📊 Thesis <span>Dashboard</span></h1>
+    <div class="subtitle">Traveling Wave Magnetophoresis for Lab-on-a-Chip Applications</div>
+    <div class="generated">Last updated: {{GENERATED_AT}}</div>
+</div>
+
+<!-- ============================================================
+     STATS BAR
+     ============================================================ -->
+<div class="stats-bar" id="stats-bar"></div>
+
+<!-- ============================================================
+     WORD PROGRESS BAR
+     ============================================================ -->
+<div class="progress-section">
+    <div class="progress-container">
+        <div class="progress-header">
+            <span class="progress-title">Word Count Progress</span>
+            <span class="progress-pct" id="progress-pct"></span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     CHARTS GRID
+     ============================================================ -->
+<div class="dashboard-grid">
+    <div class="chart-card full-width">
+        {{CHART_WORDS}}
+    </div>
+    <div class="chart-card full-width">
+        {{CHART_ACTIVITY}}
+    </div>
+    <div class="chart-card">
+        {{CHART_CHAPTERS}}
+    </div>
+    <div class="chart-card">
+        {{CHART_ASSETS}}
+    </div>
+    <div class="chart-card">
+        {{CHART_GAUGE}}
+    </div>
+    <div class="chart-card">
+        {{CHART_HEATMAP}}
+    </div>
+</div>
+
+<!-- ============================================================
+     ACHIEVEMENTS
+     ============================================================ -->
+<div class="achievements-section">
+    <div class="achievements-header">
+        <div class="achievements-title">🏆 <span>Achievements</span></div>
+        <div class="achievements-count">
+            <strong id="ach-unlocked">{{UNLOCKED_COUNT}}</strong> / {{TOTAL_ACHIEVEMENTS}} unlocked
+        </div>
+    </div>
+
+    <!-- Achievement progress bar -->
+    <div class="progress-container" style="margin-bottom: 1rem;">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="ach-progress-fill" style="background: linear-gradient(90deg, var(--bronze), var(--gold), var(--diamond));"></div>
+        </div>
+    </div>
+
+    <!-- Category filters -->
+    <div class="category-filters" id="category-filters"></div>
+
+    <!-- Achievement grid -->
+    <div class="achievement-grid" id="achievement-grid"></div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<div class="footer">
+    <p>Thesis Progress Dashboard &middot; Auto-generated from git history &middot; Keep writing! ✍️</p>
+</div>
+
+<!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ============================================================
+     DATA & LOGIC
+     ============================================================ -->
+<script>
+    // Injected data
+    const STATS = {{STATS_JSON}};
+    const ACHIEVEMENTS = {{ACHIEVEMENTS_JSON}};
+    const NEWLY_UNLOCKED = {{NEWLY_UNLOCKED_JSON}};
+    const TOTAL_ACH = {{TOTAL_ACHIEVEMENTS}};
+    const UNLOCKED_ACH = {{UNLOCKED_COUNT}};
+
+    // ---- Stats Bar ----
+    (function renderStats() {
+        const bar = document.getElementById('stats-bar');
+        const items = [
+            { value: STATS.total_words.toLocaleString(), label: 'Words', cls: '' },
+            { value: STATS.pages, label: 'Pages', cls: '' },
+            { value: STATS.figures, label: 'Figures', cls: '' },
+            { value: STATS.tables, label: 'Tables', cls: '' },
+            { value: STATS.equations, label: 'Equations', cls: '' },
+            { value: STATS.citations, label: 'Citations', cls: '' },
+            { value: STATS.sections, label: 'Sections', cls: '' },
+            { value: STATS.total_commits, label: 'Commits', cls: 'accent' },
+            { value: STATS.days_tracked, label: 'Days Tracked', cls: '' },
+        ];
+        bar.innerHTML = items.map(i =>
+            `<div class="stat-item">
+                <div class="stat-value ${i.cls}">${i.value}</div>
+                <div class="stat-label">${i.label}</div>
+            </div>`
+        ).join('');
+    })();
+
+    // ---- Progress Bar ----
+    (function renderProgress() {
+        const pct = Math.min(STATS.progress_pct, 100);
+        document.getElementById('progress-pct').textContent =
+            `${STATS.total_words.toLocaleString()} / ${STATS.word_target.toLocaleString()} (${STATS.progress_pct}%)`;
+        document.getElementById('progress-fill').style.width = pct + '%';
+
+        // Achievement progress
+        const achPct = TOTAL_ACH > 0 ? (UNLOCKED_ACH / TOTAL_ACH * 100) : 0;
+        document.getElementById('ach-progress-fill').style.width = achPct + '%';
+    })();
+
+    // ---- Achievements ----
+    const categoryOrder = ['Writing', 'Editing', 'Figures', 'Tables', 'Equations', 'Citations', 'Chapters', 'Streaks', 'Time', 'Shadow'];
+    let activeFilter = 'All';
+
+    function renderAchievements(filter) {
+        const grid = document.getElementById('achievement-grid');
+        const achList = Object.values(ACHIEVEMENTS);
+
+        // Sort: unlocked first (by tier: diamond > gold > silver > bronze), then locked
+        const tierRank = { diamond: 4, gold: 3, silver: 2, bronze: 1 };
+        achList.sort((a, b) => {
+            if (a.unlocked !== b.unlocked) return b.unlocked - a.unlocked;
+            return (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0);
+        });
+
+        const filtered = filter === 'All'
+            ? achList
+            : achList.filter(a => a.category === filter);
+
+        grid.innerHTML = filtered.map(a => {
+            const isLocked = !a.unlocked;
+            const isHidden = a.hidden && isLocked;
+            const isShadow = a.category === 'Shadow';
+
+            const emoji = isHidden ? '🥚' : a.emoji;
+            const name = isHidden ? '???' : a.name;
+            const desc = isHidden ? (a.hint || 'A secret achievement...') : a.description;
+            const dateStr = a.unlock_date ? `Unlocked: ${a.unlock_date}` : '';
+
+            const classes = [
+                'achievement-card',
+                isLocked ? 'locked' : 'unlocked',
+                a.tier,
+                isShadow ? 'shadow' : '',
+            ].filter(Boolean).join(' ');
+
+            return `<div class="${classes}" title="${desc}">
+                <span class="ach-tier ${a.tier}">${a.tier}</span>
+                <div class="ach-emoji">${emoji}</div>
+                <div class="ach-name">${name}</div>
+                <div class="ach-desc">${desc}</div>
+                ${dateStr ? `<div class="ach-date">${dateStr}</div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    (function renderFilters() {
+        const container = document.getElementById('category-filters');
+        const categories = ['All', ...categoryOrder];
+        container.innerHTML = categories.map(c => {
+            const active = c === activeFilter ? 'active' : '';
+            return `<button class="filter-btn ${active}" data-cat="${c}">${c}</button>`;
+        }).join('');
+
+        container.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            activeFilter = btn.dataset.cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderAchievements(activeFilter);
+        });
+    })();
+
+    renderAchievements('All');
+
+    // ---- Toast Notifications ----
+    (function showToasts() {
+        if (!NEWLY_UNLOCKED || NEWLY_UNLOCKED.length === 0) return;
+
+        // Check localStorage for already-seen toasts
+        const seenKey = 'thesis-dashboard-seen-achievements';
+        let seen = [];
+        try { seen = JSON.parse(localStorage.getItem(seenKey) || '[]'); } catch(e) {}
+
+        const unseen = NEWLY_UNLOCKED.filter(id => !seen.includes(id));
+        if (unseen.length === 0) return;
+
+        const container = document.getElementById('toast-container');
+
+        unseen.forEach((achId, idx) => {
+            const ach = ACHIEVEMENTS[achId];
+            if (!ach) return;
+
+            setTimeout(() => {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `
+                    <div class="toast-title">🏆 Achievement Unlocked!</div>
+                    <div class="toast-content">
+                        <span class="toast-emoji">${ach.emoji}</span>
+                        <div class="toast-text">
+                            <div class="toast-name">${ach.name}</div>
+                            <div class="toast-desc">${ach.description}</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(toast);
+
+                // Remove toast after animation
+                setTimeout(() => { toast.remove(); }, 5500);
+            }, idx * 800);
+        });
+
+        // Mark as seen
+        seen.push(...unseen);
+        try { localStorage.setItem(seenKey, JSON.stringify(seen)); } catch(e) {}
+    })();
+
+    // ---- Make Plotly charts responsive ----
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.js-plotly-plot').forEach(plot => {
+            Plotly.Plots.resize(plot);
+        });
+    });
+
+    // Trigger initial resize for proper sizing
+    setTimeout(() => {
+        document.querySelectorAll('.js-plotly-plot').forEach(plot => {
+            Plotly.Plots.resize(plot);
+        });
+    }, 100);
+</script>
+
+</body>
+</html>

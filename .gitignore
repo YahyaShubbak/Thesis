@@ -23,3 +23,7 @@ technical/build/
 /thesis.pdf
 /thesis-1.cpt
 /thesis.synctex.gz
+
+# Dashboard generated files
+dashboard/data/
+dashboard/output/

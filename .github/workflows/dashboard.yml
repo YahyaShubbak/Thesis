@@ -1,0 +1,72 @@
+name: Update Dashboard
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 16 * * 1'  # Every Monday at 16:00 UTC (same as thesis build)
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  dashboard:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history needed for git log
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-extra-utils poppler-utils
+
+    - name: Install Python dependencies
+      run: pip install -r dashboard/requirements.txt
+
+    - name: Build thesis PDF (for page count)
+      continue-on-error: true  # Dashboard should work even if LaTeX build fails
+      run: |
+        pip install https://github.com/maxnoe/texlive-batch-installation/archive/refs/tags/v0.3.1.tar.gz
+        install_texlive -p $HOME/texlive -t 2023 --collections="-a" --package-file tex-packages.txt --update
+        echo "$HOME/texlive/2023/bin/x86_64-linux" >> $GITHUB_PATH
+        latexmk || echo "LaTeX build failed, continuing without page count"
+
+    - name: Collect thesis data
+      run: python dashboard/collect_data.py
+
+    - name: Evaluate achievements
+      run: |
+        python -c "
+        from dashboard.achievements import evaluate_and_save
+        import json
+        with open('dashboard/data/history.json') as f:
+            history = json.load(f)
+        evaluate_and_save(history)
+        "
+
+    - name: Generate dashboard
+      run: python dashboard/generate_dashboard.py
+
+    - name: Deploy to GitHub Pages
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: dashboard/output
+        force_orphan: true
+
+    - name: Upload dashboard artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: thesis-dashboard
+        path: dashboard/output/index.html
