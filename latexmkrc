@@ -1,5 +1,5 @@
 # $cleanup_mode = 1;
-$out_dir = "technical\\build";
+$out_dir = "technical/build";
 $bibtex_use = 1.5;
 $pdf_previewer = "start c:\\Users\\YaSh\\AppData\\Local\\SumatraPDF\\SumatraPDF.exe %O %S";
 $pdflatex = "lualatex -shell-escape -interaction=nonstopmode -halt-on-error -synctex=1 %O %S";

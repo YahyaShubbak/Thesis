@@ -16,35 +16,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install texlive
-      uses: zauguin/install-texlive@v3
+    - name: Build thesis
+      uses: xu-cheng/latex-action@v3
       with:
-        packages: >
-          scheme-basic
-          collection-luatex
-          collection-latexrecommended
-          collection-latexextra
-          collection-fontsrecommended
-          collection-fontsextra
-          collection-mathscience
-          collection-bibtexextra
-          biber
-          biblatex
-          latexmk
-          lualatex-math
-          fontspec
-          microtype
-          unicode-math
-          physics
-          chemformula
-          xfrac
-          acronym
-          pdfpages
-          cprotect
-          placeins
-          extdash
-          scrhack
-
-    - name: Build document
-      run: |
-        latexmk
+        root_file: thesis.tex
+        latexmk_shell_escape: true
