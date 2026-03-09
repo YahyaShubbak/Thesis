@@ -189,6 +189,30 @@ def _define_achievements():
          "_secret_name": "Groundhog Day", "_secret_description": "Have two consecutive days with the exact same word count.", "_secret_emoji": "🦫"},
         {"id": "shadow_thesis_birthday", "name": "???", "description": "???", "hint": "Anniversaries come around once a year...", "emoji": "🥚", "category": "Shadow", "tier": "mythic", "hidden": True,
          "_secret_name": "Happy Birthday Thesis", "_secret_description": "Commit exactly one year after your first ever commit.", "_secret_emoji": "🎂"},
+
+        # =================================================================
+        # PHYSICS / THESIS-THEMED (20)
+        # =================================================================
+        {"id": "dipole_moment", "name": "Dipole Moment", "description": "Two chapters with 100+ words each.", "hint": "Even a simple dipole has two poles.", "emoji": "🧲", "category": "Physics", "tier": "bronze", "hidden": False},
+        {"id": "first_principles", "name": "First Principles", "description": "Theory chapter crosses 500 words.", "hint": "Ab initio: from the beginning.", "emoji": "⚛️", "category": "Physics", "tier": "bronze", "hidden": False},
+        {"id": "lab_notebook", "name": "Lab Notebook", "description": "Experimental chapter crosses 500 words.", "hint": "If it is not written down, it did not happen.", "emoji": "🔬", "category": "Physics", "tier": "bronze", "hidden": False},
+        {"id": "seed_crystal", "name": "Seed Crystal", "description": "Abstract, Introduction, and Theory all started.", "hint": "The nucleus around which the thesis crystallizes.", "emoji": "💎", "category": "Physics", "tier": "bronze", "hidden": False},
+        {"id": "exchange_coupling", "name": "Exchange Coupling", "description": "Theory + Experimental combined exceed 3,000 words.", "hint": "Two chapters, one exchange interaction.", "emoji": "🔗", "category": "Physics", "tier": "silver", "hidden": False},
+        {"id": "stoner_wohlfarth", "name": "Stoner-Wohlfarth", "description": "10+ equations in a thesis with 2,000+ word theory chapter.", "hint": "The single-domain model of thesis writing.", "emoji": "📉", "category": "Physics", "tier": "silver", "hidden": False},
+        {"id": "zeta_potential", "name": "Zeta Potential", "description": "Accumulate 30+ citations.", "hint": "The surface charge of your thesis in the literature.", "emoji": "⚡", "category": "Physics", "tier": "silver", "hidden": False},
+        {"id": "brownian_motion", "name": "Brownian Motion", "description": "Write on 10 distinct days.", "hint": "A random walk through the writing process.", "emoji": "🎲", "category": "Physics", "tier": "silver", "hidden": False},
+        {"id": "critical_frequency", "name": "Critical Frequency", "description": "Results + Discussion > 3,000 words with 15+ figures.", "hint": "Above ν_c, the particles can no longer follow.", "emoji": "📡", "category": "Physics", "tier": "gold", "hidden": False},
+        {"id": "dlvo_force_balance", "name": "DLVO Force Balance", "description": "Theory chapter > 5,000 words with 20+ equations.", "hint": "Van der Waals attraction meets electrostatic repulsion.", "emoji": "⚖️", "category": "Physics", "tier": "gold", "hidden": False},
+        {"id": "ion_bombardment", "name": "Ion Bombardment", "description": "Experimental chapter > 3,000 words with 5+ figures.", "hint": "10 keV He⁺ ions, meet your thesis.", "emoji": "💥", "category": "Physics", "tier": "gold", "hidden": False},
+        {"id": "magnetic_domain", "name": "Magnetic Domain", "description": "Reach 25 figures.", "hint": "Each figure is a domain in your scientific landscape.", "emoji": "🧭", "category": "Physics", "tier": "gold", "hidden": False},
+        {"id": "goldman_drag", "name": "Goldman Drag", "description": "Exceed 20,000 words with 30+ equations.", "hint": "The wall correction slows you down, but never stops you.", "emoji": "🐢", "category": "Physics", "tier": "diamond", "hidden": False},
+        {"id": "the_separator", "name": "The Separator", "description": "5+ chapters with 500+ words each.", "hint": "COOH vs NH₂ — separation achieved.", "emoji": "🔀", "category": "Physics", "tier": "diamond", "hidden": False},
+        {"id": "superparamagnetic", "name": "Superparamagnetic", "description": "15+ figures, 2+ tables, and 20+ equations.", "hint": "Above the blocking volume, your thesis fluctuates freely.", "emoji": "🌀", "category": "Physics", "tier": "diamond", "hidden": False},
+        {"id": "layer_stack", "name": "Layer Stack", "description": "30,000+ words, 20+ figures, and 75+ citations.", "hint": "Cu/IrMn/CoFe/Si — each layer adds to the quality.", "emoji": "🏗️", "category": "Physics", "tier": "diamond", "hidden": False},
+        {"id": "traveling_wave", "name": "Traveling Wave", "description": "40,000+ words, 30+ figures, 40+ equations, 100+ citations.", "hint": "The magnetic wave carries everything forward.", "emoji": "🌊", "category": "Physics", "tier": "mythic", "hidden": False},
+        {"id": "magnon_condensate", "name": "Magnon Condensate", "description": "Intro, Theory, Experimental, and Results each > 2,000 words.", "hint": "All chapters in coherent excitation.", "emoji": "❄️", "category": "Physics", "tier": "mythic", "hidden": False},
+        {"id": "meiklejohn_bean", "name": "Meiklejohn-Bean", "description": "50,000+ words, 50+ equations, 125+ citations, 35+ figures.", "hint": "The foundational model — exchange biased toward greatness.", "emoji": "👑", "category": "Physics", "tier": "transcendent", "hidden": False},
+        {"id": "the_dissertation", "name": "The Dissertation", "description": "A complete physics dissertation with all chapters substantial.", "hint": "Defended. Done. Doctor.", "emoji": "🎓", "category": "Physics", "tier": "transcendent", "hidden": False},
     ]
 
 
@@ -395,6 +419,11 @@ def check_achievements(history_data):
     results_words = chapters.get("Results", 0) + chapters.get("Discussion", 0)
     outlook_words = chapters.get("Outlook", 0)
 
+    # Physics achievement helpers
+    chapter_counts_100 = sum(1 for v in chapters.values() if v >= 100)
+    chapter_counts_500 = sum(1 for v in chapters.values() if v >= 500)
+    theory_exp_combined = theory_words + experimental_words
+
     # Build condition map
     conditions = {
         # Writing milestones
@@ -528,6 +557,28 @@ def check_achievements(history_data):
         "shadow_fibonacci": has_fibonacci_words,
         "shadow_groundhog": has_groundhog,
         "shadow_thesis_birthday": has_thesis_birthday,
+
+        # Physics / thesis-themed
+        "dipole_moment": chapter_counts_100 >= 2,
+        "first_principles": theory_words >= 500,
+        "lab_notebook": experimental_words >= 500,
+        "seed_crystal": abstract_words > 0 and intro_words > 0 and theory_words > 0,
+        "exchange_coupling": theory_exp_combined >= 3000,
+        "stoner_wohlfarth": equations >= 10 and theory_words >= 2000,
+        "zeta_potential": citations >= 30,
+        "brownian_motion": total_writing_days >= 10,
+        "critical_frequency": results_words >= 3000 and figures >= 15,
+        "dlvo_force_balance": theory_words >= 5000 and equations >= 20,
+        "ion_bombardment": experimental_words >= 3000 and figures >= 5,
+        "magnetic_domain": figures >= 25,
+        "goldman_drag": total_words >= 20000 and equations >= 30,
+        "the_separator": chapter_counts_500 >= 5,
+        "superparamagnetic": figures >= 15 and tables >= 2 and equations >= 20,
+        "layer_stack": total_words >= 30000 and figures >= 20 and citations >= 75,
+        "traveling_wave": total_words >= 40000 and figures >= 30 and equations >= 40 and citations >= 100,
+        "magnon_condensate": intro_words >= 2000 and theory_words >= 2000 and experimental_words >= 2000 and results_words >= 2000,
+        "meiklejohn_bean": total_words >= 50000 and equations >= 50 and citations >= 125 and figures >= 35,
+        "the_dissertation": total_words >= 50000 and abstract_words >= 200 and intro_words >= 3000 and theory_words >= 8000 and experimental_words >= 3000 and results_words >= 8000 and outlook_words >= 500 and figures >= 30 and equations >= 40 and citations >= 100,
     }
 
     # Resolve achievements

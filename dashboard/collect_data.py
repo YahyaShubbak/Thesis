@@ -25,18 +25,22 @@ HISTORY_FILE = DATA_DIR / "history.json"
 AUTHOR_PATTERNS = ["NanoYahya", "Shubbak", "Abdulrahman"]
 
 # .tex content files to track (relative to repo root)
+# Only .tex files are counted — .md, .bib, and other files are explicitly excluded
+# so that auxiliary files (e.g. Stichpunkte.md) do not inflate writing metrics.
 CONTENT_FILES = [
-    "content/00_abstract.tex",
-    "content/01_introduction.tex",
-    "content/02_theory.tex",
-    "content/03_experimental.tex",
-    "content/04_results.tex",
-    "content/05_results_discussion.tex",
-    "content/07_ausblick.tex",
-    "content/08_danksagung.tex",
-    "content/09_eigenstaendigkeit.tex",
-    "content/a_anhang.tex",
-    "content/Abbreviations.tex",
+    f for f in [
+        "content/00_abstract.tex",
+        "content/01_introduction.tex",
+        "content/02_theory.tex",
+        "content/03_experimental.tex",
+        "content/04_results.tex",
+        "content/05_results_discussion.tex",
+        "content/07_ausblick.tex",
+        "content/08_danksagung.tex",
+        "content/09_eigenstaendigkeit.tex",
+        "content/a_anhang.tex",
+        "content/Abbreviations.tex",
+    ] if f.endswith(".tex")
 ]
 
 # Friendly chapter names for display
