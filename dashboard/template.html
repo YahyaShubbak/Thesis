@@ -248,11 +248,34 @@
             background: var(--tier-color, var(--bronze));
         }
         .achievement-card.locked {
-            opacity: 0.5;
-            filter: grayscale(0.7);
+            opacity: 0.45;
+            border-color: rgba(255, 255, 255, 0.03);
         }
         .achievement-card.locked:hover {
-            opacity: 0.7;
+            opacity: 0.6;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        .achievement-card.locked .ach-emoji {
+            font-size: 2.2rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+            font-style: normal;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            font-weight: 700;
+        }
+        .achievement-card.locked .ach-name {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+        .achievement-card.locked .ach-desc {
+            opacity: 0.5;
+            font-style: italic;
+        }
+        .ach-secret-label {
+            font-size: 0.55rem;
+            color: var(--gold);
+            opacity: 0.5;
+            margin-top: 0.3rem;
         }
         .achievement-card.unlocked:hover {
             transform: translateY(-2px);
@@ -551,6 +574,7 @@
     const NEWLY_UNLOCKED = {{NEWLY_UNLOCKED_JSON}};
     const TOTAL_ACH = {{TOTAL_ACHIEVEMENTS}};
     const UNLOCKED_ACH = {{UNLOCKED_COUNT}};
+    const ACHIEVEMENT_ORDER = {{ACHIEVEMENT_ORDER_JSON}};
 
     // ---- Stats Bar ----
     (function renderStats() {
@@ -594,11 +618,16 @@
         const grid = document.getElementById('achievement-grid');
         const achList = Object.values(ACHIEVEMENTS);
 
-        // Sort: unlocked first (by tier: diamond > gold > silver > bronze), then locked
-        const tierRank = { transcendent: 6, mythic: 5, diamond: 4, gold: 3, silver: 2, bronze: 1 };
+        // Build definition order index map for stable sort
+        const orderIndex = {};
+        ACHIEVEMENT_ORDER.forEach((id, idx) => { orderIndex[id] = idx; });
+
+        // Sort by tier ascending (bronze first), then by definition order within tier
+        const tierRank = { bronze: 1, silver: 2, gold: 3, diamond: 4, mythic: 5, transcendent: 6 };
         achList.sort((a, b) => {
-            if (a.unlocked !== b.unlocked) return b.unlocked - a.unlocked;
-            return (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0);
+            const tierDiff = (tierRank[a.tier] || 0) - (tierRank[b.tier] || 0);
+            if (tierDiff !== 0) return tierDiff;
+            return (orderIndex[a.id] || 0) - (orderIndex[b.id] || 0);
         });
 
         const filtered = filter === 'All'
@@ -607,26 +636,38 @@
 
         grid.innerHTML = filtered.map(a => {
             const isLocked = !a.unlocked;
-            const isHidden = a.hidden && isLocked;
             const isShadow = a.category === 'Shadow';
 
-            const emoji = isHidden ? '🥚' : a.emoji;
-            const name = isHidden ? '???' : a.name;
-            const desc = isHidden ? (a.hint || 'A secret achievement...') : a.description;
-            const dateStr = a.unlock_date ? `Unlocked: ${a.unlock_date}` : '';
+            if (isLocked) {
+                // Cookie Clicker style: hidden "?" card
+                const hintText = a.hidden ? '???' : (a.hint || '???');
+                const secretLabel = isShadow ? '<div class="ach-secret-label">\uD83D\uDD12 SECRET</div>' : '';
+                const classes = [
+                    'achievement-card', 'locked', a.tier,
+                    isShadow ? 'shadow' : '',
+                ].filter(Boolean).join(' ');
 
+                return `<div class="${classes}" title="${hintText}">
+                    <span class="ach-tier ${a.tier}">${a.tier}</span>
+                    <div class="ach-emoji">?</div>
+                    <div class="ach-name">???</div>
+                    <div class="ach-desc">${hintText}</div>
+                    ${secretLabel}
+                </div>`;
+            }
+
+            // Unlocked card
+            const dateStr = a.unlock_date ? `Unlocked: ${a.unlock_date}` : '';
             const classes = [
-                'achievement-card',
-                isLocked ? 'locked' : 'unlocked',
-                a.tier,
+                'achievement-card', 'unlocked', a.tier,
                 isShadow ? 'shadow' : '',
             ].filter(Boolean).join(' ');
 
-            return `<div class="${classes}" title="${desc}">
+            return `<div class="${classes}" title="${a.description}">
                 <span class="ach-tier ${a.tier}">${a.tier}</span>
-                <div class="ach-emoji">${emoji}</div>
-                <div class="ach-name">${name}</div>
-                <div class="ach-desc">${desc}</div>
+                <div class="ach-emoji">${a.emoji}</div>
+                <div class="ach-name">${a.name}</div>
+                <div class="ach-desc">${a.description}</div>
                 ${dateStr ? `<div class="ach-date">${dateStr}</div>` : ''}
             </div>`;
         }).join('');

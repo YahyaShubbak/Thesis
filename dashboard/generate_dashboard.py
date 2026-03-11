@@ -474,6 +474,10 @@ def generate():
     unlocked_count = achievements_data.get("unlocked", 0)
     newly_unlocked = achievements_data.get("newly_unlocked", [])
 
+    # Ordered list of achievement IDs for stable frontend sorting
+    all_definitions = achievements_data.get("all_definitions", [])
+    achievement_order = [a["id"] for a in all_definitions]
+
     # Summary stats
     latest = daily[-1] if daily else {}
     stats = {
@@ -509,6 +513,7 @@ def generate():
     html = html.replace("{{NEWLY_UNLOCKED_JSON}}", json.dumps(newly_unlocked))
     html = html.replace("{{TOTAL_ACHIEVEMENTS}}", str(total_achievements))
     html = html.replace("{{UNLOCKED_COUNT}}", str(unlocked_count))
+    html = html.replace("{{ACHIEVEMENT_ORDER_JSON}}", json.dumps(achievement_order))
     html = html.replace("{{GENERATED_AT}}", history.get("generated_at", "unknown"))
 
     output_path = OUTPUT_DIR / "index.html"
