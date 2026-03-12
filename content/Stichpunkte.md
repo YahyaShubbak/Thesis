@@ -1,12 +1,3 @@
-# Thesis Writing Guide — Stichpunkte
-
-> ±10 bullet points per chapter/section/subsection.
-> Depth and style modeled after Huhnstock's dissertation (2022).
-> Specific equations to derive are named explicitly.
-> Chapters 7–9 (Protein transport, Tissue, WLI) are deferred.
-
----
-
 ## Chapter 1: Introduction
 
 1. Open with the broad vision: Lab-on-a-chip (LOC) devices for diagnostics/analytics; magnetic particles as mobile carriers for analyte capture, transport, and detection
