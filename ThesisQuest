@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+QUEST_ROOT="/home/yahya/Dokumente/GitHub/Thesis-Quest"
+TARGET_REPO="/home/yahya/Dokumente/GitHub/Thesis"
+STATE_DIR="/home/yahya/Dokumente/GitHub/Thesis-Quest/dashboard/projects/thesis-5ac8a2e8"
+OUTPUT_DIR="$STATE_DIR/output"
+
+export THESIS_QUEST_PROJECT_ROOT="$TARGET_REPO"
+export THESIS_QUEST_STATE_DIR="$STATE_DIR"
+export THESIS_QUEST_OUTPUT_DIR="$OUTPUT_DIR"
+
+bash "$QUEST_ROOT/dashboard/run_local.sh"
