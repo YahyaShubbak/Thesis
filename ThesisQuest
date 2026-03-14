@@ -10,4 +10,4 @@ export THESIS_QUEST_PROJECT_ROOT="$TARGET_REPO"
 export THESIS_QUEST_STATE_DIR="$STATE_DIR"
 export THESIS_QUEST_OUTPUT_DIR="$OUTPUT_DIR"
 
-bash "$QUEST_ROOT/dashboard/run_local.sh"
+bash "$QUEST_ROOT/thesis-quest.sh"

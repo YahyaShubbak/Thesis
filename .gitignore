@@ -26,6 +26,9 @@ technical/build/
 
 # Dashboard generated files
 dashboard/data/
+!dashboard/data/
+dashboard/data/*
+!dashboard/data/history.json
 dashboard/output/
 dashboard/__pycache__/achievements.cpython-313.pyc
 *.pyc
