@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+LEADERBOARD_ROOT="/home/yahya/Dokumente/GitHub/Thesis-Quest-Leaderboard"
+GENERATOR="$LEADERBOARD_ROOT/leaderboard/generate_leaderboard.py"
+CONFIG_PATH="$LEADERBOARD_ROOT/leaderboard/config/participants.json"
+OUTPUT_DIR="$LEADERBOARD_ROOT/leaderboard/output"
+
+if [[ ! -f "$GENERATOR" ]]; then
+  echo "Generator not found: $GENERATOR"
+  exit 1
+fi
+
+if [[ ! -f "$CONFIG_PATH" ]]; then
+  echo "Config not found: $CONFIG_PATH"
+  exit 1
+fi
+
+PYTHON_BIN="${PYTHON_BIN:-python}"
+if ! command -v "$PYTHON_BIN" >/dev/null 2>&1; then
+  if command -v python3 >/dev/null 2>&1; then
+    PYTHON_BIN="python3"
+  else
+    echo "No Python interpreter found in PATH."
+    exit 1
+  fi
+fi
+
+if [[ -z "${LEADERBOARD_GH_TOKEN:-}" ]]; then
+  echo "Hint: LEADERBOARD_GH_TOKEN is not set. Private repos may fail to load."
+fi
+
+"$PYTHON_BIN" "$GENERATOR" \
+  --config "$CONFIG_PATH" \
+  --output-dir "$OUTPUT_DIR"
+
+echo ""
+echo "Leaderboard updated: $OUTPUT_DIR/index.html"
