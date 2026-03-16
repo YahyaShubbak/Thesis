@@ -16,8 +16,12 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
+    - name: Install TeX Live
+      run: |
+        python3 -m pip install --user https://github.com/maxnoe/texlive-batch-installation/archive/refs/tags/v0.3.1.tar.gz
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+        install_texlive -p $HOME/texlive -t 2023 --collections="-a" --package-file tex-packages.txt --update
+        echo "$HOME/texlive/2023/bin/x86_64-linux" >> $GITHUB_PATH
+
     - name: Build thesis
-      uses: xu-cheng/latex-action@v3
-      with:
-        root_file: thesis.tex
-        latexmk_shell_escape: true
+      run: latexmk -pdf -interaction=nonstopmode -file-line-error thesis.tex
