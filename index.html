@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesis Dashboard — Traveling Wave Magnetophoresis</title>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <style>
+        /* ================================================================
+           DARK THEME — Cookie Clicker meets Academia
+           ================================================================ */
+        :root {
+            --bg: #1a1a2e;
+            --card-bg: #16213e;
+            --plot-bg: #0f3460;
+            --text: #e0e0e0;
+            --text-muted: #8899aa;
+            --accent: #e94560;
+            --accent2: #0fa3b1;
+            --green: #4ecca3;
+            --red: #e94560;
+            --gold: #ffd700;
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --diamond: #b9f2ff;
+            --mythic: #ff6ec7;
+            --transcendent: #ff4500;
+            --border: rgba(255,255,255,0.08);
+            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 50%, #0f3460 100%);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(233,69,96,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            position: relative;
+        }
+        .header h1 span { color: var(--accent); }
+        .header .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            position: relative;
+        }
+        .header .generated {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            position: relative;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.2rem 2rem;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .stat-item {
+            text-align: center;
+            min-width: 100px;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+        .stat-value.accent { color: var(--accent); }
+        .stat-value.gold { color: var(--gold); }
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        /* Progress bar */
+        .progress-section {
+            padding: 1rem 2rem;
+            background: var(--bg);
+        }
+        .progress-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .progress-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .progress-pct {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+        .progress-bar-bg {
+            height: 8px;
+            background: var(--plot-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Main grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 0.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+        .chart-card.third-width {
+            /* For gauge + heatmap side by side */
+        }
+
+        /* Plotly responsive */
+        .chart-card .js-plotly-plot, .chart-card .plotly {
+            width: 100% !important;
+        }
+
+        /* Achievement section */
+        .achievements-section {
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .achievements-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .achievements-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .achievements-title span { color: var(--gold); }
+        .achievements-count {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .achievements-count strong {
+            color: var(--green);
+            font-size: 1.1rem;
+        }
+
+        /* Category filter buttons */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--accent);
+            color: var(--text);
+            background: rgba(233, 69, 96, 0.15);
+        }
+
+        /* Achievement grid */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .achievement-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .achievement-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--border);
+        }
+        .achievement-card.unlocked::before {
+            background: var(--tier-color, var(--bronze));
+        }
+        .achievement-card.locked {
+            opacity: 0.45;
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+        .achievement-card.locked:hover {
+            opacity: 0.6;
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        .achievement-card.locked .ach-emoji {
+            font-size: 2.2rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+            font-style: normal;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            font-weight: 700;
+        }
+        .achievement-card.locked .ach-name {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+        .achievement-card.locked .ach-desc {
+            opacity: 0.5;
+            font-style: italic;
+        }
+        .ach-secret-label {
+            font-size: 0.55rem;
+            color: var(--gold);
+            opacity: 0.5;
+            margin-top: 0.3rem;
+        }
+        .achievement-card.unlocked:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border-color: var(--tier-color, var(--bronze));
+        }
+        .achievement-card.unlocked.bronze { --tier-color: var(--bronze); }
+        .achievement-card.unlocked.silver { --tier-color: var(--silver); }
+        .achievement-card.unlocked.gold { --tier-color: var(--gold); }
+        .achievement-card.unlocked.diamond { --tier-color: var(--diamond); }
+        .achievement-card.unlocked.mythic { --tier-color: var(--mythic); }
+        .achievement-card.unlocked.transcendent { --tier-color: var(--transcendent); }
+
+        /* Glow effect for diamond */
+        .achievement-card.unlocked.diamond {
+            animation: diamond-glow 3s ease-in-out infinite alternate;
+        }
+        @keyframes diamond-glow {
+            from { box-shadow: 0 0 5px rgba(185, 242, 255, 0.2); }
+            to { box-shadow: 0 0 20px rgba(185, 242, 255, 0.4); }
+        }
+
+        /* Mythic: pulsing pink glow */
+        .achievement-card.unlocked.mythic {
+            animation: mythic-glow 2.5s ease-in-out infinite alternate;
+        }
+        @keyframes mythic-glow {
+            from { box-shadow: 0 0 8px rgba(255, 110, 199, 0.3); }
+            to { box-shadow: 0 0 25px rgba(255, 110, 199, 0.6); }
+        }
+
+        /* Transcendent: fiery rainbow shimmer */
+        .achievement-card.unlocked.transcendent {
+            animation: transcendent-glow 2s ease-in-out infinite alternate;
+            background: linear-gradient(135deg, rgba(255,69,0,0.15), rgba(255,215,0,0.1), rgba(255,69,0,0.15));
+        }
+        @keyframes transcendent-glow {
+            from { box-shadow: 0 0 10px rgba(255, 69, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.2); }
+            to { box-shadow: 0 0 30px rgba(255, 69, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.3); }
+        }
+
+        .ach-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.4rem;
+        }
+        .ach-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .ach-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+        .ach-tier {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            background: rgba(0,0,0,0.3);
+        }
+        .ach-tier.bronze { color: var(--bronze); }
+        .ach-tier.silver { color: var(--silver); }
+        .ach-tier.gold { color: var(--gold); }
+        .ach-tier.diamond { color: var(--diamond); }
+        .ach-tier.mythic { color: var(--mythic); }
+        .ach-tier.transcendent { color: var(--transcendent); }
+
+        .ach-date {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .achievement-card.unlocked:hover .ach-date {
+            opacity: 1;
+        }
+
+        /* Shadow achievement special style */
+        .achievement-card.locked.shadow {
+            border-style: dashed;
+            border-color: rgba(255, 215, 0, 0.15);
+        }
+        .achievement-card.unlocked.shadow::after {
+            content: '🔓 SECRET';
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            font-size: 0.55rem;
+            color: var(--gold);
+            opacity: 0.7;
+        }
+
+        /* Toast notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .toast {
+            background: var(--card-bg);
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            padding-right: 2.6rem;
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
+            animation: toast-in 0.5s ease forwards;
+            max-width: 320px;
+            position: relative;
+        }
+        .toast.dismissing {
+            animation: toast-out 0.35s ease forwards;
+        }
+        .toast-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.6rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.2rem 0.3rem;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+        .toast-close:hover { color: var(--text); }
+        .toast-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .toast-emoji { font-size: 1.5rem; }
+        .toast-text .toast-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .toast-text .toast-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes toast-out {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100px); }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                padding: 0.5rem;
+            }
+            .achievement-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            .stats-bar {
+                padding: 1rem;
+            }
+            .achievements-section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<div class="header">
+    <h1>📊 Thesis <span>Dashboard</span></h1>
+    <div class="subtitle">Traveling Wave Magnetophoresis for Lab-on-a-Chip Applications</div>
+    <div class="generated">Last updated: 2026-03-18T15:43:03.823470+00:00</div>
+</div>
+
+<!-- ============================================================
+     STATS BAR
+     ============================================================ -->
+<div class="stats-bar" id="stats-bar"></div>
+
+<!-- ============================================================
+     WORD PROGRESS BAR
+     ============================================================ -->
+<div class="progress-section">
+    <div class="progress-container">
+        <div class="progress-header">
+            <span class="progress-title">Word Count Progress</span>
+            <span class="progress-pct" id="progress-pct"></span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     CHARTS GRID
+     ============================================================ -->
+<div class="dashboard-grid">
+    <div class="chart-card full-width">
+        <div>                            <div id="chart-words" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("chart-words")) {                    Plotly.newPlot(                        "chart-words",                        [{"fill":"tozeroy","fillcolor":"rgba(78, 204, 163, 0.1)","line":{"color":"#4ecca3","width":3},"marker":{"size":4},"mode":"lines+markers","name":"Total Words","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[157,157,157,157,157,157,157,157,157,157,692,940,1501,1512,1958,2105,2633,2751,2751,2751,2751,2751,2751,3176,3176,3194],"type":"scatter"},{"hoverinfo":"name+y","line":{"color":"#ffd700","dash":"dash","width":2},"mode":"lines","name":"50k \u2014 TARGET","showlegend":true,"visible":"legendonly","x":["2024-01-10","2026-03-18"],"y":[50000,50000],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"color":"#e0e0e0","family":"Inter, system-ui, sans-serif"},"margin":{"l":50,"r":30,"t":50,"b":40},"legend":{"bgcolor":"rgba(0,0,0,0.3)","bordercolor":"rgba(255,255,255,0.1)","borderwidth":1},"title":{"font":{"size":18},"text":"\ud83d\udcdd Cumulative Word Count"},"xaxis":{"rangeslider":{"visible":true,"bgcolor":"#0f3460"},"rangeselector":{"font":{"color":"#e0e0e0"},"buttons":[{"count":7,"label":"1W","step":"day","stepmode":"backward"},{"count":1,"label":"1M","step":"month","stepmode":"backward"},{"count":3,"label":"3M","step":"month","stepmode":"backward"},{"count":6,"label":"6M","step":"month","stepmode":"backward"},{"count":1,"label":"1Y","step":"year","stepmode":"backward"},{"label":"All","step":"all"}],"bgcolor":"#16213e","activecolor":"#e94560"},"gridcolor":"rgba(255,255,255,0.08)"},"yaxis":{"title":{"text":"Words"},"gridcolor":"rgba(255,255,255,0.08)"},"paper_bgcolor":"#1a1a2e","plot_bgcolor":"#0f3460","hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div>
+    </div>
+    <div class="chart-card full-width">
+        <div>                            <div id="chart-activity" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("chart-activity")) {                    Plotly.newPlot(                        "chart-activity",                        [{"marker":{"color":"#4ecca3"},"name":"Added (daily)","showlegend":true,"visible":true,"x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[157,0,0,0,0,0,0,0,0,0,535,248,561,11,446,147,528,118,0,0,0,0,0,425,0,18],"type":"bar"},{"marker":{"color":"#e94560"},"name":"Deleted (daily)","showlegend":true,"visible":true,"x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"type":"bar"},{"marker":{"color":"#4ecca3"},"name":"Added (weekly)","showlegend":false,"visible":false,"x":["2024-01-08","2024-01-22","2024-05-13","2024-05-27","2025-03-10","2025-03-17","2025-04-14","2025-07-28","2026-01-05","2026-01-12","2026-02-16","2026-02-23","2026-03-02","2026-03-09","2026-03-16"],"y":[157,0,0,0,0,0,0,0,1344,11,446,675,118,0,443],"type":"bar"},{"marker":{"color":"#e94560"},"name":"Deleted (weekly)","showlegend":false,"visible":false,"x":["2024-01-08","2024-01-22","2024-05-13","2024-05-27","2025-03-10","2025-03-17","2025-04-14","2025-07-28","2026-01-05","2026-01-12","2026-02-16","2026-02-23","2026-03-02","2026-03-09","2026-03-16"],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"type":"bar"},{"marker":{"color":"#4ecca3"},"name":"Added (monthly)","showlegend":false,"visible":false,"x":["2024-01-01","2024-05-01","2024-06-01","2025-03-01","2025-04-01","2025-07-01","2026-01-01","2026-02-01","2026-03-01"],"y":[157,0,0,0,0,0,1355,1121,561],"type":"bar"},{"marker":{"color":"#e94560"},"name":"Deleted (monthly)","showlegend":false,"visible":false,"x":["2024-01-01","2024-05-01","2024-06-01","2025-03-01","2025-04-01","2025-07-01","2026-01-01","2026-02-01","2026-03-01"],"y":[0,0,0,0,0,0,0,0,0],"type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"color":"#e0e0e0","family":"Inter, system-ui, sans-serif"},"margin":{"l":50,"r":30,"t":80,"b":40},"legend":{"bgcolor":"rgba(0,0,0,0.3)","bordercolor":"rgba(255,255,255,0.1)","borderwidth":1},"title":{"font":{"size":18},"text":"\ud83d\udcca Daily Writing Activity","x":0.5,"xanchor":"center"},"xaxis":{"gridcolor":"rgba(255,255,255,0.08)"},"yaxis":{"title":{"text":"Words"},"gridcolor":"rgba(255,255,255,0.08)"},"paper_bgcolor":"#1a1a2e","plot_bgcolor":"#0f3460","hovermode":"x unified","barmode":"relative","updatemenus":[{"bgcolor":"#16213e","bordercolor":"rgba(255,255,255,0.2)","buttons":[{"args":[{"visible":[true,true,false,false,false,false]},{"showlegend":true}],"label":"Daily","method":"update"},{"args":[{"visible":[false,false,true,true,false,false]},{"showlegend":true}],"label":"Weekly","method":"update"},{"args":[{"visible":[false,false,false,false,true,true]},{"showlegend":true}],"label":"Monthly","method":"update"}],"direction":"right","font":{"color":"#e0e0e0","size":11},"type":"buttons","x":0.0,"xanchor":"left","y":1.22,"yanchor":"top"}]},                        {"responsive": true}                    )                };            </script>        </div>
+    </div>
+    <div class="chart-card">
+        <div>                            <div id="chart-chapters" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("chart-chapters")) {                    Plotly.newPlot(                        "chart-chapters",                        [{"fillcolor":"#e94560","line":{"color":"#e94560","width":0.5},"name":"Abstract","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[68,68,68,68,68,68,68,68,68,68,69,69,69,69,69,69,69,69,69,69,69,69,69,69,69,69],"type":"scatter"},{"fillcolor":"#0fa3b1","line":{"color":"#0fa3b1","width":0.5},"name":"Abbreviations","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[20,20,20,20,20,20,20,33,33,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"type":"scatter"},{"fillcolor":"#4ecca3","line":{"color":"#4ecca3","width":0.5},"name":"Introduction","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[1,1,1,1,1,1,1,1,1,1,1,1,1,413,413,431,0,0,0,0,0,0,0,0,0,0],"type":"scatter"},{"fillcolor":"#ffd700","line":{"color":"#ffd700","width":0.5},"name":"Theory","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[18,18,47,47,49,59,59,59,59,59,59,59,59,59,59,59,0,0,0,0,0,0,0,0,0,0],"type":"scatter"},{"fillcolor":"#ff6b6b","line":{"color":"#ff6b6b","width":0.5},"name":"Experimental","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[27,27,27,27,471,549,1057,1175,1175,1175,1175,1175,1175,1175,1175,1175,0,0,0,0,0,0,0,0,0,0],"type":"scatter"},{"fillcolor":"#c084fc","line":{"color":"#c084fc","width":0.5},"name":"Results","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[485,733,1265,1276,1276,1276,1276,1276,1276,1276,1276,1276,1276,1276,1276,1276,0,0,0,0,0,0,0,0,0,0],"type":"scatter"},{"fillcolor":"#fb923c","line":{"color":"#fb923c","width":0.5},"name":"Discussion","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[3,3,3,3,3,60,60,60,60,60,60,60,60,60,60,60,0,0,0,0,0,0,0,0,0,0],"type":"scatter"},{"fillcolor":"#38bdf8","line":{"color":"#38bdf8","width":0.5},"name":"Outlook","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,3,3,3,3,3,3],"type":"scatter"},{"fillcolor":"#a3e635","line":{"color":"#a3e635","width":0.5},"name":"Acknowledgments","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"type":"scatter"},{"fillcolor":"#f472b6","line":{"color":"#f472b6","width":0.5},"name":"Declaration","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50],"type":"scatter"},{"fillcolor":"#94a3b8","line":{"color":"#94a3b8","width":0.5},"name":"Appendix","stackgroup":"one","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37,37],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"color":"#e0e0e0","family":"Inter, system-ui, sans-serif"},"margin":{"l":50,"r":30,"t":50,"b":40},"legend":{"bgcolor":"rgba(0,0,0,0.3)","bordercolor":"rgba(255,255,255,0.1)","borderwidth":1},"title":{"font":{"size":18},"text":"\ud83d\udcda Chapter Breakdown"},"xaxis":{"gridcolor":"rgba(255,255,255,0.08)"},"yaxis":{"title":{"text":"Words"},"gridcolor":"rgba(255,255,255,0.08)"},"paper_bgcolor":"#1a1a2e","plot_bgcolor":"#0f3460","hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div>
+    </div>
+    <div class="chart-card">
+        <div>                            <div id="chart-assets" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("chart-assets")) {                    Plotly.newPlot(                        "chart-assets",                        [{"line":{"color":"#e94560","width":2},"marker":{"size":3},"mode":"lines+markers","name":"Figures","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[1,1,1,1,1,1,1,1,0,0,2,4,4,4,4,4,4,4,4,4,4,4,4,5,5,7],"type":"scatter"},{"line":{"color":"#ffd700","width":2},"marker":{"size":3},"mode":"lines+markers","name":"Tables","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"type":"scatter"},{"line":{"color":"#0fa3b1","width":2},"marker":{"size":3},"mode":"lines+markers","name":"Equations","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"type":"scatter"},{"line":{"color":"#4ecca3","width":2},"marker":{"size":3},"mode":"lines+markers","name":"Citations","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[0,0,0,0,0,0,0,0,0,0,1,1,2,2,2,3,5,5,5,5,5,5,5,5,5,5],"type":"scatter"},{"line":{"color":"#c084fc","width":2},"marker":{"size":3},"mode":"lines+markers","name":"Sections","x":["2024-01-10","2024-01-23","2024-01-24","2024-05-13","2024-06-02","2025-03-12","2025-03-17","2025-03-20","2025-04-14","2025-07-29","2026-01-06","2026-01-07","2026-01-09","2026-01-12","2026-02-19","2026-02-25","2026-02-26","2026-03-08","2026-03-09","2026-03-11","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18"],"y":[6,6,6,6,6,6,6,6,6,6,28,28,31,31,33,54,55,55,55,55,55,55,55,55,55,55],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"color":"#e0e0e0","family":"Inter, system-ui, sans-serif"},"margin":{"l":50,"r":30,"t":50,"b":40},"legend":{"bgcolor":"rgba(0,0,0,0.3)","bordercolor":"rgba(255,255,255,0.1)","borderwidth":1},"title":{"font":{"size":18},"text":"\ud83d\udce6 Asset Tracker"},"xaxis":{"gridcolor":"rgba(255,255,255,0.08)"},"yaxis":{"title":{"text":"Count"},"gridcolor":"rgba(255,255,255,0.08)"},"paper_bgcolor":"#1a1a2e","plot_bgcolor":"#0f3460","hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div>
+    </div>
+    <div class="chart-card">
+        <div>                            <div id="chart-gauge" class="plotly-graph-div" style="height:280px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("chart-gauge")) {                    Plotly.newPlot(                        "chart-gauge",                        [{"delta":{"decreasing":{"color":"#e94560"},"increasing":{"color":"#4ecca3"},"reference":150,"valueformat":".0f"},"gauge":{"axis":{"range":[0,200],"tickcolor":"#e0e0e0"},"bar":{"color":"#4ecca3"},"bgcolor":"#0f3460","bordercolor":"rgba(255,255,255,0.1)","steps":[{"color":"rgba(233, 69, 96, 0.2)","range":[0,75.0]},{"color":"rgba(255, 215, 0, 0.2)","range":[75.0,120.0]},{"color":"rgba(78, 204, 163, 0.2)","range":[120.0,150]}],"threshold":{"line":{"color":"#ffd700","width":4},"thickness":0.75,"value":150}},"mode":"gauge+number+delta","number":{"font":{"color":"#e0e0e0","size":48}},"title":{"font":{"color":"#e0e0e0","size":16},"text":"Pages Written"},"value":0,"type":"indicator"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"color":"#e0e0e0"},"margin":{"l":30,"r":30,"t":60,"b":20},"paper_bgcolor":"#1a1a2e","height":280},                        {"responsive": true}                    )                };            </script>        </div>
+    </div>
+    <div class="chart-card">
+        <div>                            <div id="chart-heatmap" class="plotly-graph-div" style="height:220px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("chart-heatmap")) {                    Plotly.newPlot(                        "chart-heatmap",                        [{"colorscale":[[0,"#0f3460"],[0.01,"rgba(78, 204, 163, 0.2)"],[0.25,"rgba(78, 204, 163, 0.4)"],[0.5,"rgba(78, 204, 163, 0.6)"],[0.75,"rgba(78, 204, 163, 0.8)"],[1.0,"#4ecca3"]],"hoverinfo":"text","hovertext":[["2024-01-08: 0 commits","2024-01-15: 0 commits","2024-01-22: 0 commits","2024-01-29: 0 commits","2024-02-05: 0 commits","2024-02-12: 0 commits","2024-02-19: 0 commits","2024-02-26: 0 commits","2024-03-04: 0 commits","2024-03-11: 0 commits","2024-03-18: 0 commits","2024-03-25: 0 commits","2024-04-01: 0 commits","2024-04-08: 0 commits","2024-04-15: 0 commits","2024-04-22: 0 commits","2024-04-29: 0 commits","2024-05-06: 0 commits","2024-05-13: 1 commits","2024-05-20: 0 commits","2024-05-27: 0 commits","2024-06-03: 0 commits","2024-06-10: 0 commits","2024-06-17: 0 commits","2024-06-24: 0 commits","2024-07-01: 0 commits","2024-07-08: 0 commits","2024-07-15: 0 commits","2024-07-22: 0 commits","2024-07-29: 0 commits","2024-08-05: 0 commits","2024-08-12: 0 commits","2024-08-19: 0 commits","2024-08-26: 0 commits","2024-09-02: 0 commits","2024-09-09: 0 commits","2024-09-16: 0 commits","2024-09-23: 0 commits","2024-09-30: 0 commits","2024-10-07: 0 commits","2024-10-14: 0 commits","2024-10-21: 0 commits","2024-10-28: 0 commits","2024-11-04: 0 commits","2024-11-11: 0 commits","2024-11-18: 0 commits","2024-11-25: 0 commits","2024-12-02: 0 commits","2024-12-09: 0 commits","2024-12-16: 0 commits","2024-12-23: 0 commits","2024-12-30: 0 commits","2025-01-06: 0 commits","2025-01-13: 0 commits","2025-01-20: 0 commits","2025-01-27: 0 commits","2025-02-03: 0 commits","2025-02-10: 0 commits","2025-02-17: 0 commits","2025-02-24: 0 commits","2025-03-03: 0 commits","2025-03-10: 0 commits","2025-03-17: 1 commits","2025-03-24: 0 commits","2025-03-31: 0 commits","2025-04-07: 0 commits","2025-04-14: 1 commits","2025-04-21: 0 commits","2025-04-28: 0 commits","2025-05-05: 0 commits","2025-05-12: 0 commits","2025-05-19: 0 commits","2025-05-26: 0 commits","2025-06-02: 0 commits","2025-06-09: 0 commits","2025-06-16: 0 commits","2025-06-23: 0 commits","2025-06-30: 0 commits","2025-07-07: 0 commits","2025-07-14: 0 commits","2025-07-21: 0 commits","2025-07-28: 0 commits","2025-08-04: 0 commits","2025-08-11: 0 commits","2025-08-18: 0 commits","2025-08-25: 0 commits","2025-09-01: 0 commits","2025-09-08: 0 commits","2025-09-15: 0 commits","2025-09-22: 0 commits","2025-09-29: 0 commits","2025-10-06: 0 commits","2025-10-13: 0 commits","2025-10-20: 0 commits","2025-10-27: 0 commits","2025-11-03: 0 commits","2025-11-10: 0 commits","2025-11-17: 0 commits","2025-11-24: 0 commits","2025-12-01: 0 commits","2025-12-08: 0 commits","2025-12-15: 0 commits","2025-12-22: 0 commits","2025-12-29: 0 commits","2026-01-05: 0 commits","2026-01-12: 1 commits","2026-01-19: 0 commits","2026-01-26: 0 commits","2026-02-02: 0 commits","2026-02-09: 0 commits","2026-02-16: 0 commits","2026-02-23: 0 commits","2026-03-02: 0 commits","2026-03-09: 5 commits","2026-03-16: 9 commits","2026-03-23: 0 commits"],["2024-01-09: 0 commits","2024-01-16: 0 commits","2024-01-23: 1 commits","2024-01-30: 0 commits","2024-02-06: 0 commits","2024-02-13: 0 commits","2024-02-20: 0 commits","2024-02-27: 0 commits","2024-03-05: 0 commits","2024-03-12: 0 commits","2024-03-19: 0 commits","2024-03-26: 0 commits","2024-04-02: 0 commits","2024-04-09: 0 commits","2024-04-16: 0 commits","2024-04-23: 0 commits","2024-04-30: 0 commits","2024-05-07: 0 commits","2024-05-14: 0 commits","2024-05-21: 0 commits","2024-05-28: 0 commits","2024-06-04: 0 commits","2024-06-11: 0 commits","2024-06-18: 0 commits","2024-06-25: 0 commits","2024-07-02: 0 commits","2024-07-09: 0 commits","2024-07-16: 0 commits","2024-07-23: 0 commits","2024-07-30: 0 commits","2024-08-06: 0 commits","2024-08-13: 0 commits","2024-08-20: 0 commits","2024-08-27: 0 commits","2024-09-03: 0 commits","2024-09-10: 0 commits","2024-09-17: 0 commits","2024-09-24: 0 commits","2024-10-01: 0 commits","2024-10-08: 0 commits","2024-10-15: 0 commits","2024-10-22: 0 commits","2024-10-29: 0 commits","2024-11-05: 0 commits","2024-11-12: 0 commits","2024-11-19: 0 commits","2024-11-26: 0 commits","2024-12-03: 0 commits","2024-12-10: 0 commits","2024-12-17: 0 commits","2024-12-24: 0 commits","2024-12-31: 0 commits","2025-01-07: 0 commits","2025-01-14: 0 commits","2025-01-21: 0 commits","2025-01-28: 0 commits","2025-02-04: 0 commits","2025-02-11: 0 commits","2025-02-18: 0 commits","2025-02-25: 0 commits","2025-03-04: 0 commits","2025-03-11: 0 commits","2025-03-18: 0 commits","2025-03-25: 0 commits","2025-04-01: 0 commits","2025-04-08: 0 commits","2025-04-15: 0 commits","2025-04-22: 0 commits","2025-04-29: 0 commits","2025-05-06: 0 commits","2025-05-13: 0 commits","2025-05-20: 0 commits","2025-05-27: 0 commits","2025-06-03: 0 commits","2025-06-10: 0 commits","2025-06-17: 0 commits","2025-06-24: 0 commits","2025-07-01: 0 commits","2025-07-08: 0 commits","2025-07-15: 0 commits","2025-07-22: 0 commits","2025-07-29: 1 commits","2025-08-05: 0 commits","2025-08-12: 0 commits","2025-08-19: 0 commits","2025-08-26: 0 commits","2025-09-02: 0 commits","2025-09-09: 0 commits","2025-09-16: 0 commits","2025-09-23: 0 commits","2025-09-30: 0 commits","2025-10-07: 0 commits","2025-10-14: 0 commits","2025-10-21: 0 commits","2025-10-28: 0 commits","2025-11-04: 0 commits","2025-11-11: 0 commits","2025-11-18: 0 commits","2025-11-25: 0 commits","2025-12-02: 0 commits","2025-12-09: 0 commits","2025-12-16: 0 commits","2025-12-23: 0 commits","2025-12-30: 0 commits","2026-01-06: 3 commits","2026-01-13: 0 commits","2026-01-20: 0 commits","2026-01-27: 0 commits","2026-02-03: 0 commits","2026-02-10: 0 commits","2026-02-17: 0 commits","2026-02-24: 0 commits","2026-03-03: 0 commits","2026-03-10: 0 commits","2026-03-17: 1 commits","2026-03-24: 0 commits"],["2024-01-10: 2 commits","2024-01-17: 0 commits","2024-01-24: 1 commits","2024-01-31: 0 commits","2024-02-07: 0 commits","2024-02-14: 0 commits","2024-02-21: 0 commits","2024-02-28: 0 commits","2024-03-06: 0 commits","2024-03-13: 0 commits","2024-03-20: 0 commits","2024-03-27: 0 commits","2024-04-03: 0 commits","2024-04-10: 0 commits","2024-04-17: 0 commits","2024-04-24: 0 commits","2024-05-01: 0 commits","2024-05-08: 0 commits","2024-05-15: 0 commits","2024-05-22: 0 commits","2024-05-29: 0 commits","2024-06-05: 0 commits","2024-06-12: 0 commits","2024-06-19: 0 commits","2024-06-26: 0 commits","2024-07-03: 0 commits","2024-07-10: 0 commits","2024-07-17: 0 commits","2024-07-24: 0 commits","2024-07-31: 0 commits","2024-08-07: 0 commits","2024-08-14: 0 commits","2024-08-21: 0 commits","2024-08-28: 0 commits","2024-09-04: 0 commits","2024-09-11: 0 commits","2024-09-18: 0 commits","2024-09-25: 0 commits","2024-10-02: 0 commits","2024-10-09: 0 commits","2024-10-16: 0 commits","2024-10-23: 0 commits","2024-10-30: 0 commits","2024-11-06: 0 commits","2024-11-13: 0 commits","2024-11-20: 0 commits","2024-11-27: 0 commits","2024-12-04: 0 commits","2024-12-11: 0 commits","2024-12-18: 0 commits","2024-12-25: 0 commits","2025-01-01: 0 commits","2025-01-08: 0 commits","2025-01-15: 0 commits","2025-01-22: 0 commits","2025-01-29: 0 commits","2025-02-05: 0 commits","2025-02-12: 0 commits","2025-02-19: 0 commits","2025-02-26: 0 commits","2025-03-05: 0 commits","2025-03-12: 3 commits","2025-03-19: 0 commits","2025-03-26: 0 commits","2025-04-02: 0 commits","2025-04-09: 0 commits","2025-04-16: 0 commits","2025-04-23: 0 commits","2025-04-30: 0 commits","2025-05-07: 0 commits","2025-05-14: 0 commits","2025-05-21: 0 commits","2025-05-28: 0 commits","2025-06-04: 0 commits","2025-06-11: 0 commits","2025-06-18: 0 commits","2025-06-25: 0 commits","2025-07-02: 0 commits","2025-07-09: 0 commits","2025-07-16: 0 commits","2025-07-23: 0 commits","2025-07-30: 0 commits","2025-08-06: 0 commits","2025-08-13: 0 commits","2025-08-20: 0 commits","2025-08-27: 0 commits","2025-09-03: 0 commits","2025-09-10: 0 commits","2025-09-17: 0 commits","2025-09-24: 0 commits","2025-10-01: 0 commits","2025-10-08: 0 commits","2025-10-15: 0 commits","2025-10-22: 0 commits","2025-10-29: 0 commits","2025-11-05: 0 commits","2025-11-12: 0 commits","2025-11-19: 0 commits","2025-11-26: 0 commits","2025-12-03: 0 commits","2025-12-10: 0 commits","2025-12-17: 0 commits","2025-12-24: 0 commits","2025-12-31: 0 commits","2026-01-07: 6 commits","2026-01-14: 0 commits","2026-01-21: 0 commits","2026-01-28: 0 commits","2026-02-04: 0 commits","2026-02-11: 0 commits","2026-02-18: 0 commits","2026-02-25: 2 commits","2026-03-04: 0 commits","2026-03-11: 1 commits","2026-03-18: 2 commits",""],["2024-01-11: 0 commits","2024-01-18: 0 commits","2024-01-25: 0 commits","2024-02-01: 0 commits","2024-02-08: 0 commits","2024-02-15: 0 commits","2024-02-22: 0 commits","2024-02-29: 0 commits","2024-03-07: 0 commits","2024-03-14: 0 commits","2024-03-21: 0 commits","2024-03-28: 0 commits","2024-04-04: 0 commits","2024-04-11: 0 commits","2024-04-18: 0 commits","2024-04-25: 0 commits","2024-05-02: 0 commits","2024-05-09: 0 commits","2024-05-16: 0 commits","2024-05-23: 0 commits","2024-05-30: 0 commits","2024-06-06: 0 commits","2024-06-13: 0 commits","2024-06-20: 0 commits","2024-06-27: 0 commits","2024-07-04: 0 commits","2024-07-11: 0 commits","2024-07-18: 0 commits","2024-07-25: 0 commits","2024-08-01: 0 commits","2024-08-08: 0 commits","2024-08-15: 0 commits","2024-08-22: 0 commits","2024-08-29: 0 commits","2024-09-05: 0 commits","2024-09-12: 0 commits","2024-09-19: 0 commits","2024-09-26: 0 commits","2024-10-03: 0 commits","2024-10-10: 0 commits","2024-10-17: 0 commits","2024-10-24: 0 commits","2024-10-31: 0 commits","2024-11-07: 0 commits","2024-11-14: 0 commits","2024-11-21: 0 commits","2024-11-28: 0 commits","2024-12-05: 0 commits","2024-12-12: 0 commits","2024-12-19: 0 commits","2024-12-26: 0 commits","2025-01-02: 0 commits","2025-01-09: 0 commits","2025-01-16: 0 commits","2025-01-23: 0 commits","2025-01-30: 0 commits","2025-02-06: 0 commits","2025-02-13: 0 commits","2025-02-20: 0 commits","2025-02-27: 0 commits","2025-03-06: 0 commits","2025-03-13: 0 commits","2025-03-20: 1 commits","2025-03-27: 0 commits","2025-04-03: 0 commits","2025-04-10: 0 commits","2025-04-17: 0 commits","2025-04-24: 0 commits","2025-05-01: 0 commits","2025-05-08: 0 commits","2025-05-15: 0 commits","2025-05-22: 0 commits","2025-05-29: 0 commits","2025-06-05: 0 commits","2025-06-12: 0 commits","2025-06-19: 0 commits","2025-06-26: 0 commits","2025-07-03: 0 commits","2025-07-10: 0 commits","2025-07-17: 0 commits","2025-07-24: 0 commits","2025-07-31: 0 commits","2025-08-07: 0 commits","2025-08-14: 0 commits","2025-08-21: 0 commits","2025-08-28: 0 commits","2025-09-04: 0 commits","2025-09-11: 0 commits","2025-09-18: 0 commits","2025-09-25: 0 commits","2025-10-02: 0 commits","2025-10-09: 0 commits","2025-10-16: 0 commits","2025-10-23: 0 commits","2025-10-30: 0 commits","2025-11-06: 0 commits","2025-11-13: 0 commits","2025-11-20: 0 commits","2025-11-27: 0 commits","2025-12-04: 0 commits","2025-12-11: 0 commits","2025-12-18: 0 commits","2025-12-25: 0 commits","2026-01-01: 0 commits","2026-01-08: 0 commits","2026-01-15: 0 commits","2026-01-22: 0 commits","2026-01-29: 0 commits","2026-02-05: 0 commits","2026-02-12: 0 commits","2026-02-19: 1 commits","2026-02-26: 6 commits","2026-03-05: 0 commits","2026-03-12: 0 commits","2026-03-19: 0 commits",""],["2024-01-12: 0 commits","2024-01-19: 0 commits","2024-01-26: 0 commits","2024-02-02: 0 commits","2024-02-09: 0 commits","2024-02-16: 0 commits","2024-02-23: 0 commits","2024-03-01: 0 commits","2024-03-08: 0 commits","2024-03-15: 0 commits","2024-03-22: 0 commits","2024-03-29: 0 commits","2024-04-05: 0 commits","2024-04-12: 0 commits","2024-04-19: 0 commits","2024-04-26: 0 commits","2024-05-03: 0 commits","2024-05-10: 0 commits","2024-05-17: 0 commits","2024-05-24: 0 commits","2024-05-31: 0 commits","2024-06-07: 0 commits","2024-06-14: 0 commits","2024-06-21: 0 commits","2024-06-28: 0 commits","2024-07-05: 0 commits","2024-07-12: 0 commits","2024-07-19: 0 commits","2024-07-26: 0 commits","2024-08-02: 0 commits","2024-08-09: 0 commits","2024-08-16: 0 commits","2024-08-23: 0 commits","2024-08-30: 0 commits","2024-09-06: 0 commits","2024-09-13: 0 commits","2024-09-20: 0 commits","2024-09-27: 0 commits","2024-10-04: 0 commits","2024-10-11: 0 commits","2024-10-18: 0 commits","2024-10-25: 0 commits","2024-11-01: 0 commits","2024-11-08: 0 commits","2024-11-15: 0 commits","2024-11-22: 0 commits","2024-11-29: 0 commits","2024-12-06: 0 commits","2024-12-13: 0 commits","2024-12-20: 0 commits","2024-12-27: 0 commits","2025-01-03: 0 commits","2025-01-10: 0 commits","2025-01-17: 0 commits","2025-01-24: 0 commits","2025-01-31: 0 commits","2025-02-07: 0 commits","2025-02-14: 0 commits","2025-02-21: 0 commits","2025-02-28: 0 commits","2025-03-07: 0 commits","2025-03-14: 0 commits","2025-03-21: 0 commits","2025-03-28: 0 commits","2025-04-04: 0 commits","2025-04-11: 0 commits","2025-04-18: 0 commits","2025-04-25: 0 commits","2025-05-02: 0 commits","2025-05-09: 0 commits","2025-05-16: 0 commits","2025-05-23: 0 commits","2025-05-30: 0 commits","2025-06-06: 0 commits","2025-06-13: 0 commits","2025-06-20: 0 commits","2025-06-27: 0 commits","2025-07-04: 0 commits","2025-07-11: 0 commits","2025-07-18: 0 commits","2025-07-25: 0 commits","2025-08-01: 0 commits","2025-08-08: 0 commits","2025-08-15: 0 commits","2025-08-22: 0 commits","2025-08-29: 0 commits","2025-09-05: 0 commits","2025-09-12: 0 commits","2025-09-19: 0 commits","2025-09-26: 0 commits","2025-10-03: 0 commits","2025-10-10: 0 commits","2025-10-17: 0 commits","2025-10-24: 0 commits","2025-10-31: 0 commits","2025-11-07: 0 commits","2025-11-14: 0 commits","2025-11-21: 0 commits","2025-11-28: 0 commits","2025-12-05: 0 commits","2025-12-12: 0 commits","2025-12-19: 0 commits","2025-12-26: 0 commits","2026-01-02: 0 commits","2026-01-09: 2 commits","2026-01-16: 0 commits","2026-01-23: 0 commits","2026-01-30: 0 commits","2026-02-06: 0 commits","2026-02-13: 0 commits","2026-02-20: 0 commits","2026-02-27: 0 commits","2026-03-06: 0 commits","2026-03-13: 1 commits","2026-03-20: 0 commits",""],["2024-01-13: 0 commits","2024-01-20: 0 commits","2024-01-27: 0 commits","2024-02-03: 0 commits","2024-02-10: 0 commits","2024-02-17: 0 commits","2024-02-24: 0 commits","2024-03-02: 0 commits","2024-03-09: 0 commits","2024-03-16: 0 commits","2024-03-23: 0 commits","2024-03-30: 0 commits","2024-04-06: 0 commits","2024-04-13: 0 commits","2024-04-20: 0 commits","2024-04-27: 0 commits","2024-05-04: 0 commits","2024-05-11: 0 commits","2024-05-18: 0 commits","2024-05-25: 0 commits","2024-06-01: 0 commits","2024-06-08: 0 commits","2024-06-15: 0 commits","2024-06-22: 0 commits","2024-06-29: 0 commits","2024-07-06: 0 commits","2024-07-13: 0 commits","2024-07-20: 0 commits","2024-07-27: 0 commits","2024-08-03: 0 commits","2024-08-10: 0 commits","2024-08-17: 0 commits","2024-08-24: 0 commits","2024-08-31: 0 commits","2024-09-07: 0 commits","2024-09-14: 0 commits","2024-09-21: 0 commits","2024-09-28: 0 commits","2024-10-05: 0 commits","2024-10-12: 0 commits","2024-10-19: 0 commits","2024-10-26: 0 commits","2024-11-02: 0 commits","2024-11-09: 0 commits","2024-11-16: 0 commits","2024-11-23: 0 commits","2024-11-30: 0 commits","2024-12-07: 0 commits","2024-12-14: 0 commits","2024-12-21: 0 commits","2024-12-28: 0 commits","2025-01-04: 0 commits","2025-01-11: 0 commits","2025-01-18: 0 commits","2025-01-25: 0 commits","2025-02-01: 0 commits","2025-02-08: 0 commits","2025-02-15: 0 commits","2025-02-22: 0 commits","2025-03-01: 0 commits","2025-03-08: 0 commits","2025-03-15: 0 commits","2025-03-22: 0 commits","2025-03-29: 0 commits","2025-04-05: 0 commits","2025-04-12: 0 commits","2025-04-19: 0 commits","2025-04-26: 0 commits","2025-05-03: 0 commits","2025-05-10: 0 commits","2025-05-17: 0 commits","2025-05-24: 0 commits","2025-05-31: 0 commits","2025-06-07: 0 commits","2025-06-14: 0 commits","2025-06-21: 0 commits","2025-06-28: 0 commits","2025-07-05: 0 commits","2025-07-12: 0 commits","2025-07-19: 0 commits","2025-07-26: 0 commits","2025-08-02: 0 commits","2025-08-09: 0 commits","2025-08-16: 0 commits","2025-08-23: 0 commits","2025-08-30: 0 commits","2025-09-06: 0 commits","2025-09-13: 0 commits","2025-09-20: 0 commits","2025-09-27: 0 commits","2025-10-04: 0 commits","2025-10-11: 0 commits","2025-10-18: 0 commits","2025-10-25: 0 commits","2025-11-01: 0 commits","2025-11-08: 0 commits","2025-11-15: 0 commits","2025-11-22: 0 commits","2025-11-29: 0 commits","2025-12-06: 0 commits","2025-12-13: 0 commits","2025-12-20: 0 commits","2025-12-27: 0 commits","2026-01-03: 0 commits","2026-01-10: 0 commits","2026-01-17: 0 commits","2026-01-24: 0 commits","2026-01-31: 0 commits","2026-02-07: 0 commits","2026-02-14: 0 commits","2026-02-21: 0 commits","2026-02-28: 0 commits","2026-03-07: 0 commits","2026-03-14: 1 commits","2026-03-21: 0 commits",""],["2024-01-14: 0 commits","2024-01-21: 0 commits","2024-01-28: 0 commits","2024-02-04: 0 commits","2024-02-11: 0 commits","2024-02-18: 0 commits","2024-02-25: 0 commits","2024-03-03: 0 commits","2024-03-10: 0 commits","2024-03-17: 0 commits","2024-03-24: 0 commits","2024-03-31: 0 commits","2024-04-07: 0 commits","2024-04-14: 0 commits","2024-04-21: 0 commits","2024-04-28: 0 commits","2024-05-05: 0 commits","2024-05-12: 0 commits","2024-05-19: 0 commits","2024-05-26: 0 commits","2024-06-02: 2 commits","2024-06-09: 0 commits","2024-06-16: 0 commits","2024-06-23: 0 commits","2024-06-30: 0 commits","2024-07-07: 0 commits","2024-07-14: 0 commits","2024-07-21: 0 commits","2024-07-28: 0 commits","2024-08-04: 0 commits","2024-08-11: 0 commits","2024-08-18: 0 commits","2024-08-25: 0 commits","2024-09-01: 0 commits","2024-09-08: 0 commits","2024-09-15: 0 commits","2024-09-22: 0 commits","2024-09-29: 0 commits","2024-10-06: 0 commits","2024-10-13: 0 commits","2024-10-20: 0 commits","2024-10-27: 0 commits","2024-11-03: 0 commits","2024-11-10: 0 commits","2024-11-17: 0 commits","2024-11-24: 0 commits","2024-12-01: 0 commits","2024-12-08: 0 commits","2024-12-15: 0 commits","2024-12-22: 0 commits","2024-12-29: 0 commits","2025-01-05: 0 commits","2025-01-12: 0 commits","2025-01-19: 0 commits","2025-01-26: 0 commits","2025-02-02: 0 commits","2025-02-09: 0 commits","2025-02-16: 0 commits","2025-02-23: 0 commits","2025-03-02: 0 commits","2025-03-09: 0 commits","2025-03-16: 0 commits","2025-03-23: 0 commits","2025-03-30: 0 commits","2025-04-06: 0 commits","2025-04-13: 0 commits","2025-04-20: 0 commits","2025-04-27: 0 commits","2025-05-04: 0 commits","2025-05-11: 0 commits","2025-05-18: 0 commits","2025-05-25: 0 commits","2025-06-01: 0 commits","2025-06-08: 0 commits","2025-06-15: 0 commits","2025-06-22: 0 commits","2025-06-29: 0 commits","2025-07-06: 0 commits","2025-07-13: 0 commits","2025-07-20: 0 commits","2025-07-27: 0 commits","2025-08-03: 0 commits","2025-08-10: 0 commits","2025-08-17: 0 commits","2025-08-24: 0 commits","2025-08-31: 0 commits","2025-09-07: 0 commits","2025-09-14: 0 commits","2025-09-21: 0 commits","2025-09-28: 0 commits","2025-10-05: 0 commits","2025-10-12: 0 commits","2025-10-19: 0 commits","2025-10-26: 0 commits","2025-11-02: 0 commits","2025-11-09: 0 commits","2025-11-16: 0 commits","2025-11-23: 0 commits","2025-11-30: 0 commits","2025-12-07: 0 commits","2025-12-14: 0 commits","2025-12-21: 0 commits","2025-12-28: 0 commits","2026-01-04: 0 commits","2026-01-11: 0 commits","2026-01-18: 0 commits","2026-01-25: 0 commits","2026-02-01: 0 commits","2026-02-08: 0 commits","2026-02-15: 0 commits","2026-02-22: 0 commits","2026-03-01: 0 commits","2026-03-08: 6 commits","2026-03-15: 2 commits","2026-03-22: 0 commits",""]],"showscale":false,"x":["Jan 08","Jan 15","Jan 22","Jan 29","Feb 05","Feb 12","Feb 19","Feb 26","Mar 04","Mar 11","Mar 18","Mar 25","Apr 01","Apr 08","Apr 15","Apr 22","Apr 29","May 06","May 13","May 20","May 27","Jun 03","Jun 10","Jun 17","Jun 24","Jul 01","Jul 08","Jul 15","Jul 22","Jul 29","Aug 05","Aug 12","Aug 19","Aug 26","Sep 02","Sep 09","Sep 16","Sep 23","Sep 30","Oct 07","Oct 14","Oct 21","Oct 28","Nov 04","Nov 11","Nov 18","Nov 25","Dec 02","Dec 09","Dec 16","Dec 23","Dec 30","Jan 06","Jan 13","Jan 20","Jan 27","Feb 03","Feb 10","Feb 17","Feb 24","Mar 03","Mar 10","Mar 17","Mar 24","Mar 31","Apr 07","Apr 14","Apr 21","Apr 28","May 05","May 12","May 19","May 26","Jun 02","Jun 09","Jun 16","Jun 23","Jun 30","Jul 07","Jul 14","Jul 21","Jul 28","Aug 04","Aug 11","Aug 18","Aug 25","Sep 01","Sep 08","Sep 15","Sep 22","Sep 29","Oct 06","Oct 13","Oct 20","Oct 27","Nov 03","Nov 10","Nov 17","Nov 24","Dec 01","Dec 08","Dec 15","Dec 22","Dec 29","Jan 05","Jan 12","Jan 19","Jan 26","Feb 02","Feb 09","Feb 16","Feb 23","Mar 02","Mar 09","Mar 16","Mar 23"],"xgap":3,"y":["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],"ygap":3,"z":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,5,9,0],[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,1,0],[2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,2,0,1,2,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,6,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,2,0,0]],"type":"heatmap"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"color":"#e0e0e0"},"title":{"font":{"size":18},"text":"\ud83d\uddd3\ufe0f Git Activity"},"margin":{"l":50,"r":20,"t":50,"b":20},"yaxis":{"autorange":"reversed"},"xaxis":{"showgrid":false,"nticks":20},"paper_bgcolor":"#1a1a2e","plot_bgcolor":"#1a1a2e","height":220},                        {"responsive": true}                    )                };            </script>        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     ACHIEVEMENTS
+     ============================================================ -->
+<div class="achievements-section">
+    <div class="achievements-header">
+        <div class="achievements-title">🏆 <span>Achievements</span></div>
+        <div class="achievements-count">
+            <strong id="ach-unlocked">29</strong> / 130 unlocked
+        </div>
+    </div>
+
+    <!-- Achievement progress bar -->
+    <div class="progress-container" style="margin-bottom: 1rem;">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="ach-progress-fill" style="background: linear-gradient(90deg, var(--bronze), var(--gold), var(--diamond));"></div>
+        </div>
+    </div>
+
+    <!-- Category filters -->
+    <div class="category-filters" id="category-filters"></div>
+
+    <!-- Achievement grid -->
+    <div class="achievement-grid" id="achievement-grid"></div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<div class="footer">
+    <p>Thesis Progress Dashboard &middot; Auto-generated from git history &middot; Keep writing! ✍️</p>
+</div>
+
+<!-- ============================================================
+     TOAST CONTAINER
+     ============================================================ -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ============================================================
+     DATA & LOGIC
+     ============================================================ -->
+<script>
+    // Injected data
+    const STATS = {"total_words": 3194, "figures": 7, "tables": 1, "equations": 0, "citations": 5, "sections": 55, "pages": "N/A", "total_commits": 63, "days_tracked": 26, "word_target": 50000, "page_target": 150, "progress_pct": 6.4};
+    const ACHIEVEMENTS = {"hello_world": {"id": "hello_world", "unlocked": true, "unlock_date": "2024-01-10", "name": "Hello World", "description": "Write your first sentence.", "hint": "Every thesis starts with a single word...", "emoji": "\ud83d\udc4b", "category": "Writing", "tier": "bronze", "hidden": false}, "baby_steps": {"id": "baby_steps", "unlocked": true, "unlock_date": "2024-01-10", "name": "Baby Steps", "description": "Reach 100 words.", "hint": "Keep typing!", "emoji": "\ud83d\udc23", "category": "Writing", "tier": "bronze", "hidden": false}, "getting_warmed_up": {"id": "getting_warmed_up", "unlocked": true, "unlock_date": "2026-01-06", "name": "Getting Warmed Up", "description": "500 words and counting.", "hint": "The keyboard is warming up...", "emoji": "\ud83d\udd25", "category": "Writing", "tier": "bronze", "hidden": false}, "page_one": {"id": "page_one", "unlocked": true, "unlock_date": "2026-01-06", "name": "Page One", "description": "Write your first full page (~300 words).", "hint": "The first of many.", "emoji": "\ud83d\udcc4", "category": "Writing", "tier": "bronze", "hidden": false}, "first_thousand": {"id": "first_thousand", "unlocked": true, "unlock_date": "2026-01-09", "name": "The First Thousand", "description": "Four digits of pure knowledge.", "hint": "You could write a strong email!", "emoji": "\ud83c\udfaf", "category": "Writing", "tier": "silver", "hidden": false}, "verbose": {"id": "verbose", "unlocked": false, "unlock_date": null, "name": "Verbose", "description": "5,000 words -- you could fill a pamphlet.", "hint": "That is a solid blog post!", "emoji": "\ud83d\udcdd", "category": "Writing", "tier": "silver", "hidden": false}, "wordy_mcwordface": {"id": "wordy_mcwordface", "unlocked": false, "unlock_date": null, "name": "Wordy McWordface", "description": "10,000 words! That is a novella.", "hint": "Double digits of thousands!", "emoji": "\ud83d\udcda", "category": "Writing", "tier": "gold", "hidden": false}, "fifteen_k": {"id": "fifteen_k", "unlocked": false, "unlock_date": null, "name": "Quindecimille", "description": "15,000 words -- fancy Latin name for a big number.", "hint": "More than most bachelor theses!", "emoji": "\ud83c\udfc5", "category": "Writing", "tier": "gold", "hidden": false}, "twenty_k": {"id": "twenty_k", "unlocked": false, "unlock_date": null, "name": "Twenty Grand", "description": "20,000 words of accumulated wisdom.", "hint": "A small book!", "emoji": "\ud83d\udcb0", "category": "Writing", "tier": "gold", "hidden": false}, "halfway": {"id": "halfway", "unlocked": false, "unlock_date": null, "name": "Halfway There", "description": "25,000 words -- the thesis is taking shape.", "hint": "Livin on a prayer... and caffeine.", "emoji": "\u26a1", "category": "Writing", "tier": "diamond", "hidden": false}, "thirty_k": {"id": "thirty_k", "unlocked": false, "unlock_date": null, "name": "Thirty Thousand Leagues", "description": "30,000 words deep into science.", "hint": "Jules Verne would be impressed.", "emoji": "\ud83c\udf0a", "category": "Writing", "tier": "diamond", "hidden": false}, "thirty_five_k": {"id": "thirty_five_k", "unlocked": false, "unlock_date": null, "name": "Page Turner", "description": "35,000 words -- people could actually read this.", "hint": "Almost a real book!", "emoji": "\ud83d\udcd6", "category": "Writing", "tier": "diamond", "hidden": false}, "unstoppable": {"id": "unstoppable", "unlocked": false, "unlock_date": null, "name": "Unstoppable Typist", "description": "40,000 words of relentless productivity.", "hint": "Your keyboard fears you.", "emoji": "\ud83d\ude80", "category": "Writing", "tier": "diamond", "hidden": false}, "forty_five_k": {"id": "forty_five_k", "unlocked": false, "unlock_date": null, "name": "So Close", "description": "45,000 words -- the finish line is in sight.", "hint": "Almost... there...", "emoji": "\ud83c\udfc1", "category": "Writing", "tier": "diamond", "hidden": false}, "magnum_opus": {"id": "magnum_opus", "unlocked": false, "unlock_date": null, "name": "The Magnum Opus", "description": "50,000 words -- TARGET REACHED!", "hint": "You did it. Legend.", "emoji": "\ud83c\udfc6", "category": "Writing", "tier": "mythic", "hidden": false}, "novelist": {"id": "novelist", "unlocked": false, "unlock_date": null, "name": "The Novelist", "description": "60,000 words -- publish this as a book.", "hint": "Publishers are calling...", "emoji": "\ud83d\udcd6", "category": "Writing", "tier": "mythic", "hidden": false}, "seventy_k": {"id": "seventy_k", "unlocked": false, "unlock_date": null, "name": "Seventy Thousand", "description": "70,000 words -- denser than some textbooks.", "hint": "Students will suffer reading this (lovingly).", "emoji": "\ud83d\udcd5", "category": "Writing", "tier": "mythic", "hidden": false}, "war_and_peace": {"id": "war_and_peace", "unlocked": false, "unlock_date": null, "name": "War and Peace (Almost)", "description": "80,000 words -- Tolstoy nods approvingly.", "hint": "Your thesis weighs more than your laptop.", "emoji": "\u2694\ufe0f", "category": "Writing", "tier": "transcendent", "hidden": false}, "ninety_k": {"id": "ninety_k", "unlocked": false, "unlock_date": null, "name": "Approaching Infinity", "description": "90,000 words -- is there an end?", "hint": "The event horizon of thesis writing.", "emoji": "\ud83c\udf0c", "category": "Writing", "tier": "transcendent", "hidden": false}, "centennial": {"id": "centennial", "unlocked": false, "unlock_date": null, "name": "Centennial", "description": "100,000 words. A monument of science.", "hint": "You are become thesis, destroyer of free time.", "emoji": "\ud83d\udc8e", "category": "Writing", "tier": "transcendent", "hidden": false}, "warm_up_day": {"id": "warm_up_day", "unlocked": true, "unlock_date": "2024-01-10", "name": "Warm-Up Day", "description": "Write 100 words in a single day.", "hint": "A little goes a long way.", "emoji": "\ud83c\udf31", "category": "Productivity", "tier": "bronze", "hidden": false}, "productive_day": {"id": "productive_day", "unlocked": true, "unlock_date": "2026-01-06", "name": "Productive Day", "description": "Write 500 words in a single day.", "hint": "A solid day of work!", "emoji": "\ud83d\udcaa", "category": "Productivity", "tier": "silver", "hidden": false}, "thousand_day": {"id": "thousand_day", "unlocked": false, "unlock_date": null, "name": "Thousand-Word Day", "description": "Write 1,000 words in a single day.", "hint": "Now that is a productive day!", "emoji": "\ud83c\udf1f", "category": "Productivity", "tier": "gold", "hidden": false}, "two_k_day": {"id": "two_k_day", "unlocked": false, "unlock_date": null, "name": "Double Feature", "description": "Write 2,000 words in a single day.", "hint": "Your fingers are on fire!", "emoji": "\ud83d\udd25", "category": "Productivity", "tier": "diamond", "hidden": false}, "three_k_day": {"id": "three_k_day", "unlocked": false, "unlock_date": null, "name": "Triple Threat", "description": "Write 3,000 words in a single day.", "hint": "Are you even human?", "emoji": "\u26a1", "category": "Productivity", "tier": "mythic", "hidden": false}, "five_k_day": {"id": "five_k_day", "unlocked": false, "unlock_date": null, "name": "Hypergraphia", "description": "Write 5,000 words in a single day.", "hint": "Medical condition or dedication? Yes.", "emoji": "\ud83e\uddec", "category": "Productivity", "tier": "transcendent", "hidden": false}, "sprint_week": {"id": "sprint_week", "unlocked": false, "unlock_date": null, "name": "Sprint Week", "description": "Write 5,000 words total in one week.", "hint": "A week of focused writing.", "emoji": "\ud83c\udfc3", "category": "Productivity", "tier": "gold", "hidden": false}, "marathon_week": {"id": "marathon_week", "unlocked": false, "unlock_date": null, "name": "Marathon Week", "description": "Write 10,000 words total in one week.", "hint": "Sleep is optional.", "emoji": "\ud83c\udfc3\u200d\u2642\ufe0f", "category": "Productivity", "tier": "mythic", "hidden": false}, "first_delete": {"id": "first_delete", "unlocked": false, "unlock_date": null, "name": "First Cut", "description": "Delete any words for the first time.", "hint": "Pruning begins.", "emoji": "\u270f\ufe0f", "category": "Editing", "tier": "bronze", "hidden": false}, "backspace_warrior": {"id": "backspace_warrior", "unlocked": false, "unlock_date": null, "name": "Backspace Warrior", "description": "Delete 100 words in a single day.", "hint": "Sometimes you have to destroy to create.", "emoji": "\u232b", "category": "Editing", "tier": "bronze", "hidden": false}, "kill_your_darlings": {"id": "kill_your_darlings", "unlocked": false, "unlock_date": null, "name": "Kill Your Darlings", "description": "Delete 500 words in a single day.", "hint": "Faulkner would be proud.", "emoji": "\ud83d\udde1\ufe0f", "category": "Editing", "tier": "silver", "hidden": false}, "scorched_earth": {"id": "scorched_earth", "unlocked": false, "unlock_date": null, "name": "Scorched Earth", "description": "Delete 1,000 words in a single day.", "hint": "A fresh start, courtesy of the Delete key.", "emoji": "\ud83d\udd25", "category": "Editing", "tier": "gold", "hidden": false}, "nuclear_option": {"id": "nuclear_option", "unlocked": false, "unlock_date": null, "name": "Nuclear Option", "description": "Delete 2,000 words in a single day.", "hint": "Entire sections... gone. Reduced to atoms.", "emoji": "\u2622\ufe0f", "category": "Editing", "tier": "diamond", "hidden": false}, "net_negative": {"id": "net_negative", "unlocked": false, "unlock_date": null, "name": "Net Negative", "description": "End a day with fewer words than you started.", "hint": "Negative progress is still progress... right?", "emoji": "\ud83d\udcc9", "category": "Editing", "tier": "silver", "hidden": false}, "the_editor": {"id": "the_editor", "unlocked": false, "unlock_date": null, "name": "The Editor", "description": "Accumulate 5,000 total deleted words.", "hint": "You have killed a novella worth of text.", "emoji": "\u2702\ufe0f", "category": "Editing", "tier": "gold", "hidden": false}, "the_rewriter": {"id": "the_rewriter", "unlocked": false, "unlock_date": null, "name": "The Rewriter", "description": "Accumulate 15,000 total deleted words.", "hint": "You have rewritten the thesis twice over.", "emoji": "\ud83d\udd04", "category": "Editing", "tier": "mythic", "hidden": false}, "first_figure": {"id": "first_figure", "unlocked": true, "unlock_date": "2024-01-10", "name": "A Picture Says...", "description": "Add your first figure.", "hint": "...a thousand words you do not have to write!", "emoji": "\ud83d\uddbc\ufe0f", "category": "Figures", "tier": "bronze", "hidden": false}, "three_figures": {"id": "three_figures", "unlocked": true, "unlock_date": "2026-01-07", "name": "Triptych", "description": "3 figures -- a small gallery.", "hint": "Three perspectives on science.", "emoji": "\ud83c\udfad", "category": "Figures", "tier": "bronze", "hidden": false}, "gallery_opening": {"id": "gallery_opening", "unlocked": true, "unlock_date": "2026-03-16", "name": "Gallery Opening", "description": "5 figures -- a small exhibition.", "hint": "Curating your scientific gallery.", "emoji": "\ud83c\udfa8", "category": "Figures", "tier": "silver", "hidden": false}, "visual_storyteller": {"id": "visual_storyteller", "unlocked": false, "unlock_date": null, "name": "Visual Storyteller", "description": "10 figures -- a thousand words each.", "hint": "That is 10,000 words worth of pictures!", "emoji": "\ud83d\udcca", "category": "Figures", "tier": "silver", "hidden": false}, "fifteen_figs": {"id": "fifteen_figs", "unlocked": false, "unlock_date": null, "name": "Illustrated Edition", "description": "15 figures -- practically a picture book.", "hint": "Your advisor asks: more text?", "emoji": "\ud83d\udcf8", "category": "Figures", "tier": "gold", "hidden": false}, "data_viz": {"id": "data_viz", "unlocked": false, "unlock_date": null, "name": "Data Viz Enthusiast", "description": "20 figures -- you love showing data.", "hint": "Why write when you can plot?", "emoji": "\ud83d\udcc8", "category": "Figures", "tier": "gold", "hidden": false}, "twentyfive_figs": {"id": "twentyfive_figs", "unlocked": false, "unlock_date": null, "name": "Infographic PhD", "description": "25 figures -- your thesis is very visual.", "hint": "Each figure is a mini-paper!", "emoji": "\ud83d\uddfa\ufe0f", "category": "Figures", "tier": "diamond", "hidden": false}, "museum_curator": {"id": "museum_curator", "unlocked": false, "unlock_date": null, "name": "Museum Curator", "description": "30 figures -- quite the collection.", "hint": "The Louvre called, they want their curator back.", "emoji": "\ud83c\udfdb\ufe0f", "category": "Figures", "tier": "diamond", "hidden": false}, "forty_figs": {"id": "forty_figs", "unlocked": false, "unlock_date": null, "name": "Visual Encyclopedia", "description": "40 figures -- a reference work.", "hint": "Reviewers need a coffee break between figures.", "emoji": "\ud83d\udcda", "category": "Figures", "tier": "mythic", "hidden": false}, "pixel_perfectionist": {"id": "pixel_perfectionist", "unlocked": false, "unlock_date": null, "name": "Pixel Perfectionist", "description": "50 figures -- a visual masterpiece.", "hint": "Your thesis is basically an art gallery now.", "emoji": "\u2728", "category": "Figures", "tier": "transcendent", "hidden": false}, "first_table": {"id": "first_table", "unlocked": true, "unlock_date": "2026-01-09", "name": "Tabled Discussion", "description": "Create your first table.", "hint": "Organized data is happy data.", "emoji": "\ud83d\udccb", "category": "Tables", "tier": "bronze", "hidden": false}, "two_tables": {"id": "two_tables", "unlocked": false, "unlock_date": null, "name": "Double Entry", "description": "2 tables -- the data starts to organize.", "hint": "Bookkeeping intensifies.", "emoji": "\ud83d\udcd1", "category": "Tables", "tier": "bronze", "hidden": false}, "data_organizer": {"id": "data_organizer", "unlocked": false, "unlock_date": null, "name": "Data Organizer", "description": "3 tables of organized data.", "hint": "Structure brings clarity!", "emoji": "\ud83d\uddc2\ufe0f", "category": "Tables", "tier": "silver", "hidden": false}, "four_tables": {"id": "four_tables", "unlocked": false, "unlock_date": null, "name": "Table Tennis", "description": "4 tables -- back and forth with data.", "hint": "Ping... pong... data.", "emoji": "\ud83c\udfd3", "category": "Tables", "tier": "gold", "hidden": false}, "excellent": {"id": "excellent", "unlocked": false, "unlock_date": null, "name": "Excel-lent", "description": "5 tables -- you love structure.", "hint": "Spreadsheet energy detected.", "emoji": "\ud83d\udcca", "category": "Tables", "tier": "diamond", "hidden": false}, "emc2": {"id": "emc2", "unlocked": false, "unlock_date": null, "name": "E=mc2", "description": "Write your first equation.", "hint": "Physics intensifies.", "emoji": "\ud83e\uddee", "category": "Equations", "tier": "bronze", "hidden": false}, "five_eqs": {"id": "five_eqs", "unlocked": false, "unlock_date": null, "name": "Handful of Formulas", "description": "5 equations -- getting mathematical.", "hint": "The math begins.", "emoji": "\u270d\ufe0f", "category": "Equations", "tier": "bronze", "hidden": false}, "math_inclined": {"id": "math_inclined", "unlocked": false, "unlock_date": null, "name": "Mathematically Inclined", "description": "10 equations -- the math is mathing.", "hint": "Variables assemble!", "emoji": "\ud83d\udcd0", "category": "Equations", "tier": "silver", "hidden": false}, "fifteen_eqs": {"id": "fifteen_eqs", "unlocked": false, "unlock_date": null, "name": "Derivation Station", "description": "15 equations -- you are deriving like a pro.", "hint": "d/dx everything.", "emoji": "\ud83d\ude89", "category": "Equations", "tier": "silver", "hidden": false}, "proof_exercise": {"id": "proof_exercise", "unlocked": false, "unlock_date": null, "name": "Proof Left as Exercise", "description": "25 equations -- your reviewer trembles.", "hint": "The proof is left as an exercise to the reader.", "emoji": "\ud83c\udf93", "category": "Equations", "tier": "gold", "hidden": false}, "thirty_five_eqs": {"id": "thirty_five_eqs", "unlocked": false, "unlock_date": null, "name": "Equation Avalanche", "description": "35 equations -- they keep coming.", "hint": "You cannot stop the math.", "emoji": "\ud83c\udfd4\ufe0f", "category": "Equations", "tier": "gold", "hidden": false}, "the_formula": {"id": "the_formula", "unlocked": false, "unlock_date": null, "name": "The Formula", "description": "50 equations -- physics thesis confirmed.", "hint": "You are basically deriving reality.", "emoji": "\u2697\ufe0f", "category": "Equations", "tier": "diamond", "hidden": false}, "seventy_five_eqs": {"id": "seventy_five_eqs", "unlocked": false, "unlock_date": null, "name": "Equation Singularity", "description": "75 equations -- approaching critical mass.", "hint": "Your thesis might collapse into a black hole of math.", "emoji": "\ud83d\udd73\ufe0f", "category": "Equations", "tier": "mythic", "hidden": false}, "maxwell_proud": {"id": "maxwell_proud", "unlocked": false, "unlock_date": null, "name": "Maxwell Would Be Proud", "description": "100 equations of pure elegance.", "hint": "You have out-equationed most textbooks.", "emoji": "\u26a1", "category": "Equations", "tier": "mythic", "hidden": false}, "euler_reborn": {"id": "euler_reborn", "unlocked": false, "unlock_date": null, "name": "Euler Reborn", "description": "150 equations -- you speak mathematics fluently.", "hint": "Leonhard Euler sends his regards.", "emoji": "\u267e\ufe0f", "category": "Equations", "tier": "transcendent", "hidden": false}, "citation_needed": {"id": "citation_needed", "unlocked": true, "unlock_date": "2026-01-06", "name": "Citation Needed", "description": "Add your first citation.", "hint": "[citation needed]", "emoji": "\ud83d\udcce", "category": "Citations", "tier": "bronze", "hidden": false}, "five_cites": {"id": "five_cites", "unlocked": true, "unlock_date": "2026-02-26", "name": "Footnote Enthusiast", "description": "5 unique citations.", "hint": "You have read some papers!", "emoji": "\ud83d\udccc", "category": "Citations", "tier": "bronze", "hidden": false}, "ten_cites": {"id": "ten_cites", "unlocked": false, "unlock_date": null, "name": "Literature Dabbler", "description": "10 unique citations.", "hint": "Your Zotero is heating up.", "emoji": "\ud83d\udd16", "category": "Citations", "tier": "silver", "hidden": false}, "well_read": {"id": "well_read", "unlocked": false, "unlock_date": null, "name": "Well-Read", "description": "25 unique citations.", "hint": "Knowledge on the shoulders of papers.", "emoji": "\ud83d\udcd6", "category": "Citations", "tier": "silver", "hidden": false}, "literature_scholar": {"id": "literature_scholar", "unlocked": false, "unlock_date": null, "name": "Literature Scholar", "description": "50 citations -- your bibliography is thick.", "hint": "Your reference list needs its own chapter.", "emoji": "\ud83c\udfeb", "category": "Citations", "tier": "gold", "hidden": false}, "seventy_five_cites": {"id": "seventy_five_cites", "unlocked": false, "unlock_date": null, "name": "Reference Machine", "description": "75 citations -- still going.", "hint": "You cite in your sleep.", "emoji": "\ud83e\udd16", "category": "Citations", "tier": "gold", "hidden": false}, "shoulders_giants": {"id": "shoulders_giants", "unlocked": false, "unlock_date": null, "name": "Standing on Shoulders", "description": "100 citations -- of giants.", "hint": "Newton, Einstein, and your bibliography.", "emoji": "\ud83d\uddfc", "category": "Citations", "tier": "diamond", "hidden": false}, "one_twenty_five_cites": {"id": "one_twenty_five_cites", "unlocked": false, "unlock_date": null, "name": "Citation Connoisseur", "description": "125 citations -- refined taste in references.", "hint": "Only the finest references for your thesis.", "emoji": "\ud83c\udf77", "category": "Citations", "tier": "mythic", "hidden": false}, "walking_bibliography": {"id": "walking_bibliography", "unlocked": false, "unlock_date": null, "name": "Walking Bibliography", "description": "150 citations -- you ARE the literature review.", "hint": "You have read more papers than your advisor.", "emoji": "\ud83d\udeb6", "category": "Citations", "tier": "mythic", "hidden": false}, "two_hundred_cites": {"id": "two_hundred_cites", "unlocked": false, "unlock_date": null, "name": "The Library", "description": "200 citations -- a repository of human knowledge.", "hint": "The Library of Alexandria called. They are jealous.", "emoji": "\ud83c\udfdb\ufe0f", "category": "Citations", "tier": "transcendent", "hidden": false}, "abstract_thinker": {"id": "abstract_thinker", "unlocked": false, "unlock_date": null, "name": "Abstract Thinker", "description": "Write the abstract (>150 words).", "hint": "The elevator pitch of your PhD.", "emoji": "\ud83d\udcad", "category": "Chapters", "tier": "silver", "hidden": false}, "abstract_polished": {"id": "abstract_polished", "unlocked": false, "unlock_date": null, "name": "Abstract Perfection", "description": "Abstract exceeds 300 words.", "hint": "A refined summary of years of work.", "emoji": "\ud83d\udc8e", "category": "Chapters", "tier": "gold", "hidden": false}, "and_so_it_begins": {"id": "and_so_it_begins", "unlocked": false, "unlock_date": null, "name": "And So It Begins", "description": "Introduction > 1,000 words.", "hint": "The journey of a thousand pages starts here.", "emoji": "\ud83d\udeaa", "category": "Chapters", "tier": "silver", "hidden": false}, "intro_complete": {"id": "intro_complete", "unlocked": false, "unlock_date": null, "name": "Hook, Line and Sinker", "description": "Introduction > 3,000 words.", "hint": "The reader is hooked!", "emoji": "\ud83c\udfa3", "category": "Chapters", "tier": "gold", "hidden": false}, "theoretically_speaking": {"id": "theoretically_speaking", "unlocked": false, "unlock_date": null, "name": "Theoretically Speaking", "description": "Theory chapter > 3,000 words.", "hint": "In theory, no difference between theory and practice.", "emoji": "\ud83e\udde0", "category": "Chapters", "tier": "gold", "hidden": false}, "theory_mastery": {"id": "theory_mastery", "unlocked": false, "unlock_date": null, "name": "Theory Mastery", "description": "Theory chapter > 8,000 words.", "hint": "You have written a textbook chapter.", "emoji": "\ud83c\udf93", "category": "Chapters", "tier": "mythic", "hidden": false}, "lab_rat": {"id": "lab_rat", "unlocked": false, "unlock_date": null, "name": "Lab Rat", "description": "Experimental chapter > 2,000 words.", "hint": "Documenting the method to the madness.", "emoji": "\ud83d\udc00", "category": "Chapters", "tier": "gold", "hidden": false}, "results_are_in": {"id": "results_are_in", "unlocked": false, "unlock_date": null, "name": "The Results Are In", "description": "Results + Discussion > 2,000 words.", "hint": "And the data says...", "emoji": "\ud83d\udd2c", "category": "Chapters", "tier": "gold", "hidden": false}, "results_flood": {"id": "results_flood", "unlocked": false, "unlock_date": null, "name": "Data Deluge", "description": "Results + Discussion > 8,000 words.", "hint": "The data will not stop talking.", "emoji": "\ud83c\udf0a", "category": "Chapters", "tier": "mythic", "hidden": false}, "the_end_is_nigh": {"id": "the_end_is_nigh", "unlocked": false, "unlock_date": null, "name": "The End Is Nigh", "description": "Outlook/conclusion > 500 words.", "hint": "The light at the end of the tunnel!", "emoji": "\ud83c\udf05", "category": "Chapters", "tier": "silver", "hidden": false}, "daily_grind": {"id": "daily_grind", "unlocked": true, "unlock_date": "2026-03-18", "name": "Daily Grind", "description": "Write on 3 consecutive days.", "hint": "Consistency is key!", "emoji": "\u2615", "category": "Streaks", "tier": "bronze", "hidden": false}, "on_a_roll": {"id": "on_a_roll", "unlocked": false, "unlock_date": null, "name": "On a Roll", "description": "Write on 7 consecutive days.", "hint": "A full week of productivity!", "emoji": "\ud83c\udfb2", "category": "Streaks", "tier": "silver", "hidden": false}, "ten_streak": {"id": "ten_streak", "unlocked": false, "unlock_date": null, "name": "Tenacious", "description": "Write on 10 consecutive days.", "hint": "Unstoppable!", "emoji": "\ud83d\udd1f", "category": "Streaks", "tier": "silver", "hidden": false}, "fortnight_focus": {"id": "fortnight_focus", "unlocked": false, "unlock_date": null, "name": "Fortnight of Focus", "description": "Write on 14 consecutive days.", "hint": "Two weeks straight. Impressive.", "emoji": "\ud83d\udd25", "category": "Streaks", "tier": "gold", "hidden": false}, "three_week_streak": {"id": "three_week_streak", "unlocked": false, "unlock_date": null, "name": "21-Day Habit", "description": "Write on 21 consecutive days.", "hint": "They say it takes 21 days to form a habit.", "emoji": "\ud83e\uddec", "category": "Streaks", "tier": "gold", "hidden": false}, "monthly_marathon": {"id": "monthly_marathon", "unlocked": false, "unlock_date": null, "name": "Monthly Marathon", "description": "Write on 30 consecutive days.", "hint": "A full month. Legendary.", "emoji": "\ud83c\udfc3", "category": "Streaks", "tier": "diamond", "hidden": false}, "forty_five_streak": {"id": "forty_five_streak", "unlocked": false, "unlock_date": null, "name": "The Grinder", "description": "Write on 45 consecutive days.", "hint": "You have transcended normal dedication.", "emoji": "\u2699\ufe0f", "category": "Streaks", "tier": "mythic", "hidden": false}, "sixty_streak": {"id": "sixty_streak", "unlocked": false, "unlock_date": null, "name": "One with the Thesis", "description": "Write on 60 consecutive days.", "hint": "You ARE the thesis now.", "emoji": "\ud83e\uddd8", "category": "Streaks", "tier": "mythic", "hidden": false}, "ninety_streak": {"id": "ninety_streak", "unlocked": false, "unlock_date": null, "name": "Thesis Monk", "description": "Write on 90 consecutive days.", "hint": "Three months of pure devotion.", "emoji": "\ud83d\uded5", "category": "Streaks", "tier": "transcendent", "hidden": false}, "total_days_30": {"id": "total_days_30", "unlocked": false, "unlock_date": null, "name": "30 Days of Writing", "description": "Write on 30 distinct days (not necessarily consecutive).", "hint": "A month worth of effort!", "emoji": "\ud83d\udcc5", "category": "Streaks", "tier": "silver", "hidden": false}, "night_owl": {"id": "night_owl", "unlocked": true, "unlock_date": "2026-03-13", "name": "Night Owl", "description": "Push a commit after midnight.", "hint": "The best ideas come at 2 AM... or do they?", "emoji": "\ud83e\udd89", "category": "Time", "tier": "bronze", "hidden": false}, "early_bird": {"id": "early_bird", "unlocked": true, "unlock_date": "2024-01-24", "name": "Early Bird", "description": "Push a commit before 6 AM.", "hint": "The early physicist catches the... data?", "emoji": "\ud83d\udc26", "category": "Time", "tier": "silver", "hidden": false}, "weekend_warrior": {"id": "weekend_warrior", "unlocked": true, "unlock_date": "2026-03-18", "name": "Weekend Warrior", "description": "Commit on Sat and Sun in the same weekend.", "hint": "Rest is for the defended.", "emoji": "\u2694\ufe0f", "category": "Time", "tier": "silver", "hidden": false}, "lunch_break_scholar": {"id": "lunch_break_scholar", "unlocked": true, "unlock_date": "2026-01-07", "name": "Lunch Break Scholar", "description": "Commit between 12:00 and 13:00.", "hint": "Who needs food when there is science?", "emoji": "\ud83e\udd6a", "category": "Time", "tier": "bronze", "hidden": false}, "witching_hour": {"id": "witching_hour", "unlocked": false, "unlock_date": null, "name": "Witching Hour", "description": "Commit between 3 AM and 4 AM.", "hint": "The veil between physics and madness is thin.", "emoji": "\ud83e\uddd9", "category": "Time", "tier": "gold", "hidden": false}, "five_different_hours": {"id": "five_different_hours", "unlocked": true, "unlock_date": "2026-03-18", "name": "Around the Clock", "description": "Have commits across 12+ different hours of the day.", "hint": "You write at ALL hours.", "emoji": "\ud83d\udd50", "category": "Time", "tier": "gold", "hidden": false}, "shadow_oops": {"id": "shadow_oops", "unlocked": false, "unlock_date": null, "name": "???", "description": "???", "hint": "Precision is everything...", "emoji": "\ud83e\udd5a", "category": "Shadow", "tier": "silver", "hidden": true}, "shadow_holiday": {"id": "shadow_holiday", "unlocked": false, "unlock_date": null, "name": "???", "description": "???", "hint": "Try working on a very special day...", "emoji": "\ud83e\udd5a", "category": "Shadow", "tier": "gold", "hidden": true}, "shadow_nice": {"id": "shadow_nice", "unlocked": false, "unlock_date": null, "name": "???", "description": "???", "hint": "Numbers are everywhere...", "emoji": "\ud83e\udd5a", "category": "Shadow", "tier": "bronze", "hidden": true}, "shadow_zero": {"id": "shadow_zero", "unlocked": true, "unlock_date": "2026-03-18", "name": "Commit to Nothing", "description": "Make a commit that changes 0 words.", "hint": "What happens when nothing happens?", "emoji": "\ud83e\udee5", "category": "Shadow", "tier": "bronze", "hidden": true}, "shadow_resurrection": {"id": "shadow_resurrection", "unlocked": true, "unlock_date": "2026-03-18", "name": "Resurrection", "description": "Come back and write after a 30+ day gap.", "hint": "Persistence has its own reward.", "emoji": "\ud83e\udddf", "category": "Shadow", "tier": "gold", "hidden": true}, "shadow_observer": {"id": "shadow_observer", "unlocked": true, "unlock_date": "2026-03-18", "name": "The Observer", "description": "Accumulate 50+ total commits.", "hint": "The dashboard remembers everything...", "emoji": "\ud83d\udc41\ufe0f", "category": "Shadow", "tier": "silver", "hidden": true}, "shadow_allnighter": {"id": "shadow_allnighter", "unlocked": false, "unlock_date": null, "name": "???", "description": "???", "hint": "All work and no play?", "emoji": "\ud83e\udd5a", "category": "Shadow", "tier": "diamond", "hidden": true}, "shadow_palindrome": {"id": "shadow_palindrome", "unlocked": false, "unlock_date": null, "name": "???", "description": "???", "hint": "Mirror, mirror...", "emoji": "\ud83e\udd5a", "category": "Shadow", "tier": "silver", "hidden": true}, "shadow_friday13": {"id": "shadow_friday13", "unlocked": true, "unlock_date": "2026-03-18", "name": "Paraskevidekatriaphobia", "description": "Commit on a Friday the 13th.", "hint": "Superstition is just a word...", "emoji": "\ud83d\udd2e", "category": "Shadow", "tier": "silver", "hidden": true}, "shadow_pi": {"id": "shadow_pi", "unlocked": true, "unlock_date": "2026-03-18", "name": "Pi Day", "description": "Commit on March 14th (3/14).", "hint": "March has a very special day...", "emoji": "\ud83e\udd67", "category": "Shadow", "tier": "gold", "hidden": true}, "shadow_fibonacci": {"id": "shadow_fibonacci", "unlocked": false, "unlock_date": null, "name": "???", "description": "???", "hint": "Nature favorite sequence hides in your data...", "emoji": "\ud83e\udd5a", "category": "Shadow", "tier": "gold", "hidden": true}, "shadow_groundhog": {"id": "shadow_groundhog", "unlocked": true, "unlock_date": "2026-03-18", "name": "Groundhog Day", "description": "Have two consecutive days with the exact same word count.", "hint": "Didn't I do this already?", "emoji": "\ud83e\uddab", "category": "Shadow", "tier": "bronze", "hidden": true}, "shadow_thesis_birthday": {"id": "shadow_thesis_birthday", "unlocked": false, "unlock_date": null, "name": "???", "description": "???", "hint": "Anniversaries come around once a year...", "emoji": "\ud83e\udd5a", "category": "Shadow", "tier": "mythic", "hidden": true}, "dipole_moment": {"id": "dipole_moment", "unlocked": true, "unlock_date": "2026-03-18", "name": "Dipole Moment", "description": "Two chapters with 100+ words each.", "hint": "Even a simple dipole has two poles.", "emoji": "\ud83e\uddf2", "category": "Physics", "tier": "bronze", "hidden": false}, "first_principles": {"id": "first_principles", "unlocked": false, "unlock_date": null, "name": "First Principles", "description": "Theory chapter crosses 500 words.", "hint": "Ab initio: from the beginning.", "emoji": "\u269b\ufe0f", "category": "Physics", "tier": "bronze", "hidden": false}, "lab_notebook": {"id": "lab_notebook", "unlocked": true, "unlock_date": "2026-03-18", "name": "Lab Notebook", "description": "Experimental chapter crosses 500 words.", "hint": "If it is not written down, it did not happen.", "emoji": "\ud83d\udd2c", "category": "Physics", "tier": "bronze", "hidden": false}, "seed_crystal": {"id": "seed_crystal", "unlocked": true, "unlock_date": "2026-03-18", "name": "Seed Crystal", "description": "Abstract, Introduction, and Theory all started.", "hint": "The nucleus around which the thesis crystallizes.", "emoji": "\ud83d\udc8e", "category": "Physics", "tier": "bronze", "hidden": false}, "exchange_coupling": {"id": "exchange_coupling", "unlocked": false, "unlock_date": null, "name": "Exchange Coupling", "description": "Theory + Experimental combined exceed 3,000 words.", "hint": "Two chapters, one exchange interaction.", "emoji": "\ud83d\udd17", "category": "Physics", "tier": "silver", "hidden": false}, "stoner_wohlfarth": {"id": "stoner_wohlfarth", "unlocked": false, "unlock_date": null, "name": "Stoner-Wohlfarth", "description": "10+ equations in a thesis with 2,000+ word theory chapter.", "hint": "The single-domain model of thesis writing.", "emoji": "\ud83d\udcc9", "category": "Physics", "tier": "silver", "hidden": false}, "zeta_potential": {"id": "zeta_potential", "unlocked": false, "unlock_date": null, "name": "Zeta Potential", "description": "Accumulate 30+ citations.", "hint": "The surface charge of your thesis in the literature.", "emoji": "\u26a1", "category": "Physics", "tier": "silver", "hidden": false}, "brownian_motion": {"id": "brownian_motion", "unlocked": true, "unlock_date": "2026-03-18", "name": "Brownian Motion", "description": "Write on 10 distinct days.", "hint": "A random walk through the writing process.", "emoji": "\ud83c\udfb2", "category": "Physics", "tier": "silver", "hidden": false}, "critical_frequency": {"id": "critical_frequency", "unlocked": false, "unlock_date": null, "name": "Critical Frequency", "description": "Results + Discussion > 3,000 words with 15+ figures.", "hint": "Above \u03bd_c, the particles can no longer follow.", "emoji": "\ud83d\udce1", "category": "Physics", "tier": "gold", "hidden": false}, "dlvo_force_balance": {"id": "dlvo_force_balance", "unlocked": false, "unlock_date": null, "name": "DLVO Force Balance", "description": "Theory chapter > 5,000 words with 20+ equations.", "hint": "Van der Waals attraction meets electrostatic repulsion.", "emoji": "\u2696\ufe0f", "category": "Physics", "tier": "gold", "hidden": false}, "ion_bombardment": {"id": "ion_bombardment", "unlocked": false, "unlock_date": null, "name": "Ion Bombardment", "description": "Experimental chapter > 3,000 words with 5+ figures.", "hint": "10 keV He\u207a ions, meet your thesis.", "emoji": "\ud83d\udca5", "category": "Physics", "tier": "gold", "hidden": false}, "magnetic_domain": {"id": "magnetic_domain", "unlocked": false, "unlock_date": null, "name": "Magnetic Domain", "description": "Reach 25 figures.", "hint": "Each figure is a domain in your scientific landscape.", "emoji": "\ud83e\udded", "category": "Physics", "tier": "gold", "hidden": false}, "goldman_drag": {"id": "goldman_drag", "unlocked": false, "unlock_date": null, "name": "Goldman Drag", "description": "Exceed 20,000 words with 30+ equations.", "hint": "The wall correction slows you down, but never stops you.", "emoji": "\ud83d\udc22", "category": "Physics", "tier": "diamond", "hidden": false}, "the_separator": {"id": "the_separator", "unlocked": false, "unlock_date": null, "name": "The Separator", "description": "5+ chapters with 500+ words each.", "hint": "COOH vs NH\u2082 \u2014 separation achieved.", "emoji": "\ud83d\udd00", "category": "Physics", "tier": "diamond", "hidden": false}, "superparamagnetic": {"id": "superparamagnetic", "unlocked": false, "unlock_date": null, "name": "Superparamagnetic", "description": "15+ figures, 2+ tables, and 20+ equations.", "hint": "Above the blocking volume, your thesis fluctuates freely.", "emoji": "\ud83c\udf00", "category": "Physics", "tier": "diamond", "hidden": false}, "layer_stack": {"id": "layer_stack", "unlocked": false, "unlock_date": null, "name": "Layer Stack", "description": "30,000+ words, 20+ figures, and 75+ citations.", "hint": "Cu/IrMn/CoFe/Si \u2014 each layer adds to the quality.", "emoji": "\ud83c\udfd7\ufe0f", "category": "Physics", "tier": "diamond", "hidden": false}, "traveling_wave": {"id": "traveling_wave", "unlocked": false, "unlock_date": null, "name": "Traveling Wave", "description": "40,000+ words, 30+ figures, 40+ equations, 100+ citations.", "hint": "The magnetic wave carries everything forward.", "emoji": "\ud83c\udf0a", "category": "Physics", "tier": "mythic", "hidden": false}, "magnon_condensate": {"id": "magnon_condensate", "unlocked": false, "unlock_date": null, "name": "Magnon Condensate", "description": "Intro, Theory, Experimental, and Results each > 2,000 words.", "hint": "All chapters in coherent excitation.", "emoji": "\u2744\ufe0f", "category": "Physics", "tier": "mythic", "hidden": false}, "meiklejohn_bean": {"id": "meiklejohn_bean", "unlocked": false, "unlock_date": null, "name": "Meiklejohn-Bean", "description": "50,000+ words, 50+ equations, 125+ citations, 35+ figures.", "hint": "The foundational model \u2014 exchange biased toward greatness.", "emoji": "\ud83d\udc51", "category": "Physics", "tier": "transcendent", "hidden": false}, "the_dissertation": {"id": "the_dissertation", "unlocked": false, "unlock_date": null, "name": "The Dissertation", "description": "A complete physics dissertation with all chapters substantial.", "hint": "Defended. Done. Doctor.", "emoji": "\ud83c\udf93", "category": "Physics", "tier": "transcendent", "hidden": false}};
+    const NEWLY_UNLOCKED = ["hello_world", "baby_steps", "getting_warmed_up", "page_one", "first_thousand", "warm_up_day", "productive_day", "first_figure", "three_figures", "gallery_opening", "first_table", "citation_needed", "five_cites", "daily_grind", "night_owl", "early_bird", "weekend_warrior", "lunch_break_scholar", "five_different_hours", "shadow_zero", "shadow_resurrection", "shadow_observer", "shadow_friday13", "shadow_pi", "shadow_groundhog", "dipole_moment", "lab_notebook", "seed_crystal", "brownian_motion"];
+    const TOTAL_ACH = 130;
+    const UNLOCKED_ACH = 29;
+    const ACHIEVEMENT_ORDER = ["hello_world", "baby_steps", "getting_warmed_up", "first_thousand", "page_one", "verbose", "wordy_mcwordface", "fifteen_k", "twenty_k", "halfway", "thirty_k", "thirty_five_k", "unstoppable", "forty_five_k", "magnum_opus", "novelist", "seventy_k", "war_and_peace", "ninety_k", "centennial", "warm_up_day", "productive_day", "thousand_day", "two_k_day", "three_k_day", "five_k_day", "sprint_week", "marathon_week", "first_delete", "backspace_warrior", "kill_your_darlings", "scorched_earth", "nuclear_option", "net_negative", "the_editor", "the_rewriter", "first_figure", "three_figures", "gallery_opening", "visual_storyteller", "fifteen_figs", "data_viz", "twentyfive_figs", "museum_curator", "forty_figs", "pixel_perfectionist", "first_table", "two_tables", "data_organizer", "four_tables", "excellent", "emc2", "five_eqs", "math_inclined", "fifteen_eqs", "proof_exercise", "thirty_five_eqs", "the_formula", "seventy_five_eqs", "maxwell_proud", "euler_reborn", "citation_needed", "five_cites", "ten_cites", "well_read", "literature_scholar", "seventy_five_cites", "shoulders_giants", "one_twenty_five_cites", "walking_bibliography", "two_hundred_cites", "abstract_thinker", "abstract_polished", "and_so_it_begins", "intro_complete", "theoretically_speaking", "theory_mastery", "lab_rat", "results_are_in", "results_flood", "the_end_is_nigh", "daily_grind", "on_a_roll", "ten_streak", "fortnight_focus", "three_week_streak", "monthly_marathon", "forty_five_streak", "sixty_streak", "ninety_streak", "total_days_30", "night_owl", "early_bird", "weekend_warrior", "lunch_break_scholar", "witching_hour", "five_different_hours", "shadow_oops", "shadow_holiday", "shadow_nice", "shadow_zero", "shadow_resurrection", "shadow_observer", "shadow_allnighter", "shadow_palindrome", "shadow_friday13", "shadow_pi", "shadow_fibonacci", "shadow_groundhog", "shadow_thesis_birthday", "dipole_moment", "first_principles", "lab_notebook", "seed_crystal", "exchange_coupling", "stoner_wohlfarth", "zeta_potential", "brownian_motion", "critical_frequency", "dlvo_force_balance", "ion_bombardment", "magnetic_domain", "goldman_drag", "the_separator", "superparamagnetic", "layer_stack", "traveling_wave", "magnon_condensate", "meiklejohn_bean", "the_dissertation"];
+
+    // ---- Stats Bar ----
+    (function renderStats() {
+        const bar = document.getElementById('stats-bar');
+        const items = [
+            { value: STATS.total_words.toLocaleString(), label: 'Words', cls: '' },
+            { value: STATS.pages, label: 'Pages', cls: '' },
+            { value: STATS.figures, label: 'Figures', cls: '' },
+            { value: STATS.tables, label: 'Tables', cls: '' },
+            { value: STATS.equations, label: 'Equations', cls: '' },
+            { value: STATS.citations, label: 'Citations', cls: '' },
+            { value: STATS.sections, label: 'Sections', cls: '' },
+            { value: STATS.total_commits, label: 'Commits', cls: 'accent' },
+            { value: STATS.days_tracked, label: 'Days Tracked', cls: '' },
+        ];
+        bar.innerHTML = items.map(i =>
+            `<div class="stat-item">
+                <div class="stat-value ${i.cls}">${i.value}</div>
+                <div class="stat-label">${i.label}</div>
+            </div>`
+        ).join('');
+    })();
+
+    // ---- Progress Bar ----
+    (function renderProgress() {
+        const pct = Math.min(STATS.progress_pct, 100);
+        document.getElementById('progress-pct').textContent =
+            `${STATS.total_words.toLocaleString()} / ${STATS.word_target.toLocaleString()} (${STATS.progress_pct}%)`;
+        document.getElementById('progress-fill').style.width = pct + '%';
+
+        // Achievement progress
+        const achPct = TOTAL_ACH > 0 ? (UNLOCKED_ACH / TOTAL_ACH * 100) : 0;
+        document.getElementById('ach-progress-fill').style.width = achPct + '%';
+    })();
+
+    // ---- Achievements ----
+    const categoryOrder = ['Writing', 'Editing', 'Figures', 'Tables', 'Equations', 'Citations', 'Chapters', 'Streaks', 'Time', 'Shadow'];
+    let activeFilter = 'All';
+
+    function renderAchievements(filter) {
+        const grid = document.getElementById('achievement-grid');
+        const achList = Object.values(ACHIEVEMENTS);
+
+        // Build definition order index map for stable sort
+        const orderIndex = {};
+        ACHIEVEMENT_ORDER.forEach((id, idx) => { orderIndex[id] = idx; });
+
+        // Sort by tier ascending (bronze first), then by definition order within tier
+        const tierRank = { bronze: 1, silver: 2, gold: 3, diamond: 4, mythic: 5, transcendent: 6 };
+        achList.sort((a, b) => {
+            const tierDiff = (tierRank[a.tier] || 0) - (tierRank[b.tier] || 0);
+            if (tierDiff !== 0) return tierDiff;
+            return (orderIndex[a.id] || 0) - (orderIndex[b.id] || 0);
+        });
+
+        const filtered = filter === 'All'
+            ? achList
+            : achList.filter(a => a.category === filter);
+
+        grid.innerHTML = filtered.map(a => {
+            const isLocked = !a.unlocked;
+            const isShadow = a.category === 'Shadow';
+
+            if (isLocked) {
+                // Cookie Clicker style: hidden "?" card
+                const hintText = a.hidden ? '???' : (a.hint || '???');
+                const secretLabel = isShadow ? '<div class="ach-secret-label">\uD83D\uDD12 SECRET</div>' : '';
+                const classes = [
+                    'achievement-card', 'locked', a.tier,
+                    isShadow ? 'shadow' : '',
+                ].filter(Boolean).join(' ');
+
+                return `<div class="${classes}" title="${hintText}">
+                    <span class="ach-tier ${a.tier}">${a.tier}</span>
+                    <div class="ach-emoji">?</div>
+                    <div class="ach-name">???</div>
+                    <div class="ach-desc">${hintText}</div>
+                    ${secretLabel}
+                </div>`;
+            }
+
+            // Unlocked card
+            const dateStr = a.unlock_date ? `Unlocked: ${a.unlock_date}` : '';
+            const classes = [
+                'achievement-card', 'unlocked', a.tier,
+                isShadow ? 'shadow' : '',
+            ].filter(Boolean).join(' ');
+
+            return `<div class="${classes}" title="${a.description}">
+                <span class="ach-tier ${a.tier}">${a.tier}</span>
+                <div class="ach-emoji">${a.emoji}</div>
+                <div class="ach-name">${a.name}</div>
+                <div class="ach-desc">${a.description}</div>
+                ${dateStr ? `<div class="ach-date">${dateStr}</div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    (function renderFilters() {
+        const container = document.getElementById('category-filters');
+        const categories = ['All', ...categoryOrder];
+        container.innerHTML = categories.map(c => {
+            const active = c === activeFilter ? 'active' : '';
+            return `<button class="filter-btn ${active}" data-cat="${c}">${c}</button>`;
+        }).join('');
+
+        container.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            activeFilter = btn.dataset.cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderAchievements(activeFilter);
+        });
+    })();
+
+    renderAchievements('All');
+
+    // ---- Toast Notifications ----
+    (function showToasts() {
+        if (!NEWLY_UNLOCKED || NEWLY_UNLOCKED.length === 0) return;
+
+        // Check localStorage for already-seen toasts
+        const seenKey = 'thesis-dashboard-seen-achievements';
+        let seen = [];
+        try { seen = JSON.parse(localStorage.getItem(seenKey) || '[]'); } catch(e) {}
+
+        const unseen = NEWLY_UNLOCKED.filter(id => !seen.includes(id));
+        if (unseen.length === 0) return;
+
+        const container = document.getElementById('toast-container');
+
+        unseen.forEach((achId, idx) => {
+            const ach = ACHIEVEMENTS[achId];
+            if (!ach) return;
+
+            setTimeout(() => {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `
+                    <button class="toast-close" title="Dismiss">✕</button>
+                    <div class="toast-title">🏆 Achievement Unlocked!</div>
+                    <div class="toast-content">
+                        <span class="toast-emoji">${ach.emoji}</span>
+                        <div class="toast-text">
+                            <div class="toast-name">${ach.name}</div>
+                            <div class="toast-desc">${ach.description}</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(toast);
+
+                // Dismiss only on close button click
+                toast.querySelector('.toast-close').addEventListener('click', () => {
+                    toast.classList.add('dismissing');
+                    setTimeout(() => toast.remove(), 380);
+                });
+            }, idx * 800);
+        });
+
+        // Mark as seen
+        seen.push(...unseen);
+        try { localStorage.setItem(seenKey, JSON.stringify(seen)); } catch(e) {}
+    })();
+
+    // ---- Make Plotly charts responsive ----
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.js-plotly-plot').forEach(plot => {
+            Plotly.Plots.resize(plot);
+        });
+    });
+
+    // Trigger initial resize for proper sizing
+    setTimeout(() => {
+        document.querySelectorAll('.js-plotly-plot').forEach(plot => {
+            Plotly.Plots.resize(plot);
+        });
+    }, 100);
+</script>
+
+</body>
+</html>
