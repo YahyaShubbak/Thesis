@@ -25,12 +25,28 @@ We will start with ...
 \subsection{Particle transport mechanism}
 \subsection{Close to surface transport}
 
-Using relatively weak magnetic fields in the range of \SIrange{1}{4}{\kilo\A\per\m}, the superparamagnetic bead's magentic moment $\mathbf{m}$ depends on the external magnetic field linearly as 
+$\#TODO$ where to put Reynolds number?
+\begin{equation}\label{eq:Reynolds_number}
+    \mathrm{Re} = \frac{\rho u L}{\mu},
+\end{equation}
+where at room temperature, $rho=\SI{1000}{\kg\per\cubic\meter}$ is the density of water, $u$ is the flow speed which, for our system is the velocity of the \acp{MP} and is generously given by \SI{100}{\micro\m\per\s}, $L$ is the charachtersitic length which is $<\mathrm{cm}$ range, and $\mu$ is the dynamic viscosity, given at \SI{1e-3}{\Pa}. 
+It becomes apparent that at small volumes used, in the present case in the \SI{200}{\micro\L} range, $\mathrm{Re}$ becomes $<1$\cite{Shanko2019}.
+
+Since the volumes used in this \ac{LOC} device are in the sub-mL range,  
+Using relatively weak magnetic fields in the range of \SIrange{1}{4}{\kilo\A\per\m}, the superparamagnetic bead's magentic moment $\mathbf{m_\mathrm{MP}}$ depends on the external magnetic field linearly as 
 \begin{equation}
-    \mathbf{m} = \bar{\chi}_\mathrm{MP} V \mathbf{H}, 
+    \mathbf{m_\mathrm{MP}} = \bar{\chi}_\mathrm{MP} V \mathbf{H}, 
 \end{equation}
 where $V$ is the bead's volume, and $\bar{\chi}=\nicefrac{3\chi_\mathrm{MP}}{\chi_\mathrm{MP} + 3}$ is the shape corrected bead susceptibility\cite{Yellen2007}. 
 It becomes clear that the \ac{MP} is treated as a point dipole, which is a reasonable approximation when the magnetic field does not vary drastically across the \ac{MP}'s volume, but will be discussed later \cite{Yellen2007}.
+
+
+When the \ac{MP} sees the magnetic field, the potential energy $U_\mathrm{P}$ of the \ac{MP} at lateral position $x$ and above the substrate $z$ is given by\cite{Holzinger2015a} 
+\begin{equation}\label{eq:U_P_MP}
+    U_\mathrm{P}(x,z) = -\mu_0 \mathbf{m_\mathrm{MP}}(x,z) \mathbf{H}(x,z), 
+\end{equation}
+where $\mu_0$ is the vacuum permeability.
+It becomes apparent that $U_\mathrm{P}(x,z)$ is smallest where $\mathbf{H}(x,z)$, which is where the magnetic stray fields emerge from the substrate, that is, at the \acp{DW}.
 
 External fields...
 
@@ -38,4 +54,13 @@ The magnetic force exerted on the superparamagnetic bead in the direction of mot
 \begin{equation}
     F_\mathrm{m,x}(x,z,t)=V(\chi_\mathrm{MP}-\chi_\mathrm{fl}) \mu_0  ((\mathbf{H}_\mathrm{eff} \mathbf{\nabla}) \mathbf{H}_\mathrm{eff})_\mathrm{x},
 \end{equation}
-where $\chi_\mathrm{fl}$ is the susceptibility of the fluid, $\mu_0$ is the vacuum permeability, and $\mathbf{H}_\mathrm{eff}$ is the effective field, which is the sum of the static stray field emerging from the \ac{hh}-\ac{tt}-\ac{DW}, and superposed external fields created by the Helholz coils, at the position of the particle\cite{Shubbak2026}.
+where $\chi_\mathrm{fl}$ is the susceptibility of the fluid, and $\mathbf{H}_\mathrm{eff}$ is the effective field, which is the sum of the static stray field emerging from the \ac{hh}-\ac{tt}-\ac{DW}, and superposed external fields created by the Helholz coils, at the position of the particle\cite{Shubbak2026}.
+Since the \ac{MP} is residing in the potential minimum in accordance with \ref{eq:U_P_MP}, shifting this energy well will force the \ac{MP} to follow its motion. 
+Fittingly, the transport concept is coined Traveling Wave Magnetophoresis CITE WHO?
+
+
+Using an equation of motion, the transport from one \ac{DW} to the adjacent by periodically transforming $U_\mathrm{P}(x,z)$ can be described by\cite{Yellen2007, Shubbak2026}
+\begin{equation}
+    M \frac{d^2x}{dt^2}-f_\mathrm{D}\frac{dx}{dt} = F_\mathrm{m,x} \sin(\phi),
+\end{equation}
+where $M$ is the mass of an \ac{MP}, $f_\mathrm{D}$ is the viscous drag coefficient, and the phase $\phi = kx-\omega t$ denotes the relative position of the \ac{MP} with respect to the position of the nearest energy minimum. 
