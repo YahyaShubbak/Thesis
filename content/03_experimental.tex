@@ -7,9 +7,10 @@ Last...
 
 
 \section{Particle transport setup}
-The setup consists of the components depicted in Figure \ref{fig:exp_setup}.
+The setup consists of the magnetic coil pairs, a microscope, and a camera, depicted in Figure \ref{fig:exp_setup}.
+To capture the fast motion dynamics of the particle transported on top of the transport substrate, a high-speed camera is needed.
 
-\begin{figure}
+\begin{figure}[bth]
     \centering
     \includegraphics[width=1\linewidth]{Abbildungen/Experimental/Experimental_setup.png}
     \caption{
@@ -24,15 +25,30 @@ The setup consists of the components depicted in Figure \ref{fig:exp_setup}.
 
 First, the sample stage is placed at the middle point of a 3D Helmholtz coil setup consisting of pairs in $x$, $y$, and $z$ directions.
 Due to the three coils mounted in the setup, a transport in $x$ and $y$ directions is possible and, therefore, all coil components will be introduced.
-However, throughout this work, transport along $x$ only was performed, for which reason the scheme is simplified to two Helmholtz pairs in a) and, consequently, the pulsed fields are only depicted for those two coils in b). 
-
+However, throughout this work, transport only along $x$ was performed, for which reason the scheme is simplified to two Helmholtz pairs in a) in $x$ and $z$ direction, and, consequently, the pulsed fields are only depicted for those two coils in b). 
 
 All coils were produced with \SI{0.5}{\milli\m} diameter copper wire.
-Table 
+Table \ref{tab:Helmholtz_properties} shows the characterization of the used Helmholtz coil pairs.
+
+The coil pairs are individually driven by a power supply and addressed by a LabVIEW program via a digital input/output device from National Instruments.
+Trapizoidal fields depicted in Figure \ref{fig:exp_setup} b) are created with a linear rise time $\Delta t_\mathrm{r}$, a plateau time $\Delta t_\mathrm{p}$, and a linear drop time $\Delta t_\mathrm{d}$ \cite{HuhnstockThesis}.
+Because of the high magnetic field alteration rate of $V_\mathrm{H}= \SI{3.2e6}{\A\per(\m\s)}$, the rise and drop time intervals of the trapezoidal magnetic field pulses are short compared to the plateau time \cite{Holzinger2015a}; in the rise and drop times the particle might move a maximum distance of \SI{20}{\nano\m} with \SI{5}{\micro\m} stripe widths, therefore, the transport will always neglect rise and fall times and will be referring to the plateau times only \cite{Holzinger2015a}.
+- Sign alteratoins of fields
+- phase relation
+- directions of x and z relative to stripes
+
+
+The coil setup is then placed under a Zeiss Axiotop reflective microscope.
+This is important as the samples are opaque and a traditional transmissive microscope won't work.
+The microscope was fitted with a $20\,\times$  and $50\,\times$ objective depending on the experiment conducted. 
+Finally, to record the experiments, the high-speed camera EoSense 2.0 MCX12-CM from Microtron was mounted on top. 
+This monochromatic camera is capable of recording $1920\times 1080$ pixel resolution videos at around \SI{2000}{frames \per\s  }. 
+Data acquisition is done via a frame grabber installed in the acquisition PC.
+
 
 \begin{table}[bth]
-\caption{Helmholtz coils characteristics for the particle transport setup.\cite{Huhnstock2022}}
-\label{tab:my-table}
+\caption{Helmholtz coils characteristics for the particle transport setup\cite{HuhnstockThesis}.}
+\label{tab:Helmholtz_properties}
 \begin{tabular}{c|c|c|c}
 Field direction & Radius / mm & Number of windings & \begin{tabular}[c]{@{}l@{}}Magnetic field \\ calibration factor / mT/V\end{tabular}    \\ \hline
 $x$             & 39.5        & 360                & $5.844 \pm 0.003$                          \\ \hline
@@ -40,18 +56,6 @@ $y$             & 63.5        & 360                & $10.5 \pm 0.4$             
 $z$             & 24.0        & 330                & $8.36 \pm 0.01$                           
 \end{tabular}
 \end{table}
-
-The coils are individually driven by a power supply and adressed by a lab view software controlled by an NI box.
-This allows for trapiziodal fields to be applied as used for the experiments.
-The coil setup is then placed under a Zeiss Axiotop reflective microscope.
-This is important as the samples are opaic and a traditional transmissive microsocpe won't work.
-The microscope was fitted with a 20 x and 50x objektive depending on the experiment conduted. 
-Finally, to record the experiments, the highspeed camera EoSense 2.0 MCX12-CM was mounted on top. 
-This monochromatic camera is cabable of recording 1920x1080 pixles resolution videos at around 2000 frames. 
-The data aquisitoin is done via a frame grabber installed in the aquisiton PC.
-
-
-
 \section{Transport substrate preparation}
 To create the transport substrates, a 15mmx15mm naturally oxidized Si substrate is cleaned with isopropanole and dried in a stream of N2 before placing in a RF sputtering mashine. 
 There, Ar plasma is ignited while a magnetic field is applied.
