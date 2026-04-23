@@ -7,6 +7,7 @@ Last...
 
 
 \section{Particle transport setup}
+%%%%% Intro
 The setup consists of the magnetic coil pairs, a microscope, and a camera, depicted in Figure \ref{fig:exp_setup}.
 To capture the fast motion dynamics of the particle transported on top of the transport substrate, a high-speed camera is needed.
 
@@ -15,37 +16,25 @@ To capture the fast motion dynamics of the particle transported on top of the tr
     \includegraphics[width=1\linewidth]{Abbildungen/Experimental/Experimental_setup.png}
     \caption{
             Experimental particle transport setup and scheme of transport substrate with magnetic core-shell particle.
-            a) shows a high-speed camera mounted on top of a reflected light microscope.            Helmholtz coils in $x$ and $z$ directions are depicted with the sample positioned at its center.
+            a) shows a high-speed camera mounted on top of a reflected light microscope.            
+            Helmholtz coils in $x$ and $z$ directions are depicted with the sample positioned at the center.
             The graph in b) shows the external alternating magnetic field sequence pulsed to obtain trapezoidal fields with the direction and magnitude of the field on the $y$ axis and time on the $x$ axis.
             c) schematically depicts the transport substrates layer system with a \ac{hh}-\ac{tt} domain configuration and \SI{5}{\micro\m} used stripe width.
             Depicted is also a by acetone removable polymer spacer that was spin-coated on top of the substrate, here with \SI{700}{\nano\m} thickness. 
+            A magnetic micro particle with a functionalization of its surface by a carboxylic group is also depicted in the energetic minima right above a \ac{DW}.
+            Relevant forces acting on the particle are also depicted. 
             }
     \label{fig:exp_setup}
 \end{figure}
 
+%%%Coils
 First, the sample stage is placed at the middle point of a 3D Helmholtz coil setup consisting of pairs in $x$, $y$, and $z$ directions.
 Due to the three coils mounted in the setup, a transport in $x$ and $y$ directions is possible and, therefore, all coil components will be introduced.
-However, throughout this work, transport only along $x$ was performed, for which reason the scheme is simplified to two Helmholtz pairs in a) in $x$ and $z$ direction, and, consequently, the pulsed fields are only depicted for those two coils in b). 
+However, throughout this work, transport was performed only along $x$, for which reason the scheme in Figure \ref{fig:exp_setup} a) is simplified down to two Helmholtz pairs in $x$ and $z$ direction, and, consequently, the pulsed fields depicted in b) are for those two coils. %magnetic field directions? 
+$x$ denotes, if not stated otherwise, the in-plane direction parallel/antiparallel to the magnetization in the substrates' stripe pattern, while $z$ denotes the direction normal to the substrate's surface, both of which can be seen schematically in Figure \ref{fig:exp_setup} c). 
 
 All coils were produced with \SI{0.5}{\milli\m} diameter copper wire.
 Table \ref{tab:Helmholtz_properties} shows the characterization of the used Helmholtz coil pairs.
-
-The coil pairs are individually driven by a power supply and addressed by a LabVIEW program via a digital input/output device from National Instruments.
-Trapizoidal fields depicted in Figure \ref{fig:exp_setup} b) are created with a linear rise time $\Delta t_\mathrm{r}$, a plateau time $\Delta t_\mathrm{p}$, and a linear drop time $\Delta t_\mathrm{d}$ \cite{HuhnstockThesis}.
-Because of the high magnetic field alteration rate of $V_\mathrm{H}= \SI{3.2e6}{\A\per(\m\s)}$, the rise and drop time intervals of the trapezoidal magnetic field pulses are short compared to the plateau time \cite{Holzinger2015a}; in the rise and drop times the particle might move a maximum distance of \SI{20}{\nano\m} with \SI{5}{\micro\m} stripe widths, therefore, the transport will always neglect rise and fall times and will be referring to the plateau times only \cite{Holzinger2015a}.
-- Sign alteratoins of fields
-- phase relation
-- directions of x and z relative to stripes
-
-
-The coil setup is then placed under a Zeiss Axiotop reflective microscope.
-This is important as the samples are opaque and a traditional transmissive microscope won't work.
-The microscope was fitted with a $20\,\times$  and $50\,\times$ objective depending on the experiment conducted. 
-Finally, to record the experiments, the high-speed camera EoSense 2.0 MCX12-CM from Microtron was mounted on top. 
-This monochromatic camera is capable of recording $1920\times 1080$ pixel resolution videos at around \SI{2000}{frames \per\s  }. 
-Data acquisition is done via a frame grabber installed in the acquisition PC.
-
-
 \begin{table}[bth]
 \caption{Helmholtz coils characteristics for the particle transport setup\cite{HuhnstockThesis}.}
 \label{tab:Helmholtz_properties}
@@ -56,8 +45,37 @@ $y$             & 63.5        & 360                & $10.5 \pm 0.4$             
 $z$             & 24.0        & 330                & $8.36 \pm 0.01$                           
 \end{tabular}
 \end{table}
+The coil pairs are individually driven by a power supply and addressed by a LabVIEW program via a digital input/output device from National Instruments, coded by Huhnstock \cite{HuhnstockThesis}.
+Trapizoidal fields depicted in Figure \ref{fig:exp_setup} b) are created with a linear rise time $\Delta t_\mathrm{r}$, a plateau time $\Delta t_\mathrm{p}$, and a linear drop time $\Delta t_\mathrm{d}$ \cite{HuhnstockThesis}.
+Because of the high magnetic field alteration rate of $V_\mathrm{H}= \SI{3.2e6}{\A\per(\m\s)}$, the rise and drop time intervals of the trapezoidal magnetic field pulses are short compared to the plateau time \cite{Holzinger2015a}; in the rise and drop times the particle might move a maximum distance of \SI{20}{\nano\m} with \SI{5}{\micro\m} stripe widths, therefore, the transport will neglect rise and fall times and will be referring to the plateau times only \cite{Holzinger2015a}.
+As shown in Figure \ref{fig:exp_setup} b), the transport scheme uses periodic alternations of $H_\mathrm{x\,max}$ and $H_\mathrm{z\,max}$ fields, where $H_\mathrm{x}$ and $H_\mathrm{z}$ are phase shifted by $\nicefrac{\pi}{2}$ or $\nicefrac{T}{4}$ \cite{Holzinger2015a}.
+This was also realized by the LabVIEW program. 
+
+%%%Microscope
+The coil setup is then placed under a Zeiss Axiotop reflective microscope, capable of bright-field and dark-field modes.
+This is important as the samples are opaque and a traditional transmissive microscope won't work.
+The microscope was fitted with a $20\,\times$ and a $50\,\times$ objective depending on the experiment conducted. 
+In detail, these are the Zeiss EC Epiplan $20\,\times$ with a numerical aperture $\mathrm{NA} = 0.4$, and the Zeiss EC Epiplan-Neofluar $50\,\times$ with a numerical aperture $\mathrm{NA} = 0.8$, both suited for dark-field microscopy. 
+%%%camera
+Finally, to record the experiments, the high-speed camera EoSense 2.0 MCX12-CM from Microtron was mounted on top. 
+This monochromatic camera with a $\SI{19.2}{\milli\m} \times \SI{10.8}{\milli\m}$ sensor hosting $\SI{10}{\micro \m} \times \SI{10}{\micro \m}$ large pixles, is capable of recording \SI{2247}{frames \per\s} at a maximum resolution of $1920\times 1080$ pixel.
+With a structure of known dimensions, a conversion factor from pixel to \si{\micro\m} was calculated to be \SI{0.5}{\micro \m \per pixel} and \SI{0.2}{\micro \m \per pixel} for the $20\,\times$ and $50\,\times$ objectives, respectively.
+Data acquisition is done via the frame grabber FireBird CoaXPress from Active Silicon installed in the acquisition PC, connecting the camera with four micro-BNC cables. 
+Note that the maximum acquisition frame rate of the frame grabber at hand is limited to \SI{1000}{frames \per\s}.
+
+
+As shown in Figure \ref{fig:exp_setup} a), the transport substrate, or sample, is illuminated from the top.
+It consists of the magnetic layer stack presented in Figure \ref{fig:exp_setup} c), which is $\SI{1}{\centi\m}^2$ or $\SI{1.5}{\centi\m}^2$, with an additional frame-like cutout of Parafilm that is placed on top of the spacer layer to contain the particle suspension. %#TODO abbildung 
+Finally, a cover slip is placed on top, sealing the liquid inside what is then called a microfluidic chamber, where the chamber sidewalls are determined by the \SI{120}{\micro\m} thick Parafilm. 
+This is crucial for two main reasons: 
+First, the minute volume of liquid in the \SIrange{10}{20}{\micro\liter} range won't evaporate as quickly, allowing for experiments to take place for periods of time in the one to two hour regime. 
+Second, due to the hydrophobic nature of the spacer, the liquid will immediately form a droplet that acts like a lens, warping the microscopic image. 
+With the cover slip arrangement, the liquid is pressed flat. 
+The aforementioned spacer can be sputtered Si after the fabrication of the transport substrate, or it can be a polymer that is spin-coated, producing suitable thicknesses that depend on the spin coating parameters. 
+In the majority of cases, the spacer \ac{PMMA} or a \ac{PMMA} co-polymer as shown in Figure \ref{fig:exp_setup} c).
+
 \section{Transport substrate preparation}
-To create the transport substrates, a 15mmx15mm naturally oxidized Si substrate is cleaned with isopropanole and dried in a stream of N2 before placing in a RF sputtering mashine. 
+To create the transport substrates, a \SIrange{15}{15}{\milli\m} naturally oxidized Si substrate is cleaned with isopropanol and dried in a stream of \ch{N2} before placing it in an \ac{RF} sputtering machine. 
 There, Ar plasma is ignited while a magnetic field is applied.
 ...
 Films of x,y,z nm are sputtered onto the Si substrate creating the magnetic layer stack.
