@@ -2,7 +2,7 @@
 \chapter{Introduction}
 In December 2019, the world faced a pandemic outbreak of proportions difficult to imagine \cite{Ciotti2020,Vandenberg2020}.
 The COVID-19 outbreak caused a global shutdown, with a high toll in terms of human lives lost, economic repercussions, and increased poverty \cite{Ciotti2020}. 
-Four months after the outbreak, the first spike of 50 thousand deaths in a single week was achieved, overshadowed by a later peak of 104 thousand deaths in a single week in January 2021, accumulating to over seven million worldwide as of March 2026, exactly six years later \cite{WHO_covid_deaths}.
+Four months after the outbreak, the first spike of 50 thousand deaths in a single week was reached, overshadowed by a later peak of 104 thousand deaths in a single week in January 2021, accumulating to over seven million worldwide as of March 2026, exactly six years later \cite{WHO_covid_deaths}.
 Naturally, the development of tests for the SARS-CoV-2 virus to prevent further spread was of stark interest \cite{Vandenberg2020}.  
 While elaborate testing schemes such as the use of \ac{PCR}, \ac{CRISPR}-\ac{Cas}12-based lateral flow assay, or serum based testing were available early on \cite{Ciotti2020,Vandenberg2020}, these tests could not be scaled to cover a wide number of the population at once to effectively contain the spread of the virus, as these specialized techniques often take time and rely on modern infrastructure, expensive medical equipment, and trained laboratory staff \cite{Vandenberg2020}, which are often limited to more developed nations with a working medical system. 
 One breakthrough was the rapid testing developed in fall 2020, which, for the first time, allowed for individual widespread testing right at home \cite{Vandenberg2020}. 
@@ -13,14 +13,9 @@ The pandemic aside, detection of a manifold of analytes ranging from viruses \ci
 The search for new diagnostics is consequently highly desired \cite{Haleem2021,Oyewole2021,Vandenberg2020} and has sparked a great branch of research in the last decades \cite{Reginka2021,Knight2002,Kricka2001,Holland2005, Ehresmann2015,Wang2014}.
 Figure \ref{fig:number_publications_POC} illustrates just that: in the last 35 years, the number of publications concerning \ac{POCT} has significantly increased, almost 18-fold, from a combined 240 publications in the field in 1990 to over 4230 publications in 2021.
 
-\ac{LOC} devices are designed with the overall objective of integrating one or more laboratory functions into a chip having merely a size of a few millimeters to centimeters \cite{Schoenberger2016}. 
-From the perspective of a medical device, \acp{LOC} may be seen as a scaled-down version of in-vitro diagnostics \cite{Schoenberger2016}. 
-They can be mass-produced cheaply and thus allow, for example, the detection of diseases in third-world countries \cite{Schoenberger2016}.
-These regions frequently face a rudimentary health-care system while being simultaneously impacted by plagues such as malaria, hepatitis, AIDS, or Ebola, which could be made detectable using \ac{LOC} \cite{Schoenberger2016}.  
-In affluent societies, accessing \ac{LOC} technologies makes it possible to monitor socially stigmatized illnesses, which may lead to more effective and quicker disease treatment \cite{Schoenberger2016}. 
 
 While no doubt a vital part in disease control, \ac{POCT} diagnostic tools such as SARS-CoV-2 rapid self-tests are often single-use or at least contain a single-use component, and are designed for a specific disease.
-Such tests that have been used for decades now include pregnancy tests, tests for sugar levels in diabetic monitoring, and blood tests for rheumatism.
+Such tests that have been used for decades now include pregnancy tests \cite{O’Farrell2008}, tests for sugar levels in diabetic monitoring \cite{Juska2020}, and blood tests for rheumatism \cite{Renger2010}.
 
 % \begin{figure}
 %     \centering
@@ -32,36 +27,50 @@ Such tests that have been used for decades now include pregnancy tests, tests fo
  
 
 
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=1\linewidth]{Abbildungen/Intro/graph3_top5_categories_area_nonstacked_2025.png}
-%     \caption{
-%             Rapid test research interest by category, from 1990 to 2025 PubMed. 
-%             Absolute number of publications with the sum of publications shown in the dashed black area.}
-%     \label{fig:number_publications_POC}
-% \end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Abbildungen/Intro/graph3_top5_categories_area_nonstacked_2025.png}
+    \caption{
+            Rapid test research interest by category, from 1990 to 2025 PubMed. 
+            Absolute number of publications with the sum of publications shown in the dashed black area.}
+    \label{fig:number_publications_POC}
+\end{figure}
 
-\ac{POCT} using magnetic particles is one emerging field. 
-They are employed in so-called \ac{LOC} devices.
-There, they promise various advantages over their paper-chromatography-based counterparts in standard \ac{POCT} devices. 
+\ac{LOC} devices are designed with the overall objective of integrating one or more laboratory functions into a chip having merely a size of a few millimeters to centimeters \cite{Schoenberger2016}, distinguishing them from their single-purpose \ac{POCT}-devices. 
+From the perspective of a medical device, \acp{LOC} may be seen as a scaled-down version of in-vitro diagnostics \cite{Schoenberger2016}. 
+They can be mass-produced cheaply and thus allow, for example, the detection of diseases in third-world countries \cite{Schoenberger2016}.
+These regions frequently face a rudimentary health-care system while being simultaneously impacted by plagues such as malaria, hepatitis, AIDS, or Ebola, which could be made detectable using \ac{LOC} \cite{Schoenberger2016}.  
+In affluent societies, accessing \ac{LOC} technologies makes it possible to monitor socially stigmatized illnesses, which may lead to more effective and quicker disease treatment \cite{Schoenberger2016}. 
+
+
+\ac{LOC} using magnetic particles is one emerging field. 
+They promise various advantages over their paper-chromatography-based counterparts in standard \ac{POCT} devices. 
 For once, the substrate, consisting of a magnetic stray field creating layer, is reusable and acts as the base of the device.
-The \acp{MP}, which take up the role as the probes, are functionalized chemically on their polymer-coated surface that enables them to interact with different chemical groups. 
-This means that after a given test is performed on one given device and the substrate is rinsed with water, a second test can be performed right away, allowing for many types of \acp{MP} to perform very different tests. 
-As the quantity of \acp{MP} used is minute, this keeps the cost of each test low.
-Different approaches using these magnetic \ac{LOC} systems are being researched. 
-For the magnetic stray field creation, micromagnets are used, electrical wires for electromagnetic creation, and even...
-These, however, are topographically elevated elements, limiting these devices to \ac{MP} transport far away from the substrate's surface. 
-The emerging magnetic stray field gradient needed to exert a magnetic force on the particles is washed out and not well defined, limiting the transport to... forces such as DLVO   
-Topographically flat substrates, however, allow the \acp{MP} to be close to the surface, where they see a much more defined and stronger magnetic field gradient, additionally opening up the surface sensitive \ac{DLVO} forces such as electrostatic (repulsion) and van der Waals (attraction).
-One method to create topographically flat magnetic substrates is the use of \ac{IBMP}, which allows for...  
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=1\linewidth]{Abbildungen/Intro/graph4_lab_on_chip.png}
-%     \caption{Lab on chip total research and magnetic-based Lab on chip}
-%     \label{fig:number_publications_lab_chip}
-% \end{figure}
+The \acp{MP}, which take up the role as the probes, are functionalized with capture molecules on their polymer-coated surface that enables them to interact with different chemical groups \cite{Reginka2021,Ehresmann2015,Rampini2021,Gandhi2020,Jarosz2016}. 
+This means that after a given test is performed, the substrate is rinsed with water and a second test can be performed right away, allowing for many types of \acp{MP} to perform very different tests. 
+These systems only need sub-microlitre volumes, making analyte detection highly efficient \cite{Kricka2001, Holland2005, Knight2002} while keeping the cost low, because of the small amount of \acp{MP} needed. 
+The \acp{MP}, which feel a magnetic attraction towards the substrate, can be held in place while necessary wash procedure of the solution is performed on chip, without the need for removal and collection of the \acp{MP}, allowing for integration of several processing steps on a single device via microfluidic chamber structures lateral to the \ac{MP} transport direction.
 
-The work presented in this thesis focuses on the physical and chemical interactions only possible by the surface close transport of the \acp{MP} on topographically flat magnetic substrates, where the key difference in interaction is the electrostatic repulsion that, at the distances of xxx micrometer, greatly influences the drag felt by the \acp{MP} which, in turn, greatly change the transport dynamics of two \ac{MP} species. 
+
+For the magnetic stray field creation, different approaches are being researched (Pamme 2005?), where micromagnetic arrays \cite{Li2013} are used, electrical wires for electromagnetic creation \cite{tondra2001}, and even...
+These, however, are mostly topographically elevated elements, limiting these devices to \ac{MP} transport far away from the substrate's surface. 
+The emerging magnetic stray field gradient needed to exert a magnetic force on the particles is washed out and not well defined, limiting the transport to... forces such as DLVO   
+Topographically flat substrates, however, allow the \acp{MP} to be close to the surface, where they see a much more defined and stronger magnetic field gradient, additionally opening up the surface sensitive \ac{DLVO} forces such as electrostatic (repulsion) and van der Waals (attraction) \cite{Yellen2007, Shubbak2026}.
+One method to create topographically flat magnetic substrates is the use of \ac{IBMP}, as demonstrated by Ehresmann et al. more than two decades ago \cite{Ehresmann2005}.  
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Abbildungen/Intro/graph4_lab_on_chip.png}
+    \caption{Lab on chip total research and magnetic-based Lab on chip}
+    \label{fig:number_publications_lab_chip}
+\end{figure}
+
+Binding events are then registered in different ways, via analyte-bridge assays, where the analyte needs to bind to both a suitably functionalized \ac{MP} surface at one binding site and at a second binding site, to a fluorophore \cite{Reenen2014}, another MP \cite{Rampini2021}, or to the transport substrate itself \cite{Reenen2014}.
+The changes then range between fluorescent analyte detection, a change in mobility due to agglomeration, or the complete immobilization onto the surface, which can be detected optically or by sensors such as \ac{GMR} or \ac{TMR} sensors \cite{Chen2017}.
+Being able to detect disease markers, proteins, or biological analytes of interest by the mere change in individual \ac{MP} mobility, however, was largely dismissed in the past due to the large size difference between aforementioned biological matter and the \acp{MP}.
+This is because, far from any wall, the hydrodynamic radius change will not significantly change the mobility and, therefore, the hydrodynamic drag is largely unaffected. 
+
+
+The work presented in this thesis shall illuminate this knowledge gap and will focus on the physical and chemical interactions only possible by the surface close transport of the \acp{MP} on topographically flat magnetic substrates, where the key difference in interaction is the electrostatic repulsion that, at the distances of a few hundred nanometer to the low micrometer regime, greatly influences the hydrodynamic drag felt by the \acp{MP} which, in turn, greatly changes the transport dynamics of two \ac{MP} species. 
 A basic sketch of this differentiation is shown in Figure \ref{fig:toc}, where the blue \acp{MP} experience a larger electrostatic repulsion due to the more pronounced negative surface charge that forms in solution by the terminal chemical groups compared to the orange \acp{MP} that, while crucially being negative as well, is mixed with chemical groups that, in solution, induce positive charges. 
 
 %  
