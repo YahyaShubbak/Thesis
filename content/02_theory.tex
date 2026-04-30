@@ -24,15 +24,6 @@ We will start with ...
 
 \subsection{Particle transport mechanism}
 \subsection{Close to surface transport}
-
-$\#TODO$ where to put Reynolds number?
-\begin{equation}\label{eq:Reynolds_number}
-    \mathrm{Re} = \frac{\rho u L}{\mu},
-\end{equation}
-where at room temperature, $rho=\SI{1000}{\kg\per\cubic\meter}$ is the density of water, $u$ is the flow speed which, for our system is the velocity of the \acp{MP} and is generously given by \SI{100}{\micro\m\per\s}, $L$ is the charachtersitic length which is $<\mathrm{cm}$ range, and $\mu$ is the dynamic viscosity, given at \SI{1e-3}{\Pa}. 
-It becomes apparent that at small volumes used, in the present case in the \SI{200}{\micro\L} range, $\mathrm{Re}$ becomes $<1$\cite{Shanko2019}.
-
-Since the volumes used in this \ac{LOC} device are in the sub-mL range,  
 Using relatively weak magnetic fields in the range of \SIrange{1}{4}{\kilo\A\per\m}, the superparamagnetic bead's magentic moment $\mathbf{m_\mathrm{MP}}$ depends on the external magnetic field linearly as 
 \begin{equation}
     \mathbf{m_\mathrm{MP}} = \bar{\chi}_\mathrm{MP} V \mathbf{H}, 
@@ -54,13 +45,88 @@ The magnetic force exerted on the superparamagnetic bead in the direction of mot
 \begin{equation}
     F_\mathrm{m,x}(x,z,t)=V(\chi_\mathrm{MP}-\chi_\mathrm{fl}) \mu_0  ((\mathbf{H}_\mathrm{eff} \mathbf{\nabla}) \mathbf{H}_\mathrm{eff})_\mathrm{x},
 \end{equation}
-where $\chi_\mathrm{fl}$ is the susceptibility of the fluid, and $\mathbf{H}_\mathrm{eff}$ is the effective field, which is the sum of the static stray field emerging from the \ac{hh}-\ac{tt}-\ac{DW}, and superposed external fields created by the Helholz coils, at the position of the particle\cite{Shubbak2026}.
-Since the \ac{MP} is residing in the potential minimum in accordance with \ref{eq:U_P_MP}, shifting this energy well will force the \ac{MP} to follow its motion. 
-Fittingly, the transport concept is coined Traveling Wave Magnetophoresis CITE WHO?
+where $\chi_\mathrm{fl}$ is the susceptibility of the fluid, and $\mathbf{H}_\mathrm{eff}$ is the effective field, which is the sum of the static stray field emerging from the \ac{hh}-\ac{tt}-\ac{DW} that are responsible for the magnetic gradient, and superposed external fields created by the Helmholtz coils, at the position of the particle\cite{Shubbak2026}.
+In this work, the parallel-stripe domain pattern extends in $y$ direction while alternating in $x$ with the half-period $d$, meaning no gradient is created in $y$, which ensures that $F_\mathrm{m,x}(x,z,t)$ only acts along the $x$ direction\cite{Shubbak2026}. 
+Since the \ac{MP} is residing in the potential minimum in accordance with \ref{eq:U_P_MP}, shifting this energy well will force the \ac{MP} to follow its motion along $x$. 
+Fittingly, the transport concept is coined Traveling Wave Magnetophoresis by Yellen and Lee in 2007 \cite{Yellen2007}, although no wave is involved at all.
 
 
 Using an equation of motion, the transport from one \ac{DW} to the adjacent by periodically transforming $U_\mathrm{P}(x,z)$ can be described by\cite{Yellen2007, Shubbak2026}
-\begin{equation}
+\begin{equation}\label{eq:Equation_of_motion}
     M \frac{d^2x}{dt^2}-f_\mathrm{D}\frac{dx}{dt} = F_\mathrm{m,x} \sin(\phi),
 \end{equation}
-where $M$ is the mass of an \ac{MP}, $f_\mathrm{D}$ is the viscous drag coefficient, and the phase $\phi = kx-\omega t$ denotes the relative position of the \ac{MP} with respect to the position of the nearest energy minimum. 
+where $M$ is the mass of an \ac{MP}, and the phase $\phi = kx-\omega t$ denotes the relative position of the \ac{MP} with respect to the position of the nearest energy minimum. 
+The $z$-height dependent viscous drag coefficient $f_{\mathrm{D}}(z)$ can be written as \cite{WirixSpeetjens2005}:
+\begin{equation} \label{eq:f_D}
+   f_\mathrm{D}(z)= \left[ 1 - \frac{9}{16} \left( \frac{r}{r+z} \right) + \frac{1}{8}\left( \frac{r}{r+z} \right)^3 - \frac{45}{256}\left( \frac{r}{r+z} \right)^4 - \frac{1}{16} \left( \frac{r}{r+z} \right)^5 \right]^{-1}.
+\end{equation}
+Here, $z$ is the closest surface-to-surface distance between \ac{MP} and substrate \cite{WirixSpeetjens2005}. %this is during a hopping 100 nm at closest point and 1 µm at furhterst, making the drag time dependant as mp hoppes from DW to DW.
+$f_\mathrm{D}(z)$ decays strongly from the substrate's surface into the liquid, which is depicted in Figure \ref{fig:drag_coefficient}, and can reach values between 1, where the \ac{MP} is far away from any wall, and 3, where the \ac{MP} is touching the surface \cite{Holzinger2015a}.
+\begin{figure}[bth]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Theory/theory_drag_092149.pdf}
+    \caption{
+            Drag coefficient as a function of distance $z$ between the substrate surface and the lower surface of the \ac{MP} facing the substrate.
+            Different \ac{MP} radii are shown by different colors and lines, where it becomes apparent that the smaller the \ac{MP}, the more sensitive it is to changes in $z$ with respect to the felt drag.
+            Figure taken from \cite{Shubbak2026}.
+            }
+    \label{fig:drag_coefficient}
+\end{figure}
+
+Drag force resulting from Stoke's drag of a sphere \cite{Yellen2007} $\mathbf{F}_\mathrm{D}$ is then opposing the magnetic force as \cite{WirixSpeetjens2005}
+\begin{equation}\label{eq:drag_force}
+    \mathbf{F}_{\mathrm{D}}(z,t) = -6\pi r \eta \frac{d\mathbf{x}}{dt} f_\mathrm{D}(z),  
+\end{equation}
+where $r$ is the \ac{MP}'s radius, and $\eta$ is the liquid's viscosity which for water at $T=\SI{293.15}{\K}$ is $\SI{1.0093e-3}{\Pa\s}$\cite{Ehresmann2015}).
+
+Since the volumes used in this \ac{LOC} device are in the \si{\micro\L} range, laminar flow occurs, which is described by a low Reynolds number \cite{Shanko2019}:
+\begin{equation}\label{eq:Reynolds_number}
+    \mathrm{Re} = \frac{\rho u L}{\mu},
+\end{equation}
+where at room temperature, $\rho=\SI{1000}{\kg\per\cubic\meter}$ is the density of water, $u$ is the flow speed which, for our system is the velocity of the \acp{MP} and is generously given by \SI{200}{\micro\m\per\s}, $L$ is the characteristic length, which is $<\mathrm{cm}$ range, and $\mu$ is the dynamic viscosity, given at \SI{1e-3}{\Pa}. 
+It becomes apparent that at small volumes used, in the present case in the \SI{20}{\micro\L} range, $\mathrm{Re}$ becomes $<1$\cite{Shanko2019}.
+This allows for the inertial term of the \ac{MP} to be ignored, and Equation \ref{eq:Equation_of_motion} can be rewritten in a dimensionless form as an overdamped non-linear oscillator \cite{Yellen2007}
+\begin{equation}\label{eq:overdamped_oscillator}
+    \frac{d\phi}{d\tau}=\sin(\phi)-\frac{\omega}{\omega_\mathrm{c}},
+\end{equation}
+where $\omega_\mathrm{c} = F_\mathrm{m,x}(x,z,t) k/f_\mathrm{D}(z)$ is the critical frequency for a given \ac{MP} that strongly depends on the material and geometry, and $\tau=\omega_\mathrm{c}t$ is a dimensionless time \cite{Yellen2007}. 
+% Equation \ref{eq:overdamped_oscillator} has a stable solution $\frac{d\phi}{d\tau}=0$ only when the driving frequency of the external magnetic field is less than $\omega_\mathrm{c}$ \cite{Yellen2007}.
+With the drag force in Equation \ref{eq:drag_force} as the sole contributor to the damping, $\omega_\mathrm{c}$ can be formulated as:
+\begin{equation}\label{eq:critical_frequency}
+    \omega_\mathrm{c}(z) = \frac{\bar{\chi} \,\mu_0 \, \sigma_0 \,H_\mathrm{eff}}{18 \,\eta \, f_\mathrm{D}(z)} \left( 2 \pi \beta \right)^2 \exp(-2\pi \beta),
+\end{equation}
+where $\bar{\chi}$ is the shape-corrected \ac{MP} susceptibility, $\sigma_0$ denotes the effective magnetic pole distribution within the underlying substrate, and $\beta = r/d$ is the ratio between the \ac{MP} radius $r$ and the domain periodicity $d$ \cite{Yellen2007, Shubbak2026}.
+For \acp{MP} with a radius smaller than the period $d$, that is, the ratio $\beta \ll 1$, the critical frequency follows a quadratic relation with the \ac{MP} size \cite{Yellen2007}.
+
+Equation \ref{eq:overdamped_oscillator} has a stable solution $\frac{d\phi}{d\tau}=0$ only when the driving frequency of the external magnetic field is less than $\omega_\mathrm{c}$ \cite{Yellen2007}, resulting in two distinct velocity regimes: 
+\begin{equation}\label{eq:velocity_regimes}
+    v = \begin{cases} 
+\omega \frac{d}{2\pi},&  \omega \leq  \omega_{\mathrm{c}}(z)\\ 
+(\omega - \sqrt{\omega^2 - \omega^2_\mathrm{{c}})}  \frac{d}{2\pi},&  \omega >  \omega_{\mathrm{c}}(z)
+\end{cases},
+\end{equation} 
+which is depicted in Figure \ref{fig:two_velocity_regimes}.
+
+\begin{figure}[bth]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Theory/theory_velocity_101212.pdf}
+    \caption{
+            Two distinct velocity regimes caused by the stable solution of the overdamped oscillator Ansatz for $\omega <\omega_\mathrm{c}$, here exemplary put at $\omega_\mathrm{c}=\SI{5}{\Hz}$.
+            }
+    \label{fig:two_velocity_regimes}
+\end{figure}
+
+When $\omega \leq  \omega_{\mathrm{c}}(z)$, the \ac{MP} reaches a stable position in the potential energy minimum well and moves with the speed of the translation velocity of the potential energy landscape \cite{Yellen2007}: 
+\begin{equation}
+    \frac{\omega d}{2 \pi}.
+\end{equation}
+This regime is referred to as the phase-locked regime, in which the \ac{MP} lags behind the transformation of the landscape by a distance equal to\cite{Yellen2007}
+\begin{equation}    
+\Delta r = (\frac{d}{2\pi})\sin^{-1} \frac{\omega}{\omega_\mathrm{c}}.
+\end{equation}
+Near $\omega_{\mathrm{c}}(z)$, the \ac{MP} will lag \SI{90}{\degree} out of phase with respect to the energy minimum, therefore the lag becomes the distance\cite{Yellen2007}
+\begin{equation}
+    \Delta r = \frac{d}{4}.
+\end{equation}
+It is only for $\omega > \omega_{\mathrm{c}}(z)$ that the \ac{MP} begins to slip with respect to the translating potential energy landscape \cite{Yellen2007}.
+This is observable as an oscillatory rocking motion above a \ac{hh} or \ac{tt} \ac{DW}, and the time-averaged velocity of a \ac{MP} approaches 0 in accordance to Equation \ref{eq:velocity_regimes} for $\omega >  \omega_{\mathrm{c}}(z)$.
