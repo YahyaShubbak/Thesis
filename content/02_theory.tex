@@ -32,21 +32,60 @@ where $V$ is the bead's volume, and $\bar{\chi}=\nicefrac{3\chi_\mathrm{MP}}{\ch
 It becomes clear that the \ac{MP} is treated as a point dipole, which is a reasonable approximation when the magnetic field does not vary drastically across the \ac{MP}'s volume, but will be discussed later \cite{Yellen2007}.
 
 
-When the \ac{MP} sees the magnetic field, the potential energy $U_\mathrm{P}$ of the \ac{MP} at lateral position $x$ and above the substrate $z$ is given by\cite{Holzinger2015a} 
+When the \ac{MP} sees the magnetic field emerging from the \ac{MFL}, the potential energy $U_\mathrm{P}$ of the \ac{MP} at lateral position $x$ and above the substrate $z$ is given by\cite{Holzinger2015a} 
 \begin{equation}\label{eq:U_P_MP}
     U_\mathrm{P}(x,z) = -\mu_0 \mathbf{m_\mathrm{MP}}(x,z) \mathbf{H}(x,z), 
 \end{equation}
 where $\mu_0$ is the vacuum permeability.
-It becomes apparent that $U_\mathrm{P}(x,z)$ is smallest where $\mathbf{H}(x,z)$, which is where the magnetic stray fields emerge from the substrate, that is, at the \acp{DW}.
-
-External fields...
+It becomes apparent that $U_\mathrm{P}(x,z)$ is smallest where $\mathbf{H}(x,z)$ is largest, which is where the magnetic stray fields emerge from the substrate, that is, at the \acp{DW}.
 
 The magnetic force exerted on the superparamagnetic bead in the direction of motion $x$ is given by 
 \begin{equation}
     F_\mathrm{m,x}(x,z,t)=V(\chi_\mathrm{MP}-\chi_\mathrm{fl}) \mu_0  ((\mathbf{H}_\mathrm{eff} \mathbf{\nabla}) \mathbf{H}_\mathrm{eff})_\mathrm{x},
 \end{equation}
 where $\chi_\mathrm{fl}$ is the susceptibility of the fluid, and $\mathbf{H}_\mathrm{eff}$ is the effective field, which is the sum of the static stray field emerging from the \ac{hh}-\ac{tt}-\ac{DW} that are responsible for the magnetic gradient, and superposed external fields created by the Helmholtz coils, at the position of the particle\cite{Shubbak2026}.
-In this work, the parallel-stripe domain pattern extends in $y$ direction while alternating in $x$ with the half-period $d$, meaning no gradient is created in $y$, which ensures that $F_\mathrm{m,x}(x,z,t)$ only acts along the $x$ direction\cite{Shubbak2026}. 
+
+\paragraph{Rotating Field Traveling Wave Magnetophoresis} 
+
+
+The static $H_\mathrm{MFL}$ produced by the substrate and the time-dependent homogeneous rotating external magnetic fields $H_\mathrm{ext}$ produced by the Helmholz coils result in effective fields at position $x,y,z_0$ and time $t$ and are given by \cite{Ehresmann2026}
+\begin{equation}
+    \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \mathbf{H}_\mathrm{MFL}(x,y,z_0) + \mathbf{H}_\mathrm{ext}(t).
+\end{equation}
+For the present system, which is depicted in Figure \ref{fig:exp_setup}, the \ac{MFL} is periodic along the $x$-direction and the external fields rotate in the $xz$-plane, giving an effective field that can be modeled using trigonometric functions \cite{Yellen2007, Ehresmann2026} 
+\begin{equation}
+    \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \begin{bmatrix} 
+                        H_\mathrm{eff,x}  \\ 
+                        H_\mathrm{eff,y} \\
+                        H_\mathrm{eff,z}
+                    \end{bmatrix} = 
+                    \begin{bmatrix} 
+                        A(z_0)\sin(kx) +H_\mathrm{ext,0} \sin(\omega t) \\ 
+                        0 \\
+                        A(z_0)\cos(kx) +H_\mathrm{ext,0} \cos(\omega t)  
+                    \end{bmatrix},
+\end{equation}
+where $k = \nicefrac{2\pi}{d}$ is the reciprocal lattice number of the periodic \ac{MFL}, periodic in one dimension with period length $d$, $\omega=2\pi\nu$ the angular freqnecy of the external rotating field, 
+\begin{equation}\label{Eq:heuristic_A}    
+A=\nicefrac{\sigma_0}{2}\exp(-2\pi \beta)
+\end{equation}
+is a heuristic expression containing $\beta = \nicefrac{r}{d}$ the ratio between the underlying period $d$ and the radius of the \ac{MP} $r$, and $\nicefrac{\sigma_0}{2}$, which describes the stray field amplitude $H_\mathrm{MFL}(0,z)=0$ at the surface of the \ac{FM} layer (Figure \ref{fig:exp_setup}), with the exponential decrease of the fields with height $z$ \cite{Yellen2007, Ehresmann2026}.  
+In other terms, $A(0,0,z_0)$ denotes the amplitude of the periodic \ac{MFL} at a distance $z_0$ of the \ac{MP} center to the surface of the \ac{FM} layer, when \ac{MP} radii $r\gg z_0$, which is true when the spacer layer thickness $t_\mathrm{spacer}\approx \SI{1}{\micro\m}$ (see Figure \ref{fig:exp_setup}).
+With that, the height dependence of the parallel-stripe domains can be evaluated to replace the heuristic expression in Equation \ref{Eq:heuristic_A}.
+As given by Equation \ref{eq:U_P_MP}, the \ac{MP} resides above a \ac{hh} or \ac{tt} \ac{DW}; for the sake of this derivation, it shall be above a \ac{hh} \ac{DW}.
+The $x$-components of the \ac{MFL} across the \ac{MP} average out\cite{Ehresmann2026}.
+As known from literature \cite{Zingsem2017}, the absolute magnitude of the magnetic field of an infinitely thin \ac{hh} \ac{DW} stretching infinitely in $y$-direction as a function of height $z$ directly above a \ac{DW} can be approximated by
+\begin{equation}
+    \left| \mathbf{H}_\mathrm{MFL}(0,0,z_0) \right| = \left| \mathbf{H}_\mathrm{MFL, z}^\mathrm{line}(0,0,z_0) \right| = \frac{\eta_0}{2\pi z_0},
+\end{equation}
+where $\eta_0 = 2M_\mathrm{S}t_\mathrm{FM}$ describes the magnetic charge density of the \ac{DW} with the saturation magnetisation $M_\mathrm{S}$ and the thickness $t_\mathrm{FM}$ of the \ac{FM}. 
+
+
+In this work, the parallel-stripe domain pattern extends in $y$ direction while alternating in $x$ with the half-period $d$, meaning no gradient is created in $y$, which ensures that $F_\mathrm{m,x}(x,z,t)$ only acts along the $x$ direction\cite{Holzinger2015a}. 
+
+
+
+
 Since the \ac{MP} is residing in the potential minimum in accordance with \ref{eq:U_P_MP}, shifting this energy well will force the \ac{MP} to follow its motion along $x$. 
 Fittingly, the transport concept is coined Traveling Wave Magnetophoresis by Yellen and Lee in 2007 \cite{Yellen2007}, although no wave is involved at all.
 
@@ -89,7 +128,7 @@ This allows for the inertial term of the \ac{MP} to be ignored, and Equation \re
 \begin{equation}\label{eq:overdamped_oscillator}
     \frac{d\phi}{d\tau}=\sin(\phi)-\frac{\omega}{\omega_\mathrm{c}},
 \end{equation}
-where $\omega_\mathrm{c} = F_\mathrm{m,x}(x,z,t) k/f_\mathrm{D}(z)$ is the critical frequency for a given \ac{MP} that strongly depends on the material and geometry, and $\tau=\omega_\mathrm{c}t$ is a dimensionless time \cite{Yellen2007}. 
+where $\omega$ is the external rotation field frequency, $\omega_\mathrm{c} = F_\mathrm{m,x}(x,z,t) k/f_\mathrm{D}(z)$ is the critical frequency for a given \ac{MP} that strongly depends on the material and geometry, and $\tau=\omega_\mathrm{c}t$ is a dimensionless time \cite{Yellen2007}. 
 % Equation \ref{eq:overdamped_oscillator} has a stable solution $\frac{d\phi}{d\tau}=0$ only when the driving frequency of the external magnetic field is less than $\omega_\mathrm{c}$ \cite{Yellen2007}.
 With the drag force in Equation \ref{eq:drag_force} as the sole contributor to the damping, $\omega_\mathrm{c}$ can be formulated as:
 \begin{equation}\label{eq:critical_frequency}
@@ -122,7 +161,7 @@ When $\omega \leq  \omega_{\mathrm{c}}(z)$, the \ac{MP} reaches a stable positio
 \end{equation}
 This regime is referred to as the phase-locked regime, in which the \ac{MP} lags behind the transformation of the landscape by a distance equal to\cite{Yellen2007}
 \begin{equation}    
-\Delta r = (\frac{d}{2\pi})\sin^{-1} \frac{\omega}{\omega_\mathrm{c}}.
+\Delta r = \left(\frac{d}{2\pi}\right)\sin^{-1} \frac{\omega}{\omega_\mathrm{c}}.
 \end{equation}
 Near $\omega_{\mathrm{c}}(z)$, the \ac{MP} will lag \SI{90}{\degree} out of phase with respect to the energy minimum, therefore the lag becomes the distance\cite{Yellen2007}
 \begin{equation}
