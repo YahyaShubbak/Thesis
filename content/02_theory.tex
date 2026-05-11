@@ -53,7 +53,7 @@ The static $H_\mathrm{MFL}$ produced by the substrate and the time-dependent hom
     \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \mathbf{H}_\mathrm{MFL}(x,y,z_0) + \mathbf{H}_\mathrm{ext}(t).
 \end{equation}
 For the present system, which is depicted in Figure \ref{fig:exp_setup}, the \ac{MFL} is periodic along the $x$-direction and the external fields rotate in the $xz$-plane, giving an effective field that can be modeled using trigonometric functions \cite{Yellen2007, Ehresmann2026} 
-\begin{equation}
+\begin{equation}\label{eq:H_eff_approximation_yellen}
     \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \begin{bmatrix} 
                         H_\mathrm{eff,x}  \\ 
                         H_\mathrm{eff,y} \\
@@ -70,15 +70,60 @@ where $k = \nicefrac{2\pi}{d}$ is the reciprocal lattice number of the periodic 
 A=\nicefrac{\sigma_0}{2}\exp(-2\pi \beta)
 \end{equation}
 is a heuristic expression containing $\beta = \nicefrac{r}{d}$ the ratio between the underlying period $d$ and the radius of the \ac{MP} $r$, and $\nicefrac{\sigma_0}{2}$, which describes the stray field amplitude $H_\mathrm{MFL}(0,z)=0$ at the surface of the \ac{FM} layer (Figure \ref{fig:exp_setup}), with the exponential decrease of the fields with height $z$ \cite{Yellen2007, Ehresmann2026}.  
-In other terms, $A(0,0,z_0)$ denotes the amplitude of the periodic \ac{MFL} at a distance $z_0$ of the \ac{MP} center to the surface of the \ac{FM} layer, when \ac{MP} radii $r\gg z_0$, which is true when the spacer layer thickness $t_\mathrm{spacer}\approx \SI{1}{\micro\m}$ (see Figure \ref{fig:exp_setup}).
+In other terms, $A(0,0,z_0)$ denotes the amplitude of the periodic \ac{MFL} at a distance $z_0$ of the \ac{MP} center to the surface of the \ac{FM} layer, when \ac{MP} radii $r\gg z_0$, which is true when the spacer layer thickness $t_\mathrm{spacer}< \SI{1}{\micro\m}$ (see Figure \ref{fig:exp_setup}).
 With that, the height dependence of the parallel-stripe domains can be evaluated to replace the heuristic expression in Equation \ref{Eq:heuristic_A}.
 As given by Equation \ref{eq:U_P_MP}, the \ac{MP} resides above a \ac{hh} or \ac{tt} \ac{DW}; for the sake of this derivation, it shall be above a \ac{hh} \ac{DW}.
 The $x$-components of the \ac{MFL} across the \ac{MP} average out\cite{Ehresmann2026}.
 As known from literature \cite{Zingsem2017}, the absolute magnitude of the magnetic field of an infinitely thin \ac{hh} \ac{DW} stretching infinitely in $y$-direction as a function of height $z$ directly above a \ac{DW} can be approximated by
 \begin{equation}
-    \left| \mathbf{H}_\mathrm{MFL}(0,0,z_0) \right| = \left| \mathbf{H}_\mathrm{MFL, z}^\mathrm{line}(0,0,z_0) \right| = \frac{\eta_0}{2\pi z_0},
+    \lvert \mathbf{H}_\mathrm{MFL}(0,0,z_0) \rvert = \lvert \mathbf{H}_\mathrm{MFL}^\mathrm{line}(0,0,z_0) \rvert = H_\mathrm{MFL, z}^\mathrm{line} = \frac{\eta_0}{2\pi z_0},
 \end{equation}
-where $\eta_0 = 2M_\mathrm{S}t_\mathrm{FM}$ describes the magnetic charge density of the \ac{DW} with the saturation magnetisation $M_\mathrm{S}$ and the thickness $t_\mathrm{FM}$ of the \ac{FM}. 
+where $\eta_0 = 2M_\mathrm{s}t_\mathrm{FM}$ describes the magnetic charge density of the \ac{DW} with the saturation magnetisation $M_\mathrm{S}$ and the thickness $t_\mathrm{FM}$ of the \ac{FM}. 
+The superposition of adjacent \acp{DW} reduces the stray field over a \ac{DW}, which is modeled by\cite{Ehresmann2026}
+\begin{equation}\label{eq:fields_of_adjecent_DW}
+    \lvert \mathbf{H}_\mathrm{MFL, z}^\mathrm{line}(0,0,z_0) \rvert = \frac{2M_\mathrm{s}t_\mathrm{FM}}{2\pi}\left(\frac{1}{z_0}-\frac{2}{\sqrt{z^2_0 +\left( \frac{d}{2}\right)^2}}+\frac{2}{{\sqrt{z^2_0 +4\left( \frac{d}{2}\right)^2}}} - \frac{4}{d} (\ln(2) - 0.5)\right).
+\end{equation}
+
+As briefly mentioned before, the \ac{MP} will be approximated as a point-dipole.
+To describe the magnetic moment of the \ac{MP} is, however, not trivial.
+The particle consists of nanoscopic maghemite or magnetite or a mixture of both that is either dispersed evenly within a polymer matrix of the sphere, or the grains are surrounding a polymer core, in which case the particle is referred to as a core-shell particle. 
+The particles investigated in this work are Dynabeads from Thermo Fisher, which are, as specified by the manufacturer, non-porous, highly cross-linked polystyrene microspheres consisting of an even dispersion of magnetic material throughout the bead, and micromer-M from micromod, which are microspheres consisting of magnetite around an organic matrix of a styrene-maleic acid-copolymer further coated with a not further specified polymer, making the latter a core-shell particle (depicted in Figure \ref{fig:exp_setup} c)).
+In both cases, the individual grains are only talking to each other if they are close enough, that is, in the order of xy for exchange interaction or in the order of yz for dipolar interaction. 
+This interaction, or the lack thereof, is what makes the particles superparamagnetic. 
+For a complete description of the magnetic moment of an \ac{MP}, an integration of individual magnetic field components of the dispersed grains over the volume with respect to the decaying magnetic stray field emerging from the \ac{MFL} must be considered.  
+Complicated as this already is, the movement of the \acp{MP} in the transport concept is not constant along $z$ \cite{Huhnstock2022} and therefore, the effective magnetic moment of each \ac{MP} is also time dependent.
+%TODO estimate distribution of magnetic grains using the known density and size of the iron vs the desnity of the polymer. Micromer: 2µm, rho=1.1 g/cm^3. Dynabeads: 2.8µm, The density of Dynabeads magnetic beads is a challenging property to determine. The reason is that Dynabeads magnetic beads have a 17-37% magnetic iron oxide content in order to have a reasonable magnetic separation time, and the density of the iron oxide is about 4.9 g/cm3. Dynabeads magnetic beads are composite materials, being a mix of polymers and iron oxide, and there are very few polymers that have a density below 1 (Emil vom Hersteller).
+
+As this is outside the scope of this work, a point-dipole will be assumed for both particle types, i.e., matrix-dispersed and core-shell particles.
+Nevertheless, the field component varying along $z$ at location $x = 0$ of the \ac{MP} will be included to better approximate the current system by using a dimensionless weight factor $w(rk)$ which depends on the ratio $\beta$\cite{Ehresmann2026}:
+\begin{equation}\label{eq:weight_factor_dipole_approx}
+    w(rk) = w\left(\frac{2\pi r}{d}\right) = \frac{2 \int_0^r \frac{r^2-x^2}{r^2}\cos(kx)dx}{2 \int_0^r \frac{r^2-x^2}{r^2}dx} = \frac{\frac{2(\sin(rk)-rk\cos(rk))}{r^2k^3}}{\frac{2r}{3}}=\frac{3(\sin(rk)-rk\cos(rk))}{r^3k^3}, 
+\end{equation}
+where $\frac{r^2-x^2}{r^2}$ represents the area of circular slices of a sphere varying with $x$.  
+%include figure for this funciton
+From Equation \ref{eq:weight_factor_dipole_approx} follows, that the smaller $\beta$, the larger the average fields across the volume.
+This is depicted in Figure x for $d = 5,10$ and $\SI{20}{\micro\meter}$.
+Including Equation \ref{eq:weight_factor_dipole_approx} into Equation \ref{eq:fields_of_adjecent_DW} gives the volume-averaged field acting on the center of the \ac{MP} to induce its magentic moment by\cite{Ehresmann2026}:
+\begin{equation}\label{eq:H_eff_Arno}
+    \mathbf{H}_\mathrm{MFL}(x,y,z_0) = \begin{bmatrix}
+                                        H_\mathrm{MFL, x} \\
+                                        0 \\
+                                        H_\mathrm{MFL, z}
+                                    \end{bmatrix} 
+                            =
+                                    \begin{bmatrix}
+                                        \rvert H_\mathrm{MFL,z}^\mathrm{line}(0,0,z_0)\lvert\cdot w(rk)\sin(kx)\\
+                                        0 \\
+                                        \rvert H_\mathrm{MFL,z}^\mathrm{line}(0,0,z_0)\lvert\cdot w(rk)\cos(kx)
+                                    \end{bmatrix}
+                                    :=
+                                    \begin{bmatrix}
+                                        B\sin(kx) \\
+                                        0 \\
+                                        B\cos(kx)
+                                    \end{bmatrix}.
+\end{equation}
+Equation \ref{eq:H_eff_approximation_yellen} is therefore replaced by Equation \ref{eq:H_eff_Arno} as Equation \ref{eq:H_eff_Arno} better describes the effective fields acting on the \ac{MP} in the close-to-surface transport employed throughout this work.   
 
 
 In this work, the parallel-stripe domain pattern extends in $y$ direction while alternating in $x$ with the half-period $d$, meaning no gradient is created in $y$, which ensures that $F_\mathrm{m,x}(x,z,t)$ only acts along the $x$ direction\cite{Holzinger2015a}. 
