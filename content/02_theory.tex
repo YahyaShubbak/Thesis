@@ -15,7 +15,28 @@
 \section{Exchange bias}\label{sec:theory_exchange_bias}
 
 \section{DLVO-Forces}\label{sec:theory_dlvo}
+\acp{MP} for the use in a \ac{LOC} system are suspended in a liquid, usually a buffer or distilled water. 
+Therefore, \ac{DLVO} forces are of utter importance\cite{Shubbak2026}.
+These interactions are named after their discoverer Derjaguin, Landau, Verwey, and Overbeck \cite{Derjaguin1941, Verwey1947, WirixSpeetjens2005}. 
+For the system and hand, two main liquid-mediated interactions are of importance: the electrostatic and Van der Waals interactions, which will be briefly introduced in the following sections. 
 \subsection{Electrostatic intercations}
+The origin of the electrostatic interaction of colloidal systems such as \acp{MP} in an aqueous solution is the surface charge that builds up at the surface.
+This is illustrated in Figure (make figure), where a \ac{MP} is suspended in a liquid above a polymer surface as the spacing layer of the transport substrate.
+The arising electrical double layer that is depicted consists of the Helmholtz/Stern layer and the diffuse layer.
+When both systems, that is, two particles or the particle and the substrate's surface, are in such proximity that their individual electrical double layers overlap, an interaction occurs.
+Whether this interaction is attractive or repulsive depends on the sign of the charge.
+This interaction can be described by
+\begin{equation}\label{eq:F_electrostatic}
+    \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} r \kappa}{1 - \exp{(-2\kappa z)}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  \exp{(-\kappa z)} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) \exp{(-2 \kappa z)} \right]\mathbf{e}_\mathrm{z},
+\end{equation}
+where $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, $r$ is the particles radius, and $\kappa$ is the  Debye length
+\begin{equation}
+    \kappa = \sqrt{\frac{2000 N_{\mathrm{A}} e^2 I}{\epsilon_{\mathrm{0}} \epsilon_{\mathrm{r}} k_{\mathrm{B}}T}},
+\end{equation}
+with the Avogadro constant $N_{\mathrm{A}}$, the elementary charge $e$, the ionic strength of the electrolyte $I$, the Boltzmann constant $k_{\mathrm{B}}$ and temperature $T$ \cite{WirixSpeetjens2005, Reginka2021}.
+Since the surface charge is experimentally hard to determine, the zeta potential $\zeta_{\mathrm{MP}}$ and $\zeta_{\mathrm{s}}$ of \ac{MP} and substrate surfaces are commonly used as an approximation instead \cite{WirixSpeetjens2005, Ehresmann2015, Reginka2021} and is measurerd at the slipping plane (Figure,..).
+
+
 \subsection{Van der Waals}
 
 \section{Traveling wave magnetophoresis}
@@ -51,7 +72,7 @@ where $\chi_\mathrm{fl}$ is the susceptibility of the fluid, and $\mathbf{H}_\ma
 
 \paragraph{Rotating Field Traveling Wave Magnetophoresis} 
 
-
+Magnetic fields produced by Helmholtz coils in this work are of a pulsed nature with a trapezoidal shape (Figure \ref{fig:exp_setup} (b)); however, treating the fields as rotating fields will be the starting point of the derivation before introducing the consequences of deviating to pulses.
 The static $H_\mathrm{MFL}$ produced by the substrate and the time-dependent homogeneous rotating external magnetic fields $H_\mathrm{ext}$ produced by the Helmholz coils result in effective fields at position $x,y,z_0$ and time $t$ and are given by \cite{Ehresmann2026}
 \begin{equation}
     \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \mathbf{H}_\mathrm{MFL}(x,y,z_0) + \mathbf{H}_\mathrm{ext}(t).
@@ -91,7 +112,7 @@ The superposition of adjacent \acp{DW} reduces the stray field over a \ac{DW}, w
 As briefly mentioned before, the \ac{MP} will be approximated as a point-dipole.
 To describe the magnetic moment of the \ac{MP} is, however, not trivial.
 The particle consists of nanoscopic maghemite or magnetite or a mixture of both that is either dispersed evenly within a polymer matrix of the sphere, or the grains are surrounding a polymer core, in which case the particle is referred to as a core-shell particle. 
-The particles investigated in this work are Dynabeads from Thermo Fisher, which are, as specified by the manufacturer, non-porous, highly cross-linked polystyrene microspheres consisting of an even dispersion of magnetic material throughout the bead, and micromer-M from micromod, which are microspheres consisting of magnetite around an organic matrix of a styrene-maleic acid-copolymer further coated with a not further specified polymer, making the latter a core-shell particle (depicted in Figure \ref{fig:exp_setup} c)).
+The particles investigated in this work are Dynabeads from Thermo Fisher, which are, as specified by the manufacturer, non-porous, highly cross-linked polystyrene microspheres consisting of an even dispersion of magnetic material throughout the bead, and micromer-M from micromod, which are microspheres consisting of magnetite around an organic matrix of a styrene-maleic acid-copolymer further coated with an acrylic acid derivative polymer\cite{Shubbak2026}, making the latter a core-shell particle (depicted in Figure \ref{fig:exp_setup} c)).
 In both cases, the individual grains are only talking to each other if they are close enough, that is, in the order of xy for exchange interaction or in the order of yz for dipolar interaction. 
 This interaction, or the lack thereof, is what makes the particles superparamagnetic. 
 For a complete description of the magnetic moment of an \ac{MP}, an integration of individual magnetic field components of the dispersed grains over the volume with respect to the decaying magnetic stray field emerging from the \ac{MFL} must be considered.  
@@ -129,24 +150,56 @@ Including Equation \ref{eq:weight_factor_dipole_approx} into Equation \ref{eq:fi
 \end{equation}
 Equation \ref{eq:H_eff_approximation_yellen} is therefore replaced by Equation \ref{eq:H_eff_Arno} as Equation \ref{eq:H_eff_Arno} more adequately describes the effective rotating fields acting on the \ac{MP} in the current geometry.   
 With the dipole approximation for an \ac{MP}, inserting Equations \ref{eq:m_MP} and \ref{eq:effective_suceptibility_MP} into Equation \ref{eq:U_P_MP} gives \cite{Ehresmann2026}
-\begin{equation}
+\begin{equation}\label{eq:potential_energy_with_H}
     U_\mathrm{P}(x,z,t) = -\bar{\chi}V\mu_0\left( H^2_\mathrm{eff, x} + H^2_\mathrm{eff, z} \right).
 \end{equation}
 Inserting Equation \ref{eq:H_eff_Arno} gives\cite{Ehresmann2026}
 \begin{equation}
             U_\mathrm{P}(x,z,t) = -\bar{\chi}V\mu_0\left( \left( B \sin(kx)+H_\mathrm{ext,0} \sin(\omega t)\right)^2 + \left(B \sin(kx)+H_\mathrm{ext,0} \cos(\omega t)\right)^2\right).
 \end{equation}
-
-In this work, the parallel-stripe domain pattern extends in $y$ direction while alternating in $x$ with the half-period $d$, meaning no gradient is created in $y$, which ensures that $F_\mathrm{m,x}(x,z,t)$ only acts along the $x$ direction\cite{Holzinger2015a}. 
-
-
-
-
-Since the \ac{MP} is residing in the potential minimum in accordance with \ref{eq:U_P_MP}, shifting this energy well will force the \ac{MP} to follow its motion along $x$. 
+After resolving the brackets, using the Pythagorean identity of $\sin^2+\cos^2 = 1$ and applying the addition theorem on the product terms of the trigonometric functions, which can all be read in detail elsewhere \cite{Ehresmann2026}, finally gives
+\begin{equation}\label{eq:dPEL_Rotating}
+     U_\mathrm{P}(x,z,t) = -\bar{\chi}V\mu_0 \left(B^2 + H^2_\mathrm{ext,0}+BH_\mathrm{ext,0}\cos(kx-\omega t)\right).
+\end{equation}
+This describes a dynamic potential energy landscape with minima and maxima traveling in the $\pm x$-direction.
+Since the potential energy of the \ac{MP} $U_\mathrm{P}$ depends on $x$, and the magnetic field changes with $x$, a spatial change in energy means the \ac{MP} experiences a force.
+Using Equation \ref{eq:potential_energy_with_H}, therefore, gives 
+\begin{equation}
+    F_\mathrm{x}(x,z,t) = -\frac{\partial U(x,z,t)}{\partial x} = +\bar{\chi}V\mu_0 BkH_\mathrm{ext,0}\sin(kx-\omega t). 
+\end{equation}
+The in-synergy traveling potential energy minima and maxima are responsible for the potential energy well-depth and magnetic gradient force on the \ac{MP} in Equation \ref{eq:dPEL_Rotating} do not show a time variation.
+The potential energy well-depths are proportional to the amplitude of the external field and the stray field averaged over the particle volume corrected by the weight factor \ref{eq:weight_factor_dipole_approx}. 
+Since the \ac{MP} is residing in the potential minimum in accordance with \ref{eq:potential_energy_with_H}, the acting force along $x$ moves the \ac{MP} accordingly. 
 Fittingly, the transport concept is coined Traveling Wave Magnetophoresis by Yellen and Lee in 2007 \cite{Yellen2007}, although no wave is involved at all.
 
+\paragraph{Pulsed Field Traveling Wave Magnetophoresis} 
 
-Using an equation of motion, the transport from one \ac{DW} to the adjacent by periodically transforming $U_\mathrm{P}(x,z)$ can be described by\cite{Yellen2007, Shubbak2026}
+In this work, the parallel-stripe domain pattern extends in $y$ direction while alternating in $x$ with the half-period $d$, meaning no gradient is created in $y$, which ensures that the force only acts along the $x$ direction\cite{Holzinger2015a}. 
+Furthermore, the Ansatz for rotating fields is used as a starting point for the derivation of the dynamically shifting potential energy landscape, although pulsed fields are employed in the experimental scheme \cite{Holzinger2015a, Shubbak2026}, which is depicted in Figure \ref{fig:exp_setup} (b).
+Rewriting Equation \ref{eq:H_eff_Arno} in a more general form to include variations in pulsed fields\cite{Ehresmann2026} and replacing the angular frequency by a frequency $\nu = \nicefrac{\omega}{2\pi}$\cite{Shubbak2026} yields
+\begin{equation}\label{eq:pulsed_dTWM}
+    \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \begin{bmatrix}
+        B \sin(kx) + H_\mathrm{ext,x,0}\sin(2\pi\nu_\mathrm{x} t) \\
+        0 \\
+        B \cos(kx) + H_\mathrm{ext,x,0}\sin(2\pi\nu_\mathrm{z} t + \delta_\mathrm{zx})
+    \end{bmatrix}.
+\end{equation}
+As Equation \ref{eq:pulsed_dTWM} implies and shown in Figure \ref{fig:exp_setup} (b), different pulse amplitudes in $H_\mathrm{ext,x,0}$ and $H_\mathrm{ext,z,0}$ are possible, as well as differeing the frequencies $\nu_\mathrm{x}$ and $\nu_\mathrm{z}$ and the phase relation $\delta_\mathrm{zx}$ between them. 
+For this work, $\delta_\mathrm{zx}$ was kept at a constant $\SI{90}{\degree}$ shift, simplefieing Equation \ref{eq:pulsed_dTWM} to 
+\begin{equation}\label{eq:pulsed_dTWM_no_phase_variation}
+    \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \begin{bmatrix}
+        B \sin(kx) + H_\mathrm{ext,x,0}\sin(2\pi\nu_\mathrm{x} t) \\
+        0 \\
+        B \cos(kx) + H_\mathrm{ext,x,0}\cos(2\pi\nu_\mathrm{z} t )
+    \end{bmatrix}.
+\end{equation}
+With Equation \ref{eq:pulsed_dTWM_no_phase_variation}, the dynamic potential energy landscape for pulsed fields can be written as\cite{Ehresmann2026}
+\begin{equation}
+    U_\mathrm{P}(x,z,t) = -\bar{\chi}V\mu_0 (B\sin(kx) + H_\mathrm{ext,x,0}\sin(2\pi\nu t))^2. 
+\end{equation}
+
+
+Using an equation of motion, the transport from one \ac{DW} to the adjacent by periodically transforming $U_\mathrm{P}(x,z,t)$ can be described by\cite{Yellen2007, Shubbak2026}
 \begin{equation}\label{eq:Equation_of_motion}
     M \frac{d^2x}{dt^2}-f_\mathrm{D}\frac{dx}{dt} = F_\mathrm{m,x} \sin(\phi),
 \end{equation}
@@ -180,24 +233,25 @@ Since the volumes used in this \ac{LOC} device are in the \si{\micro\L} range, l
 \end{equation}
 where at room temperature, $\rho=\SI{1000}{\kg\per\cubic\meter}$ is the density of water, $u$ is the flow speed which, for our system is the velocity of the \acp{MP} and is generously given by \SI{200}{\micro\m\per\s}, $L$ is the characteristic length, which is $<\mathrm{cm}$ range, and $\mu$ is the dynamic viscosity, given at \SI{1e-3}{\Pa}. 
 It becomes apparent that at small volumes used, in the present case in the \SI{20}{\micro\L} range, $\mathrm{Re}$ becomes $<1$\cite{Shanko2019}.
-This allows for the inertial term of the \ac{MP} to be ignored, and Equation \ref{eq:Equation_of_motion} can be rewritten in a dimensionless form as an overdamped non-linear oscillator \cite{Yellen2007}
+This allows for the inertial term of the \ac{MP} to be ignored, and Equation \ref{eq:Equation_of_motion} can be rewritten in a dimensionless form as an overdamped non-linear oscillator\cite{Yellen2007}
 \begin{equation}\label{eq:overdamped_oscillator}
-    \frac{d\phi}{d\tau}=\sin(\phi)-\frac{\omega}{\omega_\mathrm{c}},
+    \frac{d\phi}{d\tau}=\sin(\phi)-\frac{\nu}{\nu_\mathrm{c}},
 \end{equation}
-where $\omega$ is the external rotation field frequency, $\omega_\mathrm{c} = F_\mathrm{m,x}(x,z,t) k/f_\mathrm{D}(z)$ is the critical frequency for a given \ac{MP} that strongly depends on the material and geometry, and $\tau=\omega_\mathrm{c}t$ is a dimensionless time \cite{Yellen2007}. 
+where $\nu$ is the external pulsed field frequency, $\nu_\mathrm{c} = F_\mathrm{m,x}(x,z,t) k/f_\mathrm{D}(z)$ is the critical frequency for a given \ac{MP} that strongly depends on the material and geometry, and $\tau=\nu_\mathrm{c}t$ is a dimensionless time \cite{Yellen2007}. 
 % Equation \ref{eq:overdamped_oscillator} has a stable solution $\frac{d\phi}{d\tau}=0$ only when the driving frequency of the external magnetic field is less than $\omega_\mathrm{c}$ \cite{Yellen2007}.
-With the drag force in Equation \ref{eq:drag_force} as the sole contributor to the damping, $\omega_\mathrm{c}$ can be formulated as:
+% Using pulsed fields rather than rotating fields as introduced in Equation \ref{eq:pulsed_dTWM_no_phase_variation}, i.e., replacing $\nu = \nicefrac{\omega}{2\pi}$, and 
+With the drag force in Equation \ref{eq:drag_force} as the sole contributor to the damping, $\nu_\mathrm{c}$ can be formulated as:
 \begin{equation}\label{eq:critical_frequency}
-    \omega_\mathrm{c}(z) = \frac{\bar{\chi} \,\mu_0 \, \sigma_0 \,H_\mathrm{eff}}{18 \,\eta \, f_\mathrm{D}(z)} \left( 2 \pi \beta \right)^2 \exp(-2\pi \beta),
+    \nu_\mathrm{c}(z) = \frac{\bar{\chi} \,\mu_0 \, \sigma_0 \,H_\mathrm{eff}}{36 \pi \,\eta \, f_\mathrm{D}(z)} \left( 2 \pi \beta \right)^2 \exp(-2\pi \beta),
 \end{equation}
-where $\bar{\chi}$ is the shape-corrected \ac{MP} susceptibility, $\sigma_0$ denotes the effective magnetic pole distribution within the underlying substrate, and $\beta = r/d$ is the ratio between the \ac{MP} radius $r$ and the domain periodicity $d$ \cite{Yellen2007, Shubbak2026}.
+where $\bar{\chi}$ is the shape-corrected \ac{MP} susceptibility, $\sigma_0$ denotes the effective magnetic pole distribution within the underlying substrate, and $\beta = r/d$ is the ratio between the \ac{MP} radius $r$ and the domain periodicity $d$ \cite{Shubbak2026}.
 For \acp{MP} with a radius smaller than the period $d$, that is, the ratio $\beta \ll 1$, the critical frequency follows a quadratic relation with the \ac{MP} size \cite{Yellen2007}.
 
 Equation \ref{eq:overdamped_oscillator} has a stable solution $\frac{d\phi}{d\tau}=0$ only when the driving frequency of the external magnetic field is less than $\omega_\mathrm{c}$ \cite{Yellen2007}, resulting in two distinct velocity regimes: 
 \begin{equation}\label{eq:velocity_regimes}
     v = \begin{cases} 
-\omega \frac{d}{2\pi},&  \omega \leq  \omega_{\mathrm{c}}(z)\\ 
-(\omega - \sqrt{\omega^2 - \omega^2_\mathrm{{c}})}  \frac{d}{2\pi},&  \omega >  \omega_{\mathrm{c}}(z)
+\nu d,&  \nu \leq  \nu_{\mathrm{c}}(z)\\ 
+(\nu - \sqrt{\nu^2 - \nu^2_\mathrm{{c}})}  d,&  \nu >  \nu_{\mathrm{c}}(z)
 \end{cases},
 \end{equation} 
 which is depicted in Figure \ref{fig:two_velocity_regimes}.
@@ -206,22 +260,22 @@ which is depicted in Figure \ref{fig:two_velocity_regimes}.
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Theory/theory_velocity_101212.pdf}
     \caption{
-            Two distinct velocity regimes caused by the stable solution of the overdamped oscillator Ansatz for $\omega <\omega_\mathrm{c}$, here exemplary put at $\omega_\mathrm{c}=\SI{5}{\Hz}$.
+            Two distinct velocity regimes caused by the stable solution of the overdamped oscillator Ansatz for $\nu <\nu_\mathrm{c}$, here exemplary put at $\nu_\mathrm{c}=\SI{5}{\Hz}$.
             }
     \label{fig:two_velocity_regimes}
 \end{figure}
 
-When $\omega \leq  \omega_{\mathrm{c}}(z)$, the \ac{MP} reaches a stable position in the potential energy minimum well and moves with the speed of the translation velocity of the potential energy landscape \cite{Yellen2007}: 
+When $\nu \leq  \nu_{\mathrm{c}}(z)$, the \ac{MP} reaches a stable position in the potential energy minimum well and moves with the speed of the translation velocity of the potential energy landscape \cite{Yellen2007}: 
 \begin{equation}
-    \frac{\omega d}{2 \pi}.
+    \nu d.
 \end{equation}
 This regime is referred to as the phase-locked regime, in which the \ac{MP} lags behind the transformation of the landscape by a distance equal to\cite{Yellen2007}
 \begin{equation}    
-\Delta r = \left(\frac{d}{2\pi}\right)\sin^{-1} \frac{\omega}{\omega_\mathrm{c}}.
+\Delta r = \left(\frac{d}{2\pi}\right)\sin^{-1} \frac{\nu}{\nu_\mathrm{c}}.
 \end{equation}
-Near $\omega_{\mathrm{c}}(z)$, the \ac{MP} will lag \SI{90}{\degree} out of phase with respect to the energy minimum, therefore the lag becomes the distance\cite{Yellen2007}
+Near $\nu_{\mathrm{c}}(z)$, the \ac{MP} will lag \SI{90}{\degree} out of phase with respect to the energy minimum, therefore the lag becomes the distance\cite{Yellen2007}
 \begin{equation}
     \Delta r = \frac{d}{4}.
 \end{equation}
-It is only for $\omega > \omega_{\mathrm{c}}(z)$ that the \ac{MP} begins to slip with respect to the translating potential energy landscape \cite{Yellen2007}.
-This is observable as an oscillatory rocking motion above a \ac{hh} or \ac{tt} \ac{DW}, and the time-averaged velocity of a \ac{MP} approaches 0 in accordance to Equation \ref{eq:velocity_regimes} for $\omega >  \omega_{\mathrm{c}}(z)$.
+It is only for $\nu > \nu_{\mathrm{c}}(z)$ that the \ac{MP} begins to slip with respect to the translating potential energy landscape \cite{Yellen2007}.
+This is observable as an oscillatory rocking motion above a \ac{hh} or \ac{tt} \ac{DW}, and the time-averaged velocity of a \ac{MP} approaches 0 in accordance to Equation \ref{eq:velocity_regimes} for $\nu >  \nu_{\mathrm{c}}(z)$.
