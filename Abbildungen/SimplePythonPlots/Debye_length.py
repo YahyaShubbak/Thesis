@@ -6,7 +6,12 @@ import numpy as np
 # where c is the salt concentration in mol L^-1.
 
 #Fontsize to 18 for everythig:
-plt.rcParams.update({"font.size": 18})
+plt.rcParams.update({
+    "font.size": 18,
+    "font.family": "serif",
+    "font.serif": ["CMU Serif", "DejaVu Serif", "Computer Modern"],
+    "text.usetex": True
+})
 
 def debye_length(concentration_mol_per_l):
     return 3.04e-10 / np.sqrt(concentration_mol_per_l)
@@ -18,9 +23,9 @@ def potential_decay(distance_m, psi0=50e-3, lambda_D=None):
 
 def main():
     concentrations = {
-        "1 mM": 1e-3,
-        "10 mM": 1e-2,
-        "0.1 M": 1e-1,
+        r"1$\,$mM": 1e-3,
+        r"10$\,$mM": 1e-2,
+        r"0.1$\,$M": 1e-1,
     }
 
     x_nm = np.linspace(0, 10, 300)
@@ -29,9 +34,9 @@ def main():
 
     plt.figure(figsize=(7, 5))
     annotation_positions = {
-        "1 mM": (3.0, 13),
-        "10 mM": (4.0, 22),
-        "0.1 M": (7.0, 40),
+        r"1$\,$mM": (3.0, 13),
+        r"10$\,$mM": (4.0, 22),
+        r"0.1$\,$M": (7.0, 40),
     }
 
     for label, c in concentrations.items():
@@ -52,8 +57,8 @@ def main():
             bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.8, ec="none"),
         )
 
-    plt.xlabel("Distance x / nm")
-    plt.ylabel("Potential ψ / mV")
+    plt.xlabel(r"Distance $x$ / nm")
+    plt.ylabel(r"Potential $\Psi$ / mV")
     # plt.title("Electrostatic potential decay for monovalent salt concentrations at 25 °C")
     plt.xlim(0, 10)
     plt.ylim(0, 50)
