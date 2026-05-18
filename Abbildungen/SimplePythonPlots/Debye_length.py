@@ -7,7 +7,7 @@ import numpy as np
 
 #Fontsize to 18 for everythig:
 plt.rcParams.update({
-    "font.size": 18,
+    "font.size": 20,
     "font.family": "serif",
     "font.serif": ["CMU Serif", "DejaVu Serif", "Computer Modern"],
     "text.usetex": True
