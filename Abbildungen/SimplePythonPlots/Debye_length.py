@@ -5,6 +5,9 @@ import numpy as np
 #   lambda_D = 3.04 Å / sqrt(c / (1 mol L^-1))
 # where c is the salt concentration in mol L^-1.
 
+#Fontsize to 18 for everythig:
+plt.rcParams.update({"font.size": 18})
+
 def debye_length(concentration_mol_per_l):
     return 3.04e-10 / np.sqrt(concentration_mol_per_l)
 
@@ -26,7 +29,7 @@ def main():
 
     plt.figure(figsize=(7, 5))
     annotation_positions = {
-        "1 mM": (2.0, 13),
+        "1 mM": (3.0, 13),
         "10 mM": (4.0, 22),
         "0.1 M": (7.0, 40),
     }
@@ -45,13 +48,13 @@ def main():
             textcoords="data",
             arrowprops=dict(arrowstyle="->", color=line.get_color(), lw=1.5),
             color=line.get_color(),
-            fontsize=10,
+            fontsize=18,
             bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.8, ec="none"),
         )
 
     plt.xlabel("Distance x / nm")
     plt.ylabel("Potential ψ / mV")
-    plt.title("Electrostatic potential decay for monovalent salt concentrations at 25 °C")
+    # plt.title("Electrostatic potential decay for monovalent salt concentrations at 25 °C")
     plt.xlim(0, 10)
     plt.ylim(0, 50)
     plt.grid(True, linestyle="-", alpha=0.5)
