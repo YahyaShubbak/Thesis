@@ -26,37 +26,37 @@ The origin of the electrostatic interaction of colloidal systems such as \acp{MP
 This is illustrated in Figure \ref{fig:double_layer}, where an \ac{MP} is suspended in a liquid above a polymer surface as the spacing layer of the transport substrate.
 \begin{figure}
     \centering
-    \includegraphics[width=.9\linewidth]{Abbildungen/Theory/ElectricalDoubleLayer.png}
+    \includegraphics[width=.9\linewidth]{Abbildungen/Theory/ElectricalDoubleLayer.pdf}
     \caption{
             Diagram of an electric double layer of an \ac{MP}.
-            The \ac{MP} is suspended in a liquid on top of the substrate.
-            Positive surface charges are compensated by anions that then make up the Stern layer that is firmly adhering to the surface.
-            This layer is further compensated by cations that loosely surround the first layer, which then make up the slipping plane.
+            The \ac{MP} is suspended in a liquid on top of the substrate, and both possess negative surface charges.
+            These charges are compensated by cations that then make up the Stern layer, firmly adhering to the surface.
+            This layer is further compensated by anions that loosely surround the first layer, which then make up the slipping plane.
             $\zeta$-potential is measured at the slipping plane.
-            Ions adhered to the \ac{PMMA} surface are drawn faintly as to guide the reader's eye to the \ac{MP}.
+            Ions adhered to the \ac{PMMA} surface are illustrated faintly to guide the reader's eye to the \ac{MP}.  
             Inspired by \cite{Park2011}.%page 47
             }
     \label{fig:double_layer}
 \end{figure}
 The electrical neutral plane reaching away from the surface after all charges have been compensated is called the electrical double layer and includes the Stern layer and the diffuse layer, where the former is tightly bound ions with opposing charge to the surface charge they are adsorbed to, and the latter is more loosely surrounding the first layer \cite{Butt2018,Park2011}.  
+The electric potential near a planar surface $\Psi(x)$, depending on the distance normal to the surface, can be derived from the Poisson-Boltzmann equation and will be left for the enthusiastic reader to the work of  \cite{Butt2018}.
+For now, the linearized Poisson-Boltzmann equation leads to a surface potential that decreases exponentially 
+\begin{equation}\label{eq:surface_potential}
+    \Psi = \Psi_0 \exp(-\kappa x)
+\end{equation}
+containing $\kappa$ 
+\begin{equation}\label{eq:kappa}
+    \kappa = \sqrt{\frac{2 c_0 e^2}{\epsilon_{\mathrm{0}} \epsilon_{\mathrm{r}} k_{\mathrm{B}}T}},
+\end{equation}
+with the bulk concentration of the salt $c_0$, the elementary charge $e$, $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, the Boltzmann constant $k_{\mathrm{B}}$, and temperature $T$ \cite{Butt2018}.
 The electrical double layer is depicted in Figure \ref{fig:double_layer} with a purple arrow.
 The blue arrow shows the diffuse layer, which incorporates the loosely bound ions, counteracting the Stern layer.  
 Note that the \ac{PMMA} surface also has its electrical double layer; ions constituting the Stern layer and slipping plane are depicted faintly in Figure \ref{fig:double_layer} so as not to overwhelm the scheme.  
-When both systems, that is, two particles or the particle and the substrate's surface, are in such proximity that their individual electrical double layers overlap, an interaction occurs.
-Whether this interaction is attractive or repulsive depends on the sign of the charge.
-This interaction can be described by\cite{WirixSpeetjens2005, Reginka2021}
-\begin{equation}\label{eq:F_electrostatic}
-    \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} r \kappa}{1 - \exp{(-2\kappa z)}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  \exp{(-\kappa z)} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) \exp{(-2 \kappa z)} \right]\mathbf{e}_\mathrm{z},
-\end{equation}
-where $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, $r$ is the particles radius, and $\kappa$ 
-\begin{equation}
-    \kappa = \sqrt{\frac{2 I e^2}{\epsilon_{\mathrm{0}} \epsilon_{\mathrm{r}} k_{\mathrm{B}}T}},
-\end{equation}
-with the Avogadro constant $N_{\mathrm{A}}$, the elementary charge $e$, the ionic strength of the electrolyte $I$, i.e., the concentration of the salt, the Boltzmann constant $k_{\mathrm{B}}$, and temperature $T$ \cite{Butt2018}.
 The inverse of $\kappa$ is called Debye length $\lambda_\mathrm{D} = \kappa^{-1}$ and describes the decay length of the potential decrease from the surface, which for a monovalent salt such as \ch{NaCl} and at \SI{25}{\celsius} is \cite{Butt2018}
 \begin{equation}
     \lambda_\mathrm{D} = \frac{\SI{3.04}{\angstrom}}{\sqrt{c_0 \SI{1}{\per\mol}}}. 
 \end{equation}
+From Equation \ref{eq:kappa} follows that a higher salt concentration increases $\kappa$, which decreases the Debye length;
 A graph of the potential over distance for three different salt concentrations is shown in Figure \ref{fig:potential_vs_x}
 \begin{figure}[bth]
     \centering
@@ -66,6 +66,21 @@ A graph of the potential over distance for three different salt concentrations i
                 }
     \label{fig:potential_vs_x}
 \end{figure}
+
+% , which is linked to the ionic strength $I$ via
+% \begin{equation}
+%     \frac{1}{2}\sum_i c_\mathrm{i} z_\mathrm{i}^2,
+% \end{equation}
+% with the charge $z$, increases the potential 
+
+When both systems, that is, two particles or the particle and the substrate's surface, are in such proximity that their individual electrical double layers overlap, an interaction occurs.
+Whether this interaction is attractive or repulsive depends on the sign of the charge.
+This interaction can be described by\cite{WirixSpeetjens2005, Reginka2021}
+\begin{equation}\label{eq:F_electrostatic}
+    \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} r \kappa}{1 - \exp{(-2\kappa z)}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  \exp{(-\kappa z)} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) \exp{(-2 \kappa z)} \right]\mathbf{e}_\mathrm{z},
+\end{equation}
+where $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, $r$ is the particles radius.
+
 
 Since the surface charge is experimentally hard to determine, the zeta potential $\zeta_{\mathrm{MP}}$ and $\zeta_{\mathrm{s}}$ of \ac{MP} and substrate surfaces are commonly used as an approximation instead \cite{WirixSpeetjens2005, Ehresmann2015, Reginka2021} and is measurerd at the slipping plane, see Figure \ref{fig:double_layer}.
 
