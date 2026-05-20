@@ -18,7 +18,69 @@
 \acp{MP} for the use in a \ac{LOC} system are suspended in a liquid, usually a buffer or distilled water. 
 Therefore, \ac{DLVO} forces are of utter importance\cite{Shubbak2026}.
 These interactions are named after their discoverer Derjaguin, Landau, Verwey, and Overbeck \cite{Derjaguin1941, Verwey1947, WirixSpeetjens2005}. 
-For the system and hand, two main liquid-mediated interactions are of importance: the electrostatic and Van der Waals interactions, which will be briefly introduced in the following sections. 
+For the system and hand, two main liquid-mediated interactions are of importance: the electrostatic and van der Waals interactions, which will be briefly introduced in the following sections. 
+
+\subsection{van der Waals interaction}
+van der Waals forces exist between any combination of surfaces and molecules \cite{Butt2018}.
+The essential interaction that governs this force is the Coulomb force, an electrostatic force between two charges $Q_1$ and $Q_2$:
+\begin{equation}
+    F_\mathrm{C} = \frac{Q_1Q_2}{4\pi \epsilon \epsilon_0 D^2},
+\end{equation}
+with permittivity and vacuum permittivity $\epsilon$ and $\epsilon_0$, and the distance $D$ bewteen the charges\cite{Butt2018}.
+The resulting potential energy between the charges is
+\begin{equation}
+    U_\mathrm{C} = \frac{Q_1Q_2}{4\pi \epsilon \epsilon_0 D}.
+\end{equation}
+Charges of opposing signs will reduce the energy when they get closer, as the potential energy is negative \cite{Butt2018}.
+van der Waals is a combination of three interactions: London dispersion, which is always present even in electrically symmetric atoms and molecules, the Keesom force, which is the interaction between rotating permanent dipoles, and the Debye force between permanent and induced dipoles.
+The following will only glance over the important concepts; for a more comprehensive derivation of these forces, the excellent book by Butt\cite{Butt2018} is recommended. 
+In short, the London dispersion interaction often dominates and shall be described in more detail.
+Considering a neutral atom where electrons oscillate around the positive nucleus with a high frequency $\nu$\cite{Butt2018}.
+Averaged over time, the atom is neutral, but at every given instance, it is polar. 
+It is just the direction of polarity that changes with time.
+Placing two such oscillators in proximity, they start to influence each other, and since attractive orientations have higher probabilities than repulsive ones, the average interaction is of an attractive nature.
+The energy between two molecules can be approximated by
+\begin{equation}\label{eq:DispersionInteraction}
+    V = -\frac{3}{2} \frac{\alpha_1 \alpha_2}{(4\pi \epsilon_0)^2 D^6} \frac{h \nu_1 \nu_2 }{(\nu_1 + \nu_2)} = -\frac{C_\mathrm{disp}}{D^6},
+\end{equation}
+with the ionization energy of the molecule $h\nu$ and the polarizibility of the moleucle $\alpha$.
+Equation \ref{eq:DispersionInteraction} is an approximation, as it only considers the highest frequency term of a series of dipole transition moments of the molecule, which is usually by far the most dominant one \cite{Butt2018}.
+
+The van der Waals force is then the sum of Keesom, Debye, and London forces, and comes down to 
+\begin{equation}\label{eq:V_vdW}
+    V_\mathrm{vdW}(D) = -\frac{C_\mathrm{vdW}}{D^6}.
+\end{equation}
+
+When dealing with macroscopic solids rather than two molecules, a pairwise summation of the forces between all molecules can be performed.
+Developed by Hamaker, this approach neglects interactions that happen alongside the individual molecule pairs, e.g., a neighboring third molecule.  
+This is only valid in dilute gases, but gives a reasonable starting point for solids as well\cite{Butt2018}.
+By swapping $C_\mathrm{vdW}$ with a material-specific constant $C_\mathrm{AB}$ of molecules A and B such that $C_\mathrm{vdW} = C_\mathrm{AB}$, Equation \ref{eq:V_vdW} can be written as
+\begin{equation}
+        V_\mathrm{vdW}(D) = -\frac{C_\mathrm{AB}}{D^6}.
+\end{equation}.
+A lengthy derivation of the interaction of one molecule A with an infinitely extended body with a planar surface of molecule B \cite{Butt2018} leads to:
+\begin{equation}\label{eq:V_mol/plane}
+    V_\mathrm{mol/plane} = \frac{\pi \rho_\mathrm{B}C_\mathrm{AB}}{6D^3},
+\end{equation}
+with the homogenious assumed density $\rho_\mathrm{B}$ of the molecules in B. 
+Remarkably, the energy between molecule and solid decreases less steeply, with a $D^{-3}$ dependence rather than $D^{-6}$. 
+Extending the premise of Equation \ref{eq:V_mol/plane} to calculate the energy between two solids, an integration over all molecules in A must be done, which leads to  
+\begin{equation}
+    V = -\frac{A_\mathrm{H}}{6D}\frac{R_1 R_2}{R_1 + R_2},
+\end{equation}
+with the Hamaker constant 
+\begin{equation}
+    A_\mathrm{H} = \pi^2C_\mathrm{AB}\rho_\mathrm{A}\rho_\mathrm{B}. 
+\end{equation}
+The resulting van der Waals force is the negative derivative:
+\begin{equation}
+    F_\mathrm{vdW} = -\frac{A_\mathrm{H}}{6D^2}\frac{R_1 R_2}{R_1 + R_2}, 
+\end{equation}
+Letting $R_2$ go to infinity gives the result for a sphere and a flat, planar surface:
+\begin{equation}
+        V = -\frac{A_\mathrm{H}R_\mathrm{P}}{6D} \quad \mathrm{and} \quad F =  -\frac{A_\mathrm{H}R_\mathrm{P}}{6D^2},
+\end{equation}
+where index "P" stands for particle\cite{Butt2018}.
 
 
 \subsection{Electrostatic intercations}
@@ -85,9 +147,6 @@ where $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liqui
 Since the surface charge is experimentally hard to determine, the zeta potential $\zeta_{\mathrm{MP}}$ and $\zeta_{\mathrm{s}}$ of \ac{MP} and substrate surfaces are commonly used as an approximation instead \cite{WirixSpeetjens2005, Ehresmann2015, Reginka2021} and is measurerd at the slipping plane, see Figure \ref{fig:double_layer}.
 
 \paragraph{Zeta potential}
-
-
-\subsection{Van der Waals}
 
 \section{Traveling wave magnetophoresis}
 In this section, the theoretical background of traveling wave magnetophoresis and its implications are explained.
