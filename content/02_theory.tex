@@ -88,7 +88,7 @@ The origin of the electrostatic interaction of colloidal systems such as \acp{MP
 This is illustrated in Figure \ref{fig:double_layer}, where an \ac{MP} is suspended in a liquid above a polymer surface as the spacing layer of the transport substrate.
 \begin{figure}
     \centering
-    \includegraphics[width=.9\linewidth]{Abbildungen/Theory/ElectricalDoubleLayer.pdf}
+    \includegraphics[width=.8\linewidth]{Abbildungen/Theory/ElectricalDoubleLayer.pdf}
     \caption{
             Diagram of an electric double layer of an \ac{MP}.
             The \ac{MP} is suspended in a liquid on top of the substrate, and both possess negative surface charges.
@@ -137,7 +137,7 @@ A graph of the potential over distance for three different salt concentrations i
 
 When both systems, that is, two particles or the particle and the substrate's surface, are in such proximity that their individual electrical double layers overlap, an interaction occurs.
 Whether this interaction is attractive or repulsive depends on the sign of the charge.
-This interaction can be described by\cite{WirixSpeetjens2005, Reginka2021}
+The resulting force can be described by\cite{WirixSpeetjens2005, Reginka2021}
 \begin{equation}\label{eq:F_electrostatic}
     \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} r \kappa}{1 - \exp{(-2\kappa z)}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  \exp{(-\kappa z)} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) \exp{(-2 \kappa z)} \right]\mathbf{e}_\mathrm{z},
 \end{equation}
@@ -146,14 +146,12 @@ where $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liqui
 
 Since the surface charge is experimentally hard to determine, the zeta potential $\zeta_{\mathrm{MP}}$ and $\zeta_{\mathrm{s}}$ of \ac{MP} and substrate surfaces are commonly used as an approximation instead \cite{WirixSpeetjens2005, Ehresmann2015, Reginka2021} and is measurerd at the slipping plane, see Figure \ref{fig:double_layer}.
 
-\paragraph{Zeta potential}
 
 \section{Traveling wave magnetophoresis}
 In this section, the theoretical background of traveling wave magnetophoresis and its implications are explained.
 We will start with ...
 
-\subsection{Particle transport mechanism}
-\subsection{Close to surface transport}
+\subsection{Particle transport mechanism close to surface}
 Using relatively weak magnetic fields in the range of \SIrange{1}{4}{\kilo\A\per\m}, the superparamagnetic bead's magentic moment $\mathbf{m_\mathrm{MP}}$ depends on the external magnetic field linearly as 
 \begin{equation}\label{eq:m_MP}
     \mathbf{m_\mathrm{MP}} = \bar{\chi}_\mathrm{MP} V \mathbf{H}, 
@@ -180,7 +178,6 @@ The magnetic force exerted on the superparamagnetic bead in the direction of mot
 where $\chi_\mathrm{fl}$ is the susceptibility of the fluid, and $\mathbf{H}_\mathrm{eff}$ is the effective field, which is the sum of the static stray field emerging from the \ac{hh}-\ac{tt}-\ac{DW} that are responsible for the magnetic gradient, and superposed external fields created by the Helmholtz coils, at the position of the particle\cite{Shubbak2026}.
 
 \paragraph{Rotating Field Traveling Wave Magnetophoresis} 
-
 Magnetic fields produced by Helmholtz coils in this work are of a pulsed nature with a trapezoidal shape (Figure \ref{fig:exp_setup} (b)); however, treating the fields as rotating fields will be the starting point of the derivation before introducing the consequences of deviating to pulses.
 The static $H_\mathrm{MFL}$ produced by the substrate and the time-dependent homogeneous rotating external magnetic fields $H_\mathrm{ext}$ produced by the Helmholz coils result in effective fields at position $x,y,z_0$ and time $t$ and are given by \cite{Ehresmann2026}
 \begin{equation}

@@ -81,14 +81,16 @@ There, Ar plasma is ignited while a magnetic field is applied.
 Films of x,y,z nm are sputtered onto the Si substrate creating the magnetic layer stack.
 This happened in the presense of a magnetic field of x mT, giving the initial direction of the magnetic moments of the ferromagnet.
 
-The substrate is then placed in a small furnace that heats the sample above the Neel temperature and while keeping below the curie temperature, freely rotating the AF.
-As there is a magnetic field in the direction of the magneic moment of the FM, the topmost layer of atoms of the AF allign to the direction of the FM, creating a pinning called exchange coupling.
+The substrate is then placed in a small furnace that heats the sample above the Neel temperature of the antiferromagnet, while keeping it below the Curie temperature of the ferromagnet, freely rotating the antiferromagnet.
+As there is a magnetic field in the direction of the magnetic moment of the ferromagnet, the topmost layer of atoms of the antiferromagnet align to the direction of the FM, creating a pinning called exchange coupling.
 
-The substrate is then covered with a lithographic mask which, in this case, masekd 5µm thin stripes.
-After developing  in xy, the substrate is placed in a homemade He Ion blaster. 
+The substrate is then covered with a lithographic mask which, in this case, masked \SI{5}{\micro\meter} thin stripes.
+After developing in xy, the substrate is placed in a homemade He Ion blaster. 
 This introduces both energy and defect in the unmasked portion of the substrate, allowing the magnetic moments to rotate.
 While this is happening, a magnetic field opposing the magentic moment of the substrate then turns the now freed magnetic moments. 
 After He irradiation, the magentic moments are now pinned by the Af in the oppoisng directoin, creating the stripe domain pattern we know and love. 
+
+
 \subsection{Thin film sputter deposition}
 To achieve high-quality thin films with monolayer accuracy, sputter deposition is most commonly used\cite{Seshan2012}.    
 Sputtering, in a nutshell, is the process of accelerating ionized atoms, often \ac{Ar}, into a surface of desired material referred to as the target, which can be metals or insulators, with high enough kinetic energy to physically remove some target atoms and condense them onto a substrate.
@@ -125,7 +127,15 @@ To maximize the energy transfer, impedance-matching hardware is installed to tun
 Additionally, the \ac{RF} sputtering allows for sputtering insulators such as silicon dioxide.
 This is due to the \ac{AC} applied to the diodes, preventing charge buildup\cite{Seshan2012}. 
 
+\subsection{Field cooling}
+While sputter deposition, a permanent magnet was placed near the sample holder to apply an in-plane magnetic field, thereby inducing a growth-related uniaxial magnetic anisotropy in the ferromagnetic layer.
+This sets the preferred magnetization direction.
+To further strengthen the unidirectional anisotropy and increase the coercive field, field cooling is done after the sputtering.
+There, the substrate is placed in a small furnace which is heated above the blocking temperature $T_\mathrm{B}$ of the \ac{AF}, that is $T_\mathrm{B} < T_\mathrm{Neel} <T < T_\mathrm{Curie}$.
+This allows for the \ac{AF} to get enough energy for the interfacial spins to be reconfigured, allowing them to be pinned by the \ac{FM} layer at the interface, shifting the hysteresis loop by the exchange bias field $H_\mathrm{EB}$ towards the direction of the \ac{FM} magnetisation, and widening of the loop by the cohercive field $H_\mathrm{C}$.
+
 \subsection{Ion bombardment induced magnetic patterning}
+
 
 \section{Magnetic characterization}
 
@@ -165,8 +175,8 @@ It consists of a one-step coating procedure with several washing steps and is me
 The steps were the following:
 
 1. A buffer solution of \SI{10}{\milli\mole\per\L} \ac{HEPES} and \SI{150}{\milli\mole\per\L} \ac{NaCl} was angesetzt and kept cold. 
-\SI{40}{\micro\L} was added to an \SI{1.5}{\m\L} Eppendorf tube.
-The reson the solution is kept cold for the entire reaction is...
+\SI{40}{\micro\L} buffer was added to an \SI{1.5}{\m\L} Eppendorf tube.
+The reason the solution is kept cold for the entire reaction is...
 2. \SI{20}{\micro\L} bead suspension from stock was added to the \ac{HEPES}
 3. The suspension was washed by vortexing the beads and the \ac{HEPES} \SIrange{3}{5}{\s} for a minimum of three times within a \SI{10}{min} time window, the Eppendorf tube was then put into a magentic rack to attract the beads to allow the removal of the supernatant with a pipette.
 \SI{40}{\micro\L} \ac{HEPES} was added again to repeat the washing three times.
@@ -175,6 +185,36 @@ To this, \SI{50}{\micro\L} of cold coupeling agend \ac{EDC} is added.
 This allows for reaction xy to tace place which couples the N of amines to the O of the COOH.
 Here, \ac{EDC} is kept cold, because of...
 The suspension was incubated for 3 hours or overnight with \SI{10}{\s} vortexing for three times in the first three hours.
-5. The suspension was then washed three times as described above but with \SI{120}{\micro\L} \ac{HEPES}, and finally resuspended in \SI{100}{\micro\L} \ac{HEPES}. 
+5. The suspension was then washed three times as described in step 3 but with \SI{120}{\micro\L} \ac{HEPES}, and finally resuspended in \SI{100}{\micro\L} \ac{HEPES}. 
 This is now the stock suspension of \acp{MP} with \ac{BSA} with a particle concentration of $c=\SI{4e8}{beads\per(\milli\L)}$.
 For use, \SI{1}{\micro\L} stock suspension is added to \SI{190}{\micro\L} \ac{HEPES} buffer and \SI{10}{\micro\L} \SI{2}{\percent} polysorbate 20, commercially known as TWEEN 20, which is a non-ionic surfactant, giving a final bead concentration of $c=\SI{2e6}{beads\per(\milli\L)}$ with \SI{0.1}{\percent} TWEEN 20.
+
+\paragraph{EDC/NHS activation}
+To couple proteins to the \acp{MP}, the carboxygroup of the particle's surface is brought into reaction with an aminegroup of the protein.
+To facilitate the reaction, \ac{EDC} and \ac{NHS} are used.
+\ac{EDC} activates the carboxygroup by reacting with the central carbon atom of the carbodiimide group, forming an O-acylisourea intermediate (reaction 1 of (1) ).
+
+
+
+
+1. \SI{40}{\micro\L} \ac{MES} buffer with c= and pH= is used to wash the \ac{MP}.
+This buffer is used because of its slightly acidic pH value of xxx which helps stabilize the carbodiimid coupling reaction, contains no primary aminies that konnkurieren with the \ac{EDC} and produces fewever nebenreaktionen. 
+This removes the aqueous solution of the stock where the \ac{MP} are stored.
+For that, the \ac{MP} stock solution is vortexed to resuspend the particles, then \SI{20}{\micro\L} is pipetted to a micro container.
+\ac{MES} is added, the solution is vortext.
+Afterwards, a magnet is placed at the side of the container to collect the \acp{MP} there, which allows for safe disposal of the supernant.
+This is repeated three times.
+2. \SI{50}{\micro\L} \ac{EDC} and \ac{NHS} with $c=$ are added. 
+\ac{EDC} acts as an activator for the \ch{COOH} groups.
+It makes this and that to make the group reactive.
+However, the product is semi stable and can react on its own further to...
+\ac{NHS} helps by doing this and that.
+3. After a 10-20 min incubation period, the solution is washed again with \ac{MES} to remove any acces...
+This has to be done quickly as to not react with this and that.
+4. \SI{50}{\micro\L} of a $c=\SI{1}{\milli\g\per\milli\L}$ \ac{BSA} solution is added and is mixed by pulling into and pushing out of the pipet three times.
+The solution is allowed to react for 60 minutes at \ac{RT} or overnight at \SI{4}{\celsius}.
+5. Another washing step with \SI{40}{\micro\L} \ac{MES} removes any unbound \ac{BSA}.
+6. Ethanolamine is added to quench the reaction by reacting with its primary amino group with any residual \ac{NHS}
+7. A final washing with $3\times\SI{120}{\micro\L}$ \ac{HEPES} removes any unwanted chemicals while bringing the pH to physiological conditions of 7.3.
+8. The supernatant is removed a final time, and the beads are resuspended in \SI{100}{\micro\L} \ac{HEPES}, creating the stock solution to work with.
+For transport experiment, \SI{1}{\micro\L} of the new stock solution is added to a solution of \SI{190}{\micro\L} \ac{HEPES} with \ac{TWEEN}, with a \ac{TWEEN} concentration of \SI{0.05}{\percent}.
