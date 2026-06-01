@@ -189,42 +189,42 @@ The suspension was incubated for 3 hours or overnight with \SI{10}{\s} vortexing
 This is now the stock suspension of \acp{MP} with \ac{BSA} with a particle concentration of $c=\SI{4e8}{beads\per(\milli\L)}$.
 For use, \SI{1}{\micro\L} stock suspension is added to \SI{190}{\micro\L} \ac{HEPES} buffer and \SI{10}{\micro\L} \SI{2}{\percent} polysorbate 20, commercially known as TWEEN 20, which is a non-ionic surfactant, giving a final bead concentration of $c=\SI{2e6}{beads\per(\milli\L)}$ with \SI{0.1}{\percent} TWEEN 20.
 
-\paragraph{EDC/NHS activation}
+\paragraph{EDC/NHS activation}\label{paragraph:EDC_NHS_activation}
 To couple proteins to the \acp{MP}, the carboxygroup of the particle's surface is brought into reaction with an aminegroup of the protein.
 To facilitate the reaction, \ac{EDC} and \ac{NHS} are used.
 \ac{EDC} activates the carboxygroup by reacting with the central carbon atom of the carbodiimide group, forming an O-acylisourea intermediate (reaction 1 of (1) ):
 The carbon in the \ac{EDC} is strongly electrophilic as it is surrounded by the more electronegative nitrogens that pull the electron density away from the carbon. 
 Therefore, a nucleophilic attack on that carbon by the carboxylate oxygen can happen.
-This intermediate is reactive, but unstable.
-
+This intermediate is reactive, but unstable, and therefore reacts with \ac{NHS} to form an \ac{NHS} succinimidyl ester and a urea byproduct.
+(2) The next step is to covalently bind the amine group of the protein to the carboxygroup.
+In that, the amine acts as a nucleophile towards the activated ester carbonyl, producing an amine bond, releasing the \ac{NHS}. 
+(3) In a final step, ethanolamine is added as a quenching agent to react with its primary amine to available, unreacted \ac{NHS} ester to prevent further unwanted reactions such as cross-reactions with surface-bound proteins on \acp{MP}. 
 
 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Abbildungen/Theory/EDC_NHS_COOH_Protein.png}
-    \caption{Caption}
+    \caption{(1)-(2) Reaction scheme of covalent bonding of carboxygroup with aminegroup of the \ac{MP}'s surface and the protein via \ac{EDC} activation and \ac{NHS}-ester intermediate product.
+    (3) Ethanolamine reacts with the activated carboxygroup to quench the reaction if no more protein is available, preventing unwanted further reactions with amine-containing species and crosslinking between proteins.
+    Taken from \cite{Fischer2010}.
     \label{fig:reaction_COOH-Protein}
 \end{figure}
 
-
+\paragraph{Coupeling protocoll}
 1. \SI{40}{\micro\L} \ac{MES} buffer with c= and pH= is used to wash the \ac{MP}.
-This buffer is used because of its slightly acidic pH value of xxx which helps stabilize the carbodiimid coupling reaction, contains no primary aminies that konnkurieren with the \ac{EDC} and produces fewever nebenreaktionen. 
+This buffer is used because of its slightly acidic pH value of xxx which helps stabilize the carbodiimid coupling reaction\cite{Fischer2010}, while also containing no primary amines that compete with the \ac{EDC} and hence produce fewer side reactions. 
 This removes the aqueous solution of the stock where the \ac{MP} are stored.
 For that, the \ac{MP} stock solution is vortexed to resuspend the particles, then \SI{20}{\micro\L} is pipetted to a micro container.
 \ac{MES} is added, the solution is vortext.
 Afterwards, a magnet is placed at the side of the container to collect the \acp{MP} there, which allows for safe disposal of the supernant.
 This is repeated three times.
 2. \SI{50}{\micro\L} \ac{EDC} and \ac{NHS} with $c=$ are added. 
-\ac{EDC} acts as an activator for the \ch{COOH} groups.
-It makes this and that to make the group reactive.
-However, the product is semi stable and can react on its own further to...
-\ac{NHS} helps by doing this and that.
-3. After a 10-20 min incubation period, the solution is washed again with \ac{MES} to remove any acces...
-This has to be done quickly as to not react with this and that.
-4. \SI{50}{\micro\L} of a $c=\SI{1}{\milli\g\per\milli\L}$ \ac{BSA} solution is added and is mixed by pulling into and pushing out of the pipet three times.
+3. After a 10-20 min incubation period, the solution is washed again with \ac{MES} to remove excess \ac{EDC} and \ac{NHS} and the byproducts(see \ref{paragraph:EDC_NHS_activation}).
+This has to be done quickly beacuse of the hydrolysis of the \ac{NHS}-ester that reacts with water to the starting product of a carboxygroup and \ac{NHS}. 
+4. \SI{50}{\micro\L} of a $c=\SI{1}{\milli\g\per\milli\L}$ \ac{BSA} solution is added and is mixed by pulling into and pushing out of the pipette three times.
 The solution is allowed to react for 60 minutes at \ac{RT} or overnight at \SI{4}{\celsius}.
 5. Another washing step with \SI{40}{\micro\L} \ac{MES} removes any unbound \ac{BSA}.
-6. Ethanolamine is added to quench the reaction by reacting with its primary amino group with any residual \ac{NHS}
+6. Ethanolamine is added to quench the reaction.
 7. A final washing with $3\times\SI{120}{\micro\L}$ \ac{HEPES} removes any unwanted chemicals while bringing the pH to physiological conditions of 7.3.
 8. The supernatant is removed a final time, and the beads are resuspended in \SI{100}{\micro\L} \ac{HEPES}, creating the stock solution to work with.
-For transport experiment, \SI{1}{\micro\L} of the new stock solution is added to a solution of \SI{190}{\micro\L} \ac{HEPES} with \ac{TWEEN}, with a \ac{TWEEN} concentration of \SI{0.05}{\percent}.
+For transport experiment, \SI{1}{\micro\L} of the new stock solution is added to a solution of \SI{190}{\micro\L} \ac{HEPES} with TWEEN, with a TWEEN concentration of \SI{0.05}{\percent}.

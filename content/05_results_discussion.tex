@@ -4,6 +4,34 @@
 \section{Characterization of superparamagnetic particles}
 \subsection{Zeta potential}
 \subsection{Magnetophoretic velocity}
+To ensure the \acp{MP} of different chemical functionalization have the same magnetic content and differences in the mean velocity are solely based on the electrostatic interactions, the magnetophoretic velocity far away from any wall has been measured.
+This ensures that no surface-surface interaction occurs, and the velocity measured is based on the magnetic content.
+To do so, a large fluid chamber was 3D printed where the \ac{MP} solution was placed of $\qtyproduct{11 x 11 x 2}{\milli\meter}$ with a bar magnet attached to one wall, which can be seen in \textbf{Figure \ref{fig:mag_phor_velocity_with_mag_field}} (b).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Experimental/vMagPho.pdf}
+    \caption{
+            (a) Magnetic flux density in the investigated magnet orientation for different distances from the neodymium magnet attached to the wall at $x=0$.
+            (b) Top view of the experimental setup using a neodymium magnet with a 3D-printed fluid chamber sealed by a coverslip (not shown).
+            Taken from \cite{Shubbak2026}  in the Supplemental Material.
+            }
+    \label{fig:mag_phor_velocity_with_mag_field}
+\end{figure}
+
+To further ensure no wall interaction, the focal plane of the microscope was set to be in the center of the container. 
+The magnetic gradient field attracts the \acp{MP} towards $x=0$, and this movement was captured with the camera. 
+$B_\mathrm{x}(x)$ in dependence of the distance to the magnet can be seen in Figure \ref{fig:mag_phor_velocity_with_mag_field} (a).
+The resulting mean magnetophoretic velocity $\left< \left< u \right> \right>$ was used to calculate the magnetic susceptibility $\chi_\mathrm{MP}$ using\cite{Wise2015}
+\begin{equation}
+    \left< \left< u \right> \right> = \frac{V(\chi_\mathrm{MP}-\chi_\mathrm{fl})}{6\pi r \eta}\frac{\left| \nabla B^2\right|}{2\mu_0},
+\end{equation}
+with the magnetic flux density $B_\mathrm{x}(x)$ of the bar magnet.
+Videos with durations between \SI{10}{\s} and \SI{50}{\s} were recorded through the dark-field microscope with a 20$\,\times\,$ magnification objective. 
+A total of 442 trajectories for \ch{COOH} and 155 trajectories for \ch{NH2} functionalized \acp{MP} of the micromod micromer®-M were evaluated as the \acp{MP} used in the mean velocity study of different surface functionalization.
+At a distance of \SI{2}{mm} away from the magnet surface, i.e., at \SI{88.0}{\mT}, $\left< \left< u_\mathrm{COOH} \right> \right> = \SI{149\pm16}{\micro\m\per\s}$ and $\left< \left< u_\mathrm{NH2} \right> \right> = \SI{151\pm14}{\micro\m\per\s}$ were found. 
+The resulting $\chi_\mathrm{MP}$ are $\chi_\mathrm{\ch{COOH}} = 0.26\pm0.01$ and $\chi_\mathrm{\ch{NH2}} = 0.26\pm0.01$, which is comparable to literature\cite{Grob2018}.
+
 \section{Transport dynamics close to the surface}
 \subsection{Mean ensemble velocity}\label{subsection:mean_velocity}
 
