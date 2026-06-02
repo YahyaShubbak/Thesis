@@ -9,7 +9,7 @@ To ensure the \acp{MP} of different chemical functionalization have the same mag
 This ensures that no surface-surface interaction occurs, and the velocity measured is based on the magnetic content.
 To do so, a large fluid chamber was 3D printed where the \ac{MP} solution was placed of $\qtyproduct{11 x 11 x 2}{\milli\meter}$ with a bar magnet attached to one wall, which can be seen in \textbf{Figure \ref{fig:mag_phor_velocity_with_mag_field}} (b).
 
-\begin{figure}
+\begin{figure}[tbh]
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Experimental/vMagPho.pdf}
     \caption{
@@ -50,17 +50,77 @@ Accordingly, an energy maximum is now present at the \ac{DW} where the \ac{MP} w
 Since the landscape is slightly skewed in the direction of transport by the applied $x$ field, the \ac{MP} does not randomly fall onto one or the other adjacent potential minima, but it has a preferred direction along $x$.
 This is now observable as a large step which, in sum with the small step, will cover $\nicefrac{1}{2}d$, that is, the distance from one \ac{DW} to the next.
 In an $x$ over $t$ graph, the two steps are separated by a stationary phase. 
-Such a graph is presented in Figure \ref{fig:x-t-graph} for the linear regime.
-
-\begin{figure}
+Such a graph is presented in Figure \ref{fig:x-t-graph_100ms} for the linear regime.
+It shows a single \ch{COOH}-micromer \ac{MP} that was transported and tracked the entire duration of the video, that is, $t=\SI{5}{s}$.
+The red rectangle is shown as a zoom in in Figure \ref{fig:x-t-graph_100ms_zoom} to more clearly present the individual steps and how they are correlated with the alternating pulsed field sequence, depicted on top.
+\begin{figure}[tbh]
     \centering
-    \includegraphics[width=1\linewidth]{Abbildungen/Evaluation/xvst_mean_Dynabeads M-270 (2.00 Hz, 125 ms).pdf}
-    \caption{PLATZHALTER WEIL KOMISCHE DATEN
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms.pdf}
+    \caption{
     $x$ over $t$ graph of a transport experiment in the linear regime.
     }
-    \label{fig:x-t-graph}
+    \label{fig:x-t-graph_100ms}
+\end{figure}
+$\mathrm{T}$ is set to start arbitrarily at $t=\SI{2200}{ms}$ to include a full period in the scheme; however, the field sequence started before that. 
+Note that the ramp time shown is exaggerated for visual purposes.
+A full period $\mathrm{T}$ is shown containing the aforementioned small step starting at $t=\SI{2200}{ms}$, and the large step starting at $t=\SI{2300}{ms}$.
+The force equilibrium is reached within nanoseconds (refer to theory or cite Holzinger?) which is not resolvable at the \si{ms} time scale the camera can provide.
+Therefore, the acceleration phase is assumed to be instantaneous.
+why not linear but gradual stop after field application?
+$\mathrm{T} = \SI{400}{ms}$ can be nicely observed, since $\nicefrac{T}{4}=\SI{100}{ms}$. 
+\begin{figure}[tbh]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms_zoom.pdf}
+    \caption{
+    $x$ over $t$ graph of a transport experiment in the linear regime.
+    }
+    \label{fig:x-t-graph_100ms_zoom}
 \end{figure}
 
+\begin{figure}[tbh]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_20ms.pdf}
+    \caption{
+    $x$ over $t$ graph of a transport experiment in the linear regime.
+    }
+    \label{fig:x-t-graph_20ms}
+\end{figure}
+
+\begin{figure}[tbh]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_20ms_zoom.pdf}
+    \caption{
+    $x$ over $t$ graph of a transport experiment in the linear regime.
+    }
+    \label{fig:x-t-graph_20ms_zoom}
+\end{figure}
+
+\begin{figure}[tbh]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_20ms_2.pdf}
+    \caption{
+    $x$ over $t$ graph of a transport experiment in the linear regime.
+    }
+    \label{fig:x-t-graph_20ms_2}
+\end{figure}
+
+\begin{figure}[tbh]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_10ms.pdf}
+    \caption{
+    $x$ over $t$ graph of a transport experiment in the linear regime.
+    }
+    \label{fig:x-t-graph_10ms}
+\end{figure}
+
+\begin{figure}[tbh]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_10ms_zoom.pdf}
+    \caption{
+    $x$ over $t$ graph of a transport experiment in the linear regime.
+    }
+    \label{fig:x-t-graph_10ms_zoom}
+\end{figure}
 
 \section{Transport of magnetic particles bound to proteins}
 A major step towards a useful \ac{LOC} system is to prove that \acp{MP} can, indeed, be distinguished in their transport properties once bound to molecules. 
