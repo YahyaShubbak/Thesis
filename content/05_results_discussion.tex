@@ -57,7 +57,7 @@ This is now observable as a large step which, in sum with the small step, will c
 \paragraph{Linear transport regime}
 In an $x$ over $t$ graph, the two steps are separated by a stationary phase. 
 Such a graph is presented in Figure \ref{fig:x-t-graph_100ms}.
-The red rectangle is shown as a zoom in in Figure \ref{fig:x-t-graph_100ms_zoom} to more clearly present the individual steps and how they are correlated with the alternating pulsed field sequence, depicted on top.
+The red rectangle is shown as a zoom in in Figure \ref{fig:x-t-graph_100ms_zoom} (b) to more clearly present the individual steps and how they are correlated with the alternating pulsed field sequence, depicted on top in (a).
 \begin{figure}[tbh]
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms.pdf}
@@ -69,15 +69,32 @@ The red rectangle is shown as a zoom in in Figure \ref{fig:x-t-graph_100ms_zoom}
 $\mathrm{T}$ is set to start arbitrarily at $t=\SI{2200}{ms}$ to include a full period in the scheme; however, the field sequence started before that. 
 Note that the ramp time transitioning between $\pm H_\mathrm{max}$ shown is exaggerated for visual purposes.
 A full period $\mathrm{T}$ containing the aforementioned small step starting at $t=\SI{2200}{ms}$, and the large step starting at $t=\SI{2300}{ms}$, is shown.
-The force equilibrium responsible for the directed transport is reached within nanoseconds (refer to theory or cite Holzinger?) which is not resolvable at the \si{ms} time scale the camera can provide.
-Therefore, the acceleration phase is assumed to be instantaneous.
-why not linear but gradual stop after field application?
-After the instantaneous acceleration, the particle moves linearly and is then decelerated before it comes to a stop at the adjacent \ac{DW}.
 $\mathrm{T} = \SI{400}{ms}$ can be nicely observed, since $\nicefrac{T}{4}=\SI{100}{ms}$. 
+
+
+The force equilibrium responsible for the directed transport is reached within nanoseconds (refer to theory or cite Holzinger?) which is not resolvable at the \si{ms} time scale the camera can provide.
+Therefore, the acceleration phase is assumed to be instantaneous and the force equilibrium between $F_\mathrm{m,x}$ and $\mathbf{F}_\mathrm{D}(z,t)$ is reached.
+The change from $+H_\mathrm{z, max}$ to $-H_\mathrm{z, max}$ pushes the \ac{MP} physically up the newly created potential energy maxima. 
+After the instantaneous acceleration, the particle moves linearly by falling down the potential well, and is then decelerated before it comes to a stop at the adjacent \ac{DW}.
+One explanation for the deceleration would be the change in height during a step as it falls:
+while falling, $f_\mathrm{D}$ increases as a funciton if $z$ accodring to Equation \ref{eq:f_D}, increasing $\mathbf{F}_\mathrm{D}(z,t)$ (Equation \ref{eq:drag_force}).
+$\Delta z$ is several \si{\micro\m}\cite{Huhnstock2022}, therefore significant enough for a change to be visible.
+Far away, that is, several $\si{\micro \m}$, $f_\mathrm{D}=1$, and will not influence the drag, thus a perceived linear velocity is observed. 
+Approaching the surface will increase $f_\mathrm{D}>1$, increasing Stokes' drag and deceleration is observed.  
+
+Further, an asymmetric stripe width is present.
+This is explained by the difference in \ch{He+}-ion bombarded stripes and those kept pristine. 
+After bombardement, this and that happenes, causing a broadening of one domain over the other.
+While $d$ is still $\SI{10}{\micro\m}$ within the error margin, individual stripes have an asymmetry.
+In the depicted case of Figure \ref{fig:x-t-graph_100ms_zoom}, the asyymetrie is 
+\begin{equation}
+    \text{Asymmetrie} = \frac{\text{Stripe}_1 - \text{Stripe}_2}{\text{Stripe}_1 + \text{Stripe}_2} = \frac{\SI{5.36}{\micro\m} - \SI{4.70}{\micro\m}}{\SI{5.36}{\micro\m} + \SI{4.70}{\micro\m}} = \SI{6.56}{\percent},
+\end{equation}
+and the bombarded stripe is wider than its unbombarded counterpart (see section He Bombardement). 
 
 \begin{figure}[tbh]
     \centering
-    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms_zoom.pdf}
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms_zoom_field_steps.pdf}
     \caption{
     $x$ over $t$ graph of a transport experiment in the linear regime.
     }
