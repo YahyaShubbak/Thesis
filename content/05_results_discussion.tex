@@ -57,7 +57,7 @@ This is now observable as a large step which, in sum with the small step, will c
 \paragraph{Linear transport regime}
 In an $x$ over $t$ graph, the two steps are separated by a stationary phase. 
 Such a graph is presented in Figure \ref{fig:x-t-graph_100ms}.
-The red rectangle is shown as a zoom in in Figure \ref{fig:x-t-graph_100ms_zoom} (b) to more clearly present the individual steps and how they are correlated with the alternating pulsed field sequence, depicted on top in (a).
+The red rectangle is shown as a zoom in in Figure \ref{fig:x-t-graph_100ms_zoom_velocity} (b) to more clearly present the individual steps and how they are correlated with the alternating pulsed field sequence, depicted on top in (a).
 \begin{figure}[tbh]
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms.pdf}
@@ -86,7 +86,7 @@ Further, an asymmetric stripe width is present.
 This is explained by the difference in \ch{He+}-ion bombarded stripes and those kept pristine. 
 After bombardement, this and that happenes, causing a broadening of one domain over the other.
 While $d$ is still $\SI{10}{\micro\m}$ within the error margin, individual stripes have an asymmetry.
-In the depicted case of Figure \ref{fig:x-t-graph_100ms_zoom}, the asyymetrie is 
+In the depicted case of Figure \ref{fig:x-t-graph_100ms_zoom_velocity}, the asyymetrie is 
 \begin{equation}
     \text{Asymmetrie} = \frac{\text{Stripe}_1 - \text{Stripe}_2}{\text{Stripe}_1 + \text{Stripe}_2} = \frac{\SI{5.36}{\micro\m} - \SI{4.70}{\micro\m}}{\SI{5.36}{\micro\m} + \SI{4.70}{\micro\m}} = \SI{6.56}{\percent},
 \end{equation}
@@ -97,10 +97,14 @@ and the bombarded stripe is wider than its unbombarded counterpart (see section 
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms_zoom_field_steps_velocity.pdf}
     \caption{
-    $x$ over $t$ graph of a transport experiment in the linear regime.
-    Smoothing via moving average with a window of \SI{20}{ms}.
+    (a) Magnetic pulse sequence for \ac{MP} transport. 
+    (b) $x$ over $t$ graph of a transport experiment in the linear regime of a single \ac{MP}.
+    Blue graph shows data, orange is smoothed data via a moving average with a window of \SI{20}{ms}.
+    More than a full period is shown where a \ac{MP} travels $\approx \SI{10}{\micro\m}$.
+    Due to the lithography process, one domain is widened by about \SI{7}{\percent}; this corresponds to the bombarded area.
+    (c) The derivative of the data (blue) and the smoothed data (red) is given.
     }
-    \label{fig:x-t-graph_100ms_zoom_velocity}
+    \label{fig:x-t-graph_100ms_zoom_velocity_velocity}
 \end{figure}
 
 
