@@ -62,7 +62,9 @@ The red rectangle is shown as a zoom in in Figure \ref{fig:x-t-graph_100ms_zoom_
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms.pdf}
     \caption{
-    $x$ over $t$ graph of a transport experiment in the linear regime.
+    $x$ over $t$ graph of a transport experiment in the linear regime of a single particle at \SI{2.5}{Hz}.
+    The \ac{MP} traveld the expected \SI{125}{\micro\m}.
+    Zoom in on the red rectangle shown in Figure \ref{fig:x-t-graph_100ms_zoom_velocity} (b).
     }
     \label{fig:x-t-graph_100ms}
 \end{figure}
@@ -80,14 +82,14 @@ One explanation for the deceleration would be the change in height during a step
 while falling, $f_\mathrm{D}$ increases as a funciton if $z$ accodring to Equation \ref{eq:f_D}, increasing $\mathbf{F}_\mathrm{D}(z,t)$ (Equation \ref{eq:drag_force}).
 $\Delta z$ is several \si{\micro\m}\cite{Huhnstock2022}, therefore significant enough for a change to be visible.
 Far away, that is, several $\si{\micro \m}$ above the surface, $f_\mathrm{D}=1$, and will not influence the drag, thus a perceived linear velocity is observed. 
-This is especially visible in Figure \ref{fig:x-t-graph_100ms_zoom_velocity} (c) in the derivative of the smoothed data at both large steps, that is, from \SI{2290}{ms} to \SI{2315}{ms} and \SI{2490}{ms} to \SI{2515}{ms}.  
 Approaching the surface will increase $f_\mathrm{D}>1$, increasing Stokes' drag and deceleration is observed.
 Qualitatively, this is closer to a linear rather than an exponential decay in velocity. 
-This further corroborates the deceleration due to drag increase rather than a decrease of magnetic field strength as the field gradient is left. 
+This is especially visible in Figure \ref{fig:x-t-graph_100ms_zoom_velocity} (c) in the derivative of the smoothed data at both large steps, that is, from \SI{2290}{ms} to \SI{2315}{ms} and \SI{2490}{ms} to \SI{2515}{ms}.  
+This further corroborates the deceleration due to drag increase rather than a decrease in magnetic field strength as the \ac{MP} moves sideways away from the greatest field gradient. 
 
 Further, an asymmetric stripe width is present.
 This is explained by the difference in \ch{He+}-ion bombarded stripes and those kept pristine. 
-After bombardement, this and that happenes, causing a broadening of one domain over the other.
+After bombardment, this and that happen, causing a broadening of one domain over the other.
 While $d$ is still $\SI{10}{\micro\m}$ within the error margin, individual stripes have an asymmetry.
 In the depicted case of Figure \ref{fig:x-t-graph_100ms_zoom_velocity}, the asyymetrie is 
 \begin{equation}
@@ -101,7 +103,7 @@ and the bombarded stripe is wider than its unbombarded counterpart (see section 
     \includegraphics[width=1\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms_zoom_field_steps_velocity.pdf}
     \caption{
     (a) Magnetic pulse sequence for \ac{MP} transport. 
-    (b) $x$ over $t$ graph of a transport experiment in the linear regime of a single \ac{MP}.
+    (b) $x$ over $t$ graph of a transport experiment in the linear regime of a single \ac{MP} at \SI{2.5}{Hz}.
     Blue graph shows data, orange is smoothed data via a moving average with a window of \SI{20}{ms}.
     More than a full period is shown where a \ac{MP} travels $\approx \SI{10}{\micro\m}$.
     Due to the lithography process, one domain is widened by about \SI{7}{\percent}; this corresponds to the bombarded area.
@@ -110,12 +112,45 @@ and the bombarded stripe is wider than its unbombarded counterpart (see section 
     \label{fig:x-t-graph_100ms_zoom_velocity}
 \end{figure}
 
+\paragraph{Non-linear regime}
+After the critical frequency $\nu_\mathrm{c}$, the mean ensemble velocity follows a decay according to Equation \ref{eq:velocity_regimes}, which can be seen in Figure \ref{fig:two_velocity_regimes}. 
+In this regime, \acp{MP} can have different behaviours, since in real-world applications \acp{MP} are not perfectly uniform.
+This means that larger \acp{MP} with more magnetic content might still be in the phase-locked regime and move parallel to the co-moving potential energy landscape, while slightly smaller ones experience slips back, and the smallest particles only oscillate above a given \ac{DW}.
+
+
+Slips back of one \ac{MP} can be seen in Figure \ref{fig:x-t-graph_20ms}. 
+If in the linear regime, the \ac{MP} could have traveld \SI{625}{\micro\m} in \SI{5}{s} at \SI{12.5}{Hz}, here the \ac{MP} only managed to cover $\approx\SI{175}{\micro\m}$.
+This is according to 
+\begin{equation}
+    x = \frac{t}{\mathrm{T/2}}\frac{d}{2} = t\cdot 2\nu \cdot  \frac{d}{2} = \SI{5000}{ms} \cdot  2\SI{12.5}{mHz} \cdot  \frac{\SI{10}{\micro\m}}{2}. 
+\end{equation}
+
+A feature of the driving software becomes visible.
+The phase relation between $H_\mathrm{x, max}$ and $H_\mathrm{z, max}$ is inverted after $\mathrm{T} =20$. 
+As a consequence, transport in the $+x$ direction is followed by transport in the $-x$ direction and so on.
+Since the video duration in this experiment series was fixed, this phase relation change is only visible after FIND OUT CALCULATION Hz.
+This is especially well visible when the observed \ac{MP} only oscillates above a \ac{DW}, as is the case in Figure \ref{fig:x-t-graph_20ms}.
+A \ac{MP} transported in $+x$ is concidered (Figure \ref{fig:x-t-graph_20ms} at $t=\SI{0}{ms}$) with the coordinate system placed that the center of it has its 0 point in the center of the \ac{DW}.
+The \ac{MP} resides above that \ac{DW}, with the effective field pushing it toward the $+x$-edge.
+It has too much inertia to follow the moving potential energy landscape and is only able to follow the change in $\pm H_\mathrm{x, max}$, leading to a back and forth movement above the point where it is pinned, of about \SI{1}{\micro\m}, visible as sharp peaks in the $x-t$-graph.
+This follows that with each $T/2$, that is, when $H_\mathrm{x, max}$ changes sign, the \ac{MP} is pushed from left to right. 
+Since this happens \SI{20}{T} times, a total of 20 peaks towards the $+x$ and 20 peaks towards $-x$ are visible.
+After that, the phze relation changes.
+Now the \ac{MP} is pushed to the $-x$ edge of the \ac{DW}.
+This is visible at $t\approx \SI{1100}{ms}$ as the \ac{MP} is covering a larger distance of about \SI{1.5}{\micro\m}.
+Then, the same scheme of \SI{1}{\micro\m} peaks happens for a total of 40 times before the phase relation changes once more. 
+
+Figure \ref{fig:x-t-graph_20ms_zoom} has $\mathrm{T}$ depicted.
+It demonstrates unpredictable behaviour as the number of slips back can not be predicted when the properties of the \acp{MP} vary.
+
 
 \begin{figure}[tbh]
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_20ms.pdf}
     \caption{
-    $x$ over $t$ graph of a transport experiment in the linear regime.
+    $x$ over $t$ graph of a transport experiment of a single particle in the non-linear regime at \SI{12.5}{Hz}.
+    Due to slips back, the \ac{MP} only travled $\approx\SI{175}{\micro\m}$ of the possible \SI{625}{\micro\m}.
+    Zoom in on the red rectangle shown in Figure \ref{fig:x-t-graph_20ms_zoom}.
     }
     \label{fig:x-t-graph_20ms}
 \end{figure}
@@ -124,16 +159,26 @@ and the bombarded stripe is wider than its unbombarded counterpart (see section 
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_20ms_zoom.pdf}
     \caption{
-    $x$ over $t$ graph of a transport experiment in the linear regime.
+    $x$ over $t$ graph of a transport experiment of a single particle in the non-linear regime at \SI{12.5}{Hz}.
     }
     \label{fig:x-t-graph_20ms_zoom}
 \end{figure}
 
 \begin{figure}[tbh]
     \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_20ms_2.pdf}
+    \caption{
+    $x$ over $t$ graph of a transport experiment of a single particle in the non-linear regime at \SI{12.5}{Hz}.
+    }
+    \label{fig:x-t-graph_20ms_2}
+\end{figure}
+
+\begin{figure}[tbh]
+    \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_10ms.pdf}
     \caption{
-    $x$ over $t$ graph of a transport experiment in the linear regime.
+    $x$ over $t$ graph of a transport experiment of a single particle in the non-linear regime at \SI{25}{Hz}.
+    Zoom in on the red rectangle shown in Figure \ref{fig:x-t-graph_10ms_zoom}.
     }
     \label{fig:x-t-graph_10ms}
 \end{figure}
@@ -142,19 +187,12 @@ and the bombarded stripe is wider than its unbombarded counterpart (see section 
     \centering
     \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_10ms_zoom.pdf}
     \caption{
-    $x$ over $t$ graph of a transport experiment in the linear regime.
+    $x$ over $t$ graph of a transport experiment of a single particle in the non-linear regime at \SI{25}{Hz}.
     }
     \label{fig:x-t-graph_10ms_zoom}
 \end{figure}
 
-\begin{figure}[tbh]
-    \centering
-    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_20ms_2.pdf}
-    \caption{
-    $x$ over $t$ graph of a transport experiment in the linear regime.
-    }
-    \label{fig:x-t-graph_20ms_2}
-\end{figure}
+
 
 \section{Transport of magnetic particles bound to proteins}
 A major step towards a useful \ac{LOC} system is to prove that \acp{MP} can, indeed, be distinguished in their transport properties once bound to molecules. 
