@@ -73,14 +73,17 @@ $\mathrm{T} = \SI{400}{ms}$ can be nicely observed, since $\nicefrac{T}{4}=\SI{1
 
 
 The force equilibrium responsible for the directed transport is reached within nanoseconds (refer to theory or cite Holzinger?) which is not resolvable at the \si{ms} time scale the camera can provide.
-Therefore, the acceleration phase is assumed to be instantaneous and the force equilibrium between $F_\mathrm{m,x}$ and $\mathbf{F}_\mathrm{D}(z,t)$ is reached.
+Therefore, the acceleration phase is assumed to be instantaneous and the force equilibrium between $F_\mathrm{m,x}$ and $\mathbf{F}_\mathrm{D}(z,t)$ is reached immediately.
 The change from $+H_\mathrm{z, max}$ to $-H_\mathrm{z, max}$ pushes the \ac{MP} physically up the newly created potential energy maxima. 
 After the instantaneous acceleration, the particle moves linearly by falling down the potential well, and is then decelerated before it comes to a stop at the adjacent \ac{DW}.
 One explanation for the deceleration would be the change in height during a step as it falls:
 while falling, $f_\mathrm{D}$ increases as a funciton if $z$ accodring to Equation \ref{eq:f_D}, increasing $\mathbf{F}_\mathrm{D}(z,t)$ (Equation \ref{eq:drag_force}).
 $\Delta z$ is several \si{\micro\m}\cite{Huhnstock2022}, therefore significant enough for a change to be visible.
-Far away, that is, several $\si{\micro \m}$, $f_\mathrm{D}=1$, and will not influence the drag, thus a perceived linear velocity is observed. 
-Approaching the surface will increase $f_\mathrm{D}>1$, increasing Stokes' drag and deceleration is observed.  
+Far away, that is, several $\si{\micro \m}$ above the surface, $f_\mathrm{D}=1$, and will not influence the drag, thus a perceived linear velocity is observed. 
+This is especially visible in Figure \ref{fig:x-t-graph_100ms_zoom_velocity} (c) in the derivative of the smoothed data at both large steps, that is, freom \SI{2290}{ms} to \SI{2315}{ms} and \SI{2490}{ms} to \SI{2515}{ms}.  
+Approaching the surface will increase $f_\mathrm{D}>1$, increasing Stokes' drag and deceleration is observed.
+Qualitatively, this is closer to a linear rather than an exponential decay in velocity. 
+This further corroborates the deceleration due to drag increase rather than a decrease of magnetic field strength as the field gradient is left. 
 
 Further, an asymmetric stripe width is present.
 This is explained by the difference in \ch{He+}-ion bombarded stripes and those kept pristine. 
@@ -95,7 +98,7 @@ and the bombarded stripe is wider than its unbombarded counterpart (see section 
 
 \begin{figure}[tbh]
     \centering
-    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms_zoom_field_steps_velocity.pdf}
+    \includegraphics[width=1\linewidth]{Abbildungen/Evaluation/x_t_COOH_100ms_zoom_field_steps_velocity.pdf}
     \caption{
     (a) Magnetic pulse sequence for \ac{MP} transport. 
     (b) $x$ over $t$ graph of a transport experiment in the linear regime of a single \ac{MP}.
@@ -104,7 +107,7 @@ and the bombarded stripe is wider than its unbombarded counterpart (see section 
     Due to the lithography process, one domain is widened by about \SI{7}{\percent}; this corresponds to the bombarded area.
     (c) The derivative of the data (blue) and the smoothed data (red) is given.
     }
-    \label{fig:x-t-graph_100ms_zoom_velocity_velocity}
+    \label{fig:x-t-graph_100ms_zoom_velocity}
 \end{figure}
 
 
