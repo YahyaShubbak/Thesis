@@ -53,7 +53,7 @@ This Brownian motion Ansatz then works with the \verb|search range| to allow for
 The result is a table in H5 format containing \verb|frame|, \verb|x|, and \verb|y| position per given particle.
 From that, a map of all trajectories can be plotted, which can be seen in Fig. \ref{fig:Traj_no_filter}.
 
-\paragraph{Mean particle velocity - or trajectory maps}
+\paragraph{Filtering steps}\label{paragraph:trackpy_filtering}
 To evaluate the velocity, two conversion factors are implemented, as the temporal information is given in frames rather than seconds, and the spatial information in pixels, rather than (micro)meters.  
 Conversion to seconds is self-explanatory, as the chosen frame rate of 1000 FPS translates to a temporal resolution of 1 millisecond per frame. 
 To convert from pixels to micrometers, the pixel pitch resulting from the combination of the camera sensor and microscope objective must be measured.
@@ -90,9 +90,9 @@ This could have been avoided if a smaller density of MPs had been chosen for the
 
 Alongside the fragmentation, which is caused by the linking algorithm of \verb|trackpy|, Fig. \ref{fig:Traj_2000filter} shows a physical artifact as well.
 Even after filtering for short temporal trajectories, short spatial trajectories remain.
-These are essential in the non-linear regime where MPs can not follow the moving potential energy landscape linearly, some are only oscillating above a DW. 
-In the linear regime, however (Eq. TODO), MPs do not perform any oscillatory motion around a DW and do follow the changing potential energy landscape.
-Trajectories should therefore have the length in accordance with Eq. TODO with the given duration of \SI{5}{\s} and a period length $d=\SI{10}{\micro\m}$ be \SI{150.6}{\micro\m}.
+These are essential in the non-linear regime where MPs can not follow the moving potential energy landscape linearly; some are only oscillating above a DW. 
+In the linear regime, however (Equation \ref{eq:velocity_regimes}), MPs do not perform any oscillatory motion around a DW and do follow the changing potential energy landscape.
+Trajectories should therefore have the length in accordance with Equation \ref{eq:traj_length} with the given duration of \SI{5}{\s} at \SI{3.01}{Hz} and a period length $d=\SI{10}{\micro\m}$ be \SI{150.5}{\micro\m}.
 This, of course, is only true for MPs who are present for the whole duration, e.g., in an initial left-to-right transport (positive $x-$direction), MPs start near $x=0$ and move to higher $x$ before the phase relation change flips the transport direction, and the MPs are transported back.
 Shorter trajectories are possible if MPs leave the ROI by starting at a higher $x$, or enter it at a given time.
 However, short trajectories that present themselves as circles are, at least in the linear regime, actually pinned and therefore falsely lower the mean velocity of the ensemble in the linear regime.
