@@ -52,9 +52,10 @@ This initial transformation of the energy landscape pushes the \ac{MP} for a sho
 Then, the applied $z$ field changes polarity, and the superposition of the magnetic fields creates new minima at the adjacent \ac{DW}.
 Accordingly, an energy maximum is now present at the \ac{DW} where the \ac{MP} was residing, which pushes the particle physically up.
 Since the landscape is slightly skewed in the direction of transport by the applied $x$ field, the \ac{MP} does not randomly fall onto one or the other adjacent potential minima, but it has a preferred direction along $x$.
-This is now observable as a large step which, in sum with the small step, will cover $\nicefrac{1}{2}d$, that is, the distance from one \ac{DW} to the next.
+This is now observable as a large step which, in sum with the small step, will cover $\frac{1}{2}d$, that is, the distance from one \ac{DW} to the next.
 
 \paragraph{Linear transport regime}
+When driving frequencies below a certain value are applied, and the \acp{MP} are able to closely follow the dynamically changing potential energy landscape, i.e., the \acp{MP} are in the phase locked regime, the mean velocity of the \acp{MP} increase lineraly accoding to Equation \ref{eq:velocity_regimes}.  
 In an $x$ over $t$ graph, the two steps are separated by a stationary phase. 
 Such a graph is presented in Figure \ref{fig:x-t-graph_100ms}.
 The red rectangle is shown as a zoom in in Figure \ref{fig:x-t-graph_100ms_zoom_velocity} (b) to more clearly present the individual steps and how they are correlated with the alternating pulsed field sequence, depicted on top in (a).
@@ -119,11 +120,12 @@ This means that larger \acp{MP} with more magnetic content might still be in the
 
 
 Slips back of one \ac{MP} can be seen in Figure \ref{fig:x-t-graph_20ms}. 
-If in the linear regime, the \ac{MP} could have traveld \SI{625}{\micro\m} in \SI{5}{s} at \SI{12.5}{Hz}, here the \ac{MP} only managed to cover $\approx\SI{175}{\micro\m}$.
-This is according to 
-\begin{equation}
-    x = \frac{t}{\mathrm{T/2}}\frac{d}{2} = t\cdot 2\nu \cdot  \frac{d}{2} = \SI{5000}{ms} \cdot  2\SI{12.5}{mHz} \cdot  \frac{\SI{10}{\micro\m}}{2}. 
+If in the linear regime, the \ac{MP} could have traveld \SI{625}{\micro\m} in \SI{5}{s} at \SI{12.5}{Hz} according to  
+\begin{equation}\label{eq:traj_length}
+    x = \frac{t}{\mathrm{T/2}}\frac{d}{2} = t\cdot 2\nu \cdot  \frac{d}{2} = \SI{5000}{ms} \cdot  2 \cdot \SI{12.5}{mHz} \cdot  \frac{\SI{10}{\micro\m}}{2} = \SI{625}{\micro \m}. 
 \end{equation}
+Due to the afformentoined slips, the \ac{MP} only managed to cover $\approx\SI{175}{\micro\m}$.
+
 
 A feature of the driving software becomes visible.
 The phase relation between $H_\mathrm{x, max}$ and $H_\mathrm{z, max}$ is inverted after $\mathrm{T} =20$. 
@@ -142,7 +144,6 @@ Then, the same scheme of \SI{1}{\micro\m} peaks happens for a total of 40 times 
 
 Figure \ref{fig:x-t-graph_20ms_zoom} has $\mathrm{T}$ depicted.
 It demonstrates unpredictable behaviour as the number of slips back can not be predicted when the properties of the \acp{MP} vary.
-
 
 \begin{figure}[tbh]
     \centering
@@ -192,7 +193,26 @@ It demonstrates unpredictable behaviour as the number of slips back can not be p
     \label{fig:x-t-graph_10ms_zoom}
 \end{figure}
 
-
+\paragraph{Velocity calcullation}
+To calculate the velocity, filtering steps are performed as described in Paragraph Filtering steps of Chapter \ref{paragraph:trackpy_filtering}.
+Then, $\frac{dx}{dt}$ is derived for a given trajectory of an \ac{MP} - this is the mean velocity $\left< v \right>$ of one \ac{MP} across the duration $t$.
+The mean of $\left< v \right>$ of all \acp{MP} gives then the mean of the mean $\left< \left< v \right> \right>$ from which also the number of velocity measurements is derived.
+Done for all given driving frequencies $\nu$ yields the $\left< \left< v \right> \right>$ over $\nu$ graph that can be seen in Figure \ref{fig:MeanVelocityCOOHNH2}.
+The number of velocity measurements per frequency is given as a color map represented in each data point.
+Finally, to infer $\nu_\mathrm{c}$ from the graph, Equation \ref{eq:velocity_regimes} is fitted by separating the data points into the linear fit and the decaying regime and approaching with a least square fit the best parameters.
+This yields $\nu_\mathrm{c}$ per graph, which is also given in the figure.
+\begin{figure}[tbhp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Evaluation/MeanVelocityCOOHNH2.pdf}
+    \caption{
+            Mean transport velocities $\left<\left< v \right>\right>(\nu)$ for the two differently surface-functionalized \ac{MP} types averaged over the number of tracked \acp{MP} as a function of the external driving frequency $\nu$.
+            The one-parameter fits to the theoretical model of Equation~\ref{eq:velocity_regimes} are shown by dashed and dashed-dotted lines for COOH-functionalization and \ch{NH2}-functionalization \acp{MP}, respectively.
+            $\nu_\mathrm{c}$ determined by the fit are marked by dotted vertical lines.
+            The number of tracked \acp{MP} ranges between 110 and 340 for \ch{COOH} and 210 and 540 for \ch{NH2}.
+            The color-map shows how many velocity measurements $n_\mathrm{v}$ are included in each $\left<\left< v \right>\right>$ data point.     
+            }
+    \label{fig:MeanVelocityCOOHNH2}
+\end{figure}
 
 \section{Transport of magnetic particles bound to proteins}
 A major step towards a useful \ac{LOC} system is to prove that \acp{MP} can, indeed, be distinguished in their transport properties once bound to molecules. 
