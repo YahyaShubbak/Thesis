@@ -155,7 +155,7 @@ Since the temperature changes the viscosity of the medium, the cuvette is kept a
 Measurement is then conducted three times, which leads to an overall accurate value. 
 
 Zeta potentials were measured for a variety of particles and solution combinations.
-The Result of which can be found in Figure \ref{fig:zeta_plot}.
+The results of which can be found in Figure \ref{fig:zeta_plot}.
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Abbildungen/Experimental/zeta_potential_legend.png}
@@ -166,28 +166,7 @@ The Result of which can be found in Figure \ref{fig:zeta_plot}.
 \end{figure}
 
 \section{BSA protocol}
-\acp{MP} that are designed to bind to proteins such as \ac{BSA} are, for example, Thermo Fisher Dynabeads™ M-270 Carboxylic Acid.
-Carboxylic acid, as the particle's functional surface group, can form an amide bond with a primary amino group of the protein.
-The concentration of the stock suspension of the M-270 Carboxylic Acid beads is $c=\SI{2e9}{beads\per(\milli\L))}$.
 
-For binding \ac{BSA} to the M-270 Carboxylic Acid particles, the coupling protocol of the manufacturer was followed and slightly tweaked.
-It consists of a one-step coating procedure with several washing steps and is mediated by carbodiimide activation.
-The steps were the following:
-
-1. A buffer solution of \SI{10}{\milli\mole\per\L} \ac{HEPES} and \SI{150}{\milli\mole\per\L} \ac{NaCl} was angesetzt and kept cold. 
-\SI{40}{\micro\L} buffer was added to an \SI{1.5}{\m\L} Eppendorf tube.
-The reason the solution is kept cold for the entire reaction is...
-2. \SI{20}{\micro\L} bead suspension from stock was added to the \ac{HEPES}
-3. The suspension was washed by vortexing the beads and the \ac{HEPES} \SIrange{3}{5}{\s} for a minimum of three times within a \SI{10}{min} time window, the Eppendorf tube was then put into a magentic rack to attract the beads to allow the removal of the supernatant with a pipette.
-\SI{40}{\micro\L} \ac{HEPES} was added again to repeat the washing three times.
-4. The third time supernatant is removed, the \acp{MP} are resuspended in \SI{50}{\micro\L} BSA solution of \SI{0.1}{\m\g\per(\m\L)} concentration with \SI{20}{\micro\L} \ac{HEPES}.
-To this, \SI{50}{\micro\L} of cold coupeling agend \ac{EDC} is added.
-This allows for reaction xy to tace place which couples the N of amines to the O of the COOH.
-Here, \ac{EDC} is kept cold, because of...
-The suspension was incubated for 3 hours or overnight with \SI{10}{\s} vortexing for three times in the first three hours.
-5. The suspension was then washed three times as described in step 3 but with \SI{120}{\micro\L} \ac{HEPES}, and finally resuspended in \SI{100}{\micro\L} \ac{HEPES}. 
-This is now the stock suspension of \acp{MP} with \ac{BSA} with a particle concentration of $c=\SI{4e8}{beads\per(\milli\L)}$.
-For use, \SI{1}{\micro\L} stock suspension is added to \SI{190}{\micro\L} \ac{HEPES} buffer and \SI{10}{\micro\L} \SI{2}{\percent} polysorbate 20, commercially known as TWEEN 20, which is a non-ionic surfactant, giving a final bead concentration of $c=\SI{2e6}{beads\per(\milli\L)}$ with \SI{0.1}{\percent} TWEEN 20.
 
 \paragraph{EDC/NHS activation}\label{paragraph:EDC_NHS_activation}
 To couple proteins to the \acp{MP}, the carboxygroup of the particle's surface is brought into reaction with an aminegroup of the protein.
@@ -212,20 +191,28 @@ In that, the amine acts as a nucleophile towards the activated ester carbonyl, p
 \end{figure}
 
 \paragraph{Coupeling protocoll}
-1. \SI{40}{\micro\L} \ac{MES} buffer with c= and pH= is used to wash the \ac{MP}.
-This buffer is used because of its slightly acidic pH value of xxx which helps stabilize the carbodiimid coupling reaction\cite{Fischer2010}, while also containing no primary amines that compete with the \ac{EDC} and hence produce fewer side reactions. 
+\acp{MP} that are designed to bind to proteins such as \ac{BSA} are, for example, Thermo Fisher Dynabeads™ M-270 Carboxylic Acid.
+Carboxylic acid, as the particle's functional surface group, can form an amide bond with a primary amino group of the protein.
+The concentration of the stock suspension of the M-270 Carboxylic Acid beads is $c=\SI{2e9}{beads\per(\milli\L))}$.
+
+For binding \ac{BSA} to the M-270 Carboxylic Acid particles, the coupling protocol of the manufacturer was followed and slightly tweaked.
+It consists of a one-step coating procedure with several washing steps and is mediated by carbodiimide activation.
+The steps were the following:
+1. \SI{100}{\micro\L} \ac{MES} buffer with $c=\SI{25}{mMol\per\L}$ and pH$\,=5.5$ at \SI{21.5}{\celsius} is used to wash the \ac{MP}.
+This buffer is used because of its acidic pH value, which helps stabilize the carbodiimide coupling reaction\cite{Fischer2010}, while also containing no primary amines that compete with the \ac{EDC} and hence produce fewer side reactions. 
 This removes the aqueous solution of the stock where the \ac{MP} are stored.
-For that, the \ac{MP} stock solution is vortexed to resuspend the particles, then \SI{20}{\micro\L} is pipetted to a micro container.
-\ac{MES} is added, the solution is vortext.
-Afterwards, a magnet is placed at the side of the container to collect the \acp{MP} there, which allows for safe disposal of the supernant.
+For that, the \ac{MP} stock solution is vortexed to resuspend the particles, then \SI{100}{\micro\L} is pipetted to a micro container.
+\ac{MES} is added, and the solution is vortexed.
+Afterwards, a magnet is placed at the side of the container to collect the \acp{MP} there, which allows for safe disposal of the supernatant.
 This is repeated three times.
-2. \SI{50}{\micro\L} \ac{EDC} and \ac{NHS} with $c=$ are added. 
-3. After a 10-20 min incubation period, the solution is washed again with \ac{MES} to remove excess \ac{EDC} and \ac{NHS} and the byproducts(see \ref{paragraph:EDC_NHS_activation}).
-This has to be done quickly beacuse of the hydrolysis of the \ac{NHS}-ester that reacts with water to the starting product of a carboxygroup and \ac{NHS}. 
-4. \SI{50}{\micro\L} of a $c=\SI{1}{\milli\g\per\milli\L}$ \ac{BSA} solution is added and is mixed by pulling into and pushing out of the pipette three times.
-The solution is allowed to react for 60 minutes at \ac{RT} or overnight at \SI{4}{\celsius}.
-5. Another washing step with \SI{40}{\micro\L} \ac{MES} removes any unbound \ac{BSA}.
-6. Ethanolamine is added to quench the reaction.
-7. A final washing with $3\times\SI{120}{\micro\L}$ \ac{HEPES} removes any unwanted chemicals while bringing the pH to physiological conditions of 7.3.
-8. The supernatant is removed a final time, and the beads are resuspended in \SI{100}{\micro\L} \ac{HEPES}, creating the stock solution to work with.
-For transport experiment, \SI{1}{\micro\L} of the new stock solution is added to a solution of \SI{190}{\micro\L} \ac{HEPES} with TWEEN, with a TWEEN concentration of \SI{0.05}{\percent}.
+2. \SI{50}{\micro\L} \ac{EDC} and \ac{NHS} with $c=$ are added together into a microcontainer; the mixture is then added to the dry beads to resuspend them. 
+3. After a 10-minute incubation period with slow tilt rotation, the solution is washed again with \ac{MES} to remove excess \ac{EDC} and \ac{NHS} and the byproducts(see \ref{paragraph:EDC_NHS_activation}).
+This has to be done quickly because of the hydrolysis of the \ac{NHS}-ester that reacts with water to the starting product of a carboxygroup and \ac{NHS}. 
+4. \SI{60}{\micro\L} of a $c=\SI{1}{\milli\g\per\milli\L}$ \ac{BSA} solution is added and mixed by pulling into and pushing out of the pipette three times.
+It is important at this stage not to use the vortexer as the process is too violent and can cause the proteins to denature.
+The solution is allowed to react for 30 minutes at \ac{RT} or overnight at \SI{4}{\celsius} with slow tilt rotation.
+5. Another washing step with \SI{100}{\micro\L} \ac{MES} and \SI{0.1}{\percent} TWEEN 20 removes any unbound \ac{BSA}.
+6. Ethanolamine is added to quench the reaction for 60 minutes with slow tilt rotation.
+7. A final washing with $4\times\SI{100}{\micro\L}$ \ac{PBS} removes any unwanted chemicals while bringing the pH to physiological conditions of around 7.4.
+8. The supernatant is removed a final time, and the beads are resuspended in \SI{100}{\micro\L} \ac{PBS}, creating the stock solution to work with.
+For the transport experiment, \SI{1}{\micro\L} of the new stock solution is added to a solution of \SI{950}{\micro\L} \ac{PBS} with \SI{0.1}{\percent} TWEEN.
