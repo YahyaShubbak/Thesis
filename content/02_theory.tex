@@ -169,7 +169,7 @@ When the \ac{MP} sees the magnetic field emerging from the \ac{MFL}, the potenti
     U_\mathrm{P}(x,z) = -\mu_0 \mathbf{m_\mathrm{MP}}(x,z) \mathbf{H}(x,z), 
 \end{equation}
 where $\mu_0$ is the vacuum permeability.
-It becomes apparent that $U_\mathrm{P}(x,z)$ is smallest where $\mathbf{H}(x,z)$ is largest, which is where the magnetic stray fields emerge from the substrate, that is, at the \acp{DW}.
+It becomes apparent that $U_\mathrm{P}(x,z)$ is smallest where $\mathbf{H}(x,z)$ is largest, which is where the magnetic stray fields emerge from the substrate, that is, at the \acp{DW} for domain pattern-based particle transport.
 
 The magnetic force exerted on the superparamagnetic bead in the direction of motion $x$ is given by 
 \begin{equation}
@@ -287,7 +287,7 @@ Rewriting Equation \ref{eq:H_eff_Arno} in a more general form to include variati
     \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \begin{bmatrix}
         B \sin(kx) + H_\mathrm{ext,x,0}\sin(2\pi\nu_\mathrm{x} t) \\
         0 \\
-        B \cos(kx) + H_\mathrm{ext,x,0}\sin(2\pi\nu_\mathrm{z} t + \delta_\mathrm{zx})
+        B \cos(kx) + H_\mathrm{ext,z,0}\sin(2\pi\nu_\mathrm{z} t + \delta_\mathrm{zx})
     \end{bmatrix}.
 \end{equation}
 As Equation \ref{eq:pulsed_dTWM} implies and shown in Figure \ref{fig:exp_setup} (b), different pulse amplitudes in $H_\mathrm{ext,x,0}$ and $H_\mathrm{ext,z,0}$ are possible, as well as differeing the frequencies $\nu_\mathrm{x}$ and $\nu_\mathrm{z}$ and the phase relation $\delta_\mathrm{zx}$ between them. 
@@ -296,7 +296,7 @@ For this work, $\delta_\mathrm{zx}$ was kept at a constant $\SI{90}{\degree}$ sh
     \mathbf{H}_\mathrm{eff}(x,y,z_0,t) = \begin{bmatrix}
         B \sin(kx) + H_\mathrm{ext,x,0}\sin(2\pi\nu_\mathrm{x} t) \\
         0 \\
-        B \cos(kx) + H_\mathrm{ext,x,0}\cos(2\pi\nu_\mathrm{z} t )
+        B \cos(kx) + H_\mathrm{ext,z,0}\cos(2\pi\nu_\mathrm{z} t )
     \end{bmatrix}.
 \end{equation}
 With Equation \ref{eq:pulsed_dTWM_no_phase_variation}, the dynamic potential energy landscape for pulsed fields can be written as\cite{Ehresmann2026}
