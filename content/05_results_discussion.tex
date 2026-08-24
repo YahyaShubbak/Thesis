@@ -1,11 +1,24 @@
 % !TEX root = ../thesis.tex
 % \chapter{Results and discussion}
 \chapter{Surface-surface interaction based separation of magnetic particles}
-\section{Characterization of superparamagnetic particles}
-\subsection{Zeta potential}
+\section{Static characteristics of magnetic particles}
 
-\subsection{Magnetophoretic velocity}
-To ensure the \acp{MP} of different chemical functionalization have the same magnetic content and differences in the mean velocity are solely based on the electrostatic interactions, the magnetophoretic velocity far away from any wall has been measured.
+\subsection{Zeta surface potential}
+Zeta potentials were measured for a variety of particles and solution combinations.
+The results of which can be found in Figure \ref{fig:zeta_plot}.
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Abbildungen/Experimental/zeta_potential_legend.png}
+    \caption{
+            Zetapotential
+                            }
+    \label{fig:zeta_plot}
+\end{figure}
+
+\subsection{Absolute height above substrate surface}
+\section{Motion characteristics of magnetic particles in dependence on surface chemistry}
+\subsection{Without substrate surface}
+To ensure the \acp{MP} of different chemical functionalizations have the same magnetic content and differences in the mean velocity are solely based on the electrostatic interactions, the magnetophoretic velocity far away from any wall has been measured.
 This ensures that no surface-surface interaction occurs, and the velocity measured is based on the magnetic content.
 To do so, a large fluid chamber was 3D printed where the \ac{MP} solution was placed of $\qtyproduct{11 x 11 x 2}{\milli\meter}$ with a bar magnet attached to one wall, which can be seen in \textbf{Figure \ref{fig:mag_phor_velocity_with_mag_field}} (b).
 
@@ -33,8 +46,7 @@ A total of 442 trajectories for \ch{COOH} and 155 trajectories for \ch{NH2} func
 At a distance of \SI{2}{mm} away from the magnet surface, i.e., at \SI{88.0}{\mT}, $\left< \left< u_\mathrm{COOH} \right> \right> = \SI{149\pm16}{\micro\m\per\s}$ and $\left< \left< u_\mathrm{NH2} \right> \right> = \SI{151\pm14}{\micro\m\per\s}$ were found. 
 The resulting $\chi_\mathrm{MP}$ are $\chi_\mathrm{\ch{COOH}} = 0.26\pm0.01$ and $\chi_\mathrm{\ch{NH2}} = 0.26\pm0.01$, which is comparable to literature\cite{Grob2018}.
 
-\section{Transport dynamics close to the surface}
-\subsection{Mean ensemble velocity}\label{subsection:mean_velocity}
+\subsection{Close to substrate surface}\label{subsection:mean_velocity}
 In this Section, the mean velocity $\left< v \right>$ of the particle ensemble transported close to the substrate's surface will be the main focus. 
 It will be presented how the mean velocity is calculated considering a constant video duration, but with a varying number of steps each particle can take, or with a constant number of steps but, therefore, a varying video duration.
 It will be shown that keeping the number of steps constant has benefits while granting a reasonably high statistic.
@@ -217,6 +229,16 @@ using the standard error of the mean ($SEM$) multiplied by the critical value $Z
             }
     \label{fig:MeanVelocityCOOHNH2}
 \end{figure}
+
+
+\section{Motion characteristics of magnetic particles in dependence on protein attachment}
+\subsection{Without substrate surface}
+\subsection{Close to substrate surface}
+
+\section{Motion characteristics of magnetic beads in dependence on substrate surface properties}%Au vs Si vs PMMA, Tissue
+
+
+
 
 \section{Transport of magnetic particles bound to proteins}
 A major step towards a useful \ac{LOC} system is to prove that \acp{MP} can, indeed, be distinguished in their transport properties once bound to molecules. 
