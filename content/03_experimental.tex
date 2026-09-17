@@ -5,6 +5,34 @@ First, the particle transport setup will be discussed which is the core machine 
 Then...
 Last...
 
+\section{Experimental optimization for critical frequency}
+The experimental design should be tuned to the planned investigation.
+Since the separation of particles with nominally the same size, mass, and magnetic content is at the core of this thesis, a maximization of the critical frequency $\nu_\mathrm{c}$ is desirable.
+The Stellschrauben are the transport substrate, the aqueous medium in which the particles are suspended, and the particles themselves.
+With Equation \ref{eq:critical_frequency}, $\nu_\mathrm{c} \propto (2\pi \beta)^2\exp(-2\pi \beta)$ with $\beta = r/d$.
+This means that, for a fixed radius $r$ of the \ac{MP}, $d$ can be optimized for the largest $\beta$.
+To get the maxima, the derivative of $\beta$ must be performed and set to 0.
+\begin{align}
+    \nu_\mathrm{c}(\beta) &= (2\pi \beta)^2\exp(-2\pi \beta)\\ 
+    \nu_\mathrm{c}(\beta) &= 4\pi^2 \beta^2 \exp(-2\pi\beta)\\
+    \frac{d \nu_\mathrm{c}}{d \beta}&= 4 \pi^2 [2 \beta \exp(-2 \pi \beta) + \beta^2 (-2\pi)\exp(-2\pi \beta)]\\
+    \frac{d \nu_\mathrm{c}}{d \beta}&= 4\pi^2 \beta \exp(-2\pi \beta) (2-2\pi \beta)\\
+    0&= 4\pi^2 \beta \exp(-2\pi \beta) (2-2\pi \beta)\\
+    0&= 2-2\pi \beta \\
+    \beta_\mathrm{max} &= \frac{1}{\pi} \approx 0.318,
+\end{align}
+since $r>0$ and $\exp(-2\pi\beta)>0$.
+For the \acp{MP} at hand, that is, $r_\mathrm{micromer} = \SI{1.0}{\micro\m}$ and $r_\mathrm{dynabeads} = \SI{1.4}{\micro\m}$, we optimize for $d$ with
+\begin{align}
+    \beta_\mathrm{max} &= \frac{1}{\pi}\\
+    \frac{r}{d_\mathrm{opt}} &= \frac{1}{\pi}\\
+    d_\mathrm{opt} &= \pi d_\mathrm{opt}
+\end{align}
+and get $d_\mathrm{opt, micromer} = \SI{3.14}{\micro\meter}$ and $d_\mathrm{opt, dynabeads} = \SI{4.40}{\micro\meter}$.
+
+For the used magnetic layer system of 30 nm IrMn, 10 nm CoFe, Gaul and coworkers have found that $d<\SI{4}{\micro\m}$ produce vanishing magnetic plateau like structures that make the \ac{DW} distingushable from the domain center \cite{Gaul2018}.
+At $d<\SI{4}{\micro\m}$, crosstalk between neighboring \acp{DW} is significant\cite{Gaul2018}, therefore an optimal $d$ for this layer system is kept at $\SI{4}{\micro\m}$.
+%TODO why is then the largest nu c in the plot from arnos theory given at d = 5 µm for r=1µm MPs?
 
 \section{Particle transport setup}
 %%%%% Intro
@@ -181,7 +209,7 @@ In that, the amine acts as a nucleophile towards the activated ester carbonyl, p
     \label{fig:reaction_COOH-Protein}
 \end{figure}
 
-\paragraph{Coupeling protocoll}
+\paragraph{Coupling protocol}
 \acp{MP} that are designed to bind to proteins such as \ac{BSA} are, for example, Thermo Fisher Dynabeads™ M-270 Carboxylic Acid.
 Carboxylic acid, as the particle's functional surface group, can form an amide bond with a primary amino group of the protein.
 The concentration of the stock suspension of the M-270 Carboxylic Acid beads is $c=\SI{2e9}{beads\per(\milli\L))}$.
