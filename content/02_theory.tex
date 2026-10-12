@@ -108,15 +108,17 @@ For now, the linearized Poisson-Boltzmann equation leads to a surface potential 
 \end{equation}
 containing $\kappa$ 
 \begin{equation}\label{eq:kappa}
-    \kappa = \sqrt{\frac{2 c_0 e^2}{\epsilon_{\mathrm{0}} \epsilon_{\mathrm{r}} k_{\mathrm{B}}T}},
+    \kappa = \sqrt{\frac{2 c_0 e^2}{\epsilon_{\mathrm{0}} \epsilon_{\mathrm{r}} k_{\mathrm{B}}T}} = \sqrt{\frac{2000 N_\mathrm{A} e^2 I}{\epsilon_{\mathrm{0}} \epsilon_{\mathrm{r}} k_{\mathrm{B}}T}}, 
 \end{equation}
-with the bulk concentration of the salt $c_0$, the elementary charge $e$, $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, the Boltzmann constant $k_{\mathrm{B}}$, and temperature $T$ \cite{Butt2018}.
+with the bulk concentration of the salt $c_0$, the elementary charge $e$, $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, the Boltzmann constant $k_{\mathrm{B}}$, the ionic strength $I$, the Avogadro number $N_\mathrm{A}$, and temperature $T$ \cite{Butt2018, WirixSpeetjens2005}.
+The factor of 1000 converts from \si{mol/L} to \si{mol/\cubic\m} \cite{WirixSpeetjens2005}.
+
 The electrical double layer is depicted in Figure \ref{fig:double_layer} with a purple arrow.
 The blue arrow shows the diffuse layer, which incorporates the loosely bound ions, counteracting the Stern layer.  
 Note that the \ac{PMMA} surface also has its electrical double layer; ions constituting the Stern layer and slipping plane are depicted faintly in Figure \ref{fig:double_layer} so as not to overwhelm the scheme.  
-The inverse of $\kappa$ is called Debye length $\lambda_\mathrm{D} = \kappa^{-1}$ and describes the decay length of the potential decrease from the surface, which for a monovalent salt such as \ch{NaCl} and at \SI{25}{\celsius} is \cite{Butt2018}
-\begin{equation}
-    \lambda_\mathrm{D} = \frac{\SI{3.04}{\angstrom}}{\sqrt{c_0 \SI{1}{\per\mol}}}. 
+The inverse of $\kappa$ is called Debye length $\lambda_\mathrm{D} = \kappa^{-1}$ and describes the decay length of the potential decrease from the surface, which, for a monovalent salt such as \ch{NaCl} dissolved in distilled water and at \SI{25}{\celsius}, is \cite{Butt2018}
+\begin{equation}\label{eq:Debye_length}
+    \lambda_\mathrm{D} = \frac{\SI{3.04}{\angstrom}}{\sqrt{I\, \si{\liter\per\mol}}} . 
 \end{equation}
 From Equation \ref{eq:kappa} follows that a higher salt concentration increases $\kappa$, which decreases the Debye length;
 A graph of the potential over distance for three different salt concentrations is shown in Figure \ref{fig:potential_vs_x}
@@ -133,7 +135,33 @@ A graph of the potential over distance for three different salt concentrations i
 % \begin{equation}
 %     \frac{1}{2}\sum_i c_\mathrm{i} z_\mathrm{i}^2,
 % \end{equation}
-% with the charge $z$, increases the potential 
+% with the charge $z$, increases the potential
+The ionic strength $I$ can be calculated by\cite{Atkins2006}
+\begin{equation}\label{eq:Ionic_strength}
+    I=\tfrac12\sum_i c_i z_i^{2}
+\end{equation}
+An example of several Debye lengths resulting from Equation \ref{eq:Debye_length} is depicted in Figure \ref{fig:dlvo_debye_length_vs_ionic_strength}, where, on a log-log graph, the solid blue line (gerade?) is the Debye length from \SI{0.1}{\micro M} to \SI{1}{M} with several liquids marked.   
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Abbildungen/Theory/dlvo_debye_length_vs_ionic_strength.pdf}
+    \caption{  
+            $\kappa^{-1}$ from \SI{0.1}{\micro M} to \SI{1}{M} with pure distilled water, air-equilibrated water, a monovalent salt at \SI{1}{mM}, and PBS at \SI{174}{mM}. 
+                }
+    \label{fig:dlvo_debye_length_vs_ionic_strength}
+\end{figure}
+
+The used PBS solution contains \SI{0.14}{M} \ch{NaCl}, \SI{2.7}{M} \ch{KCl}, \SI{10}{mM} \ch{Na2HPO4*}2\ch{H2O}, and \SI{1.76}{mM} \ch{KH2PO4}, yielding according to Equaiton \ref{eq:Ionic_strength} 
+\begin{align*}
+    \text{monovalent ions:}\\
+    \ch{Na+}: \, \SI{140}{mM} + 2\cdot\SI{10}{mM} = \SI{160}{mM}\\
+    \ch{K+}: \, \SI{2.7}{mM} + \SI{1.76}{mM} = \SI{4.46}{mM}\\
+    \ch{Cl-}: \, \SI{140}{mM} + \SI{2.7}{mM} = \SI{142.7}{mM}\\
+    \ch{H2PO4-}:\, \SI{1.76}{mM} \\
+    \text{divalent ions:}\\
+    \ch{HPO_4^2-}: \, \SI{10}{mM} \\
+    I = \frac{1}{2} (160+4.46+142.7+1.76+10\cdot2^2)\,\si{mM} = \SI{174.46}{mM}.
+\end{align*}
 
 When both systems, that is, two particles or the particle and the substrate's surface, are in such proximity that their individual electrical double layers overlap, an interaction occurs.
 Whether this interaction is attractive or repulsive depends on the sign of the charge.
@@ -142,6 +170,8 @@ The resulting force can be described by\cite{WirixSpeetjens2005, Reginka2021}
     \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} r \kappa}{1 - \exp{(-2\kappa z)}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  \exp{(-\kappa z)} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) \exp{(-2 \kappa z)} \right]\mathbf{e}_\mathrm{z},
 \end{equation}
 where $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, $r$ is the particles radius.
+The upper sign in \ref{eq:F_electrostatic} refers to the model where the surface charge density is assumed to be constant, whereas the lower sign assumes a constant surface potential of both solids \cite{WirixSpeetjens2005}.
+This differentiation is only important for distances between surfaces smaller than the double layer thickness, otherwise, the two models coincide \cite{WirixSpeetjens2005}.
 
 
 Since the surface charge is experimentally hard to determine, the zeta potential $\zeta_{\mathrm{MP}}$ and $\zeta_{\mathrm{s}}$ of \ac{MP} and substrate surfaces are commonly used as an approximation instead \cite{WirixSpeetjens2005, Ehresmann2015, Reginka2021} and is measurerd at the slipping plane, see Figure \ref{fig:double_layer}.
