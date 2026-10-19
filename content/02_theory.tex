@@ -57,7 +57,7 @@ This is only valid in dilute gases, but gives a reasonable starting point for so
 By swapping $C_\mathrm{vdW}$ with a material-specific constant $C_\mathrm{AB}$ of molecules A and B such that $C_\mathrm{vdW} = C_\mathrm{AB}$, Equation \ref{eq:V_vdW} can be written as
 \begin{equation}
         V_\mathrm{vdW}(D) = -\frac{C_\mathrm{AB}}{D^6}.
-\end{equation}.
+\end{equation}
 A lengthy derivation of the interaction of one molecule A with an infinitely extended body with a planar surface of molecule B \cite{Butt2018} leads to:
 \begin{equation}\label{eq:V_mol/plane}
     V_\mathrm{mol/plane} = \frac{\pi \rho_\mathrm{B}C_\mathrm{AB}}{6D^3},
@@ -81,7 +81,11 @@ Letting $R_2$ go to infinity gives the result for a sphere and a flat, planar su
         V = -\frac{A_\mathrm{H}R_\mathrm{P}}{6D} \quad \mathrm{and} \quad F =  -\frac{A_\mathrm{H}R_\mathrm{P}}{6D^2},
 \end{equation}
 where index "P" stands for particle\cite{Butt2018}.
-
+Since the effect of retardation is important for distances $D > \SI{10}{nm}$\cite{WirixSpeetjens2005}, the van der Waals forces is reduced  to
+\begin{equation}\label{eq:van_der_waals_force}
+        F_\mathrm{vdW} =  -\frac{A_\mathrm{H}R_\mathrm{P}}{6D^2} \left[ \frac{1}{1 + 14D/\lambda_\mathrm{ret}} \right]\mathbf{e_z},
+\end{equation}
+with the characteristic retardation length $\lambda_\mathrm{ret}$ often assuemd to be around \SI{100}{nm}\cite{WirixSpeetjens2005} and the unitvector $\mathbf{e_z}$.
 
 \subsection{Electrostatic intercations}
 The origin of the electrostatic interaction of colloidal systems such as \acp{MP} in an aqueous solution is the surface charge that builds up at the surface \cite{Butt2018}.
@@ -104,7 +108,7 @@ The electrical neutral plane reaching away from the surface after all charges ha
 The electric potential near a planar surface $\Psi(x)$, depending on the distance normal to the surface, can be derived from the Poisson-Boltzmann equation and will be left for the enthusiastic reader to the work of  \cite{Butt2018}.
 For now, the linearized Poisson-Boltzmann equation leads to a surface potential that decreases exponentially 
 \begin{equation}\label{eq:surface_potential}
-    \Psi = \Psi_0 \exp(-\kappa x)
+    \Psi = \Psi_0 e^{-\kappa x}
 \end{equation}
 containing $\kappa$ 
 \begin{equation}\label{eq:kappa}
@@ -146,7 +150,8 @@ An example of several Debye lengths resulting from Equation \ref{eq:Debye_length
     \centering
     \includegraphics[width=0.9\linewidth]{Abbildungen/Theory/dlvo_debye_length_vs_ionic_strength.pdf}
     \caption{  
-            $\kappa^{-1}$ from \SI{0.1}{\micro M} to \SI{1}{M} with pure distilled water, air-equilibrated water, a monovalent salt at \SI{1}{mM}, and PBS at \SI{174}{mM}. 
+            $\kappa^{-1}$ from \SI{0.1}{\micro M} to \SI{1}{M} with pure distilled water, air-equilibrated water, a monovalent salt at \SI{1}{mM}, and PBS at \SI{174}{mM}.
+            $\epsilon_\mathrm{r}$ is set to 80.1, the value for water at \SI{293.15}{K} (or should I use Celsius? \SI{20}{\celsius}.
                 }
     \label{fig:dlvo_debye_length_vs_ionic_strength}
 \end{figure}
@@ -165,17 +170,44 @@ The used PBS solution contains \SI{0.14}{M} \ch{NaCl}, \SI{2.7}{M} \ch{KCl}, \SI
 
 When both systems, that is, two particles or the particle and the substrate's surface, are in such proximity that their individual electrical double layers overlap, an interaction occurs.
 Whether this interaction is attractive or repulsive depends on the sign of the charge.
-The resulting force can be described by\cite{WirixSpeetjens2005, Reginka2021}
+The resulting force can be described by obtaining the exact solution of the simplified Poisson-Boltzmann equation.
+In that, an infinitely extended surface resulting in a constant potential along the plane is considered, giving \cite{Butt2018}
+\begin{equation}
+    \frac{\text{d}^2 \psi}{\text{d}x^2} = \frac{c_0e}{\epsilon_0\epsilon_r}\left( e^{\frac{e \psi (x)}{k_\mathrm{B}T}}- e^{-\frac{e \psi (x)}{k_\mathrm{B}T}} \right),
+\end{equation}
+which is valid for two planar surfaces.
+%For low surface potentials, that is, $e^{\kappa x} \gg e^{-\kappa x}$, however, the solution can be simplified using the linear term of the equation and neglecting higher terms, to\cite{WirixSpeetjens2005, Butt2018}
+For low surface potentials, however, the solution can be simplified using the linear term of the equation and neglecting higher terms, to\cite{WirixSpeetjens2005, Butt2018}
 \begin{equation}\label{eq:F_electrostatic}
-    \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} r \kappa}{1 - \exp{(-2\kappa z)}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  \exp{(-\kappa z)} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) \exp{(-2 \kappa z)} \right]\mathbf{e}_\mathrm{z},
+    \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} r \kappa}{1 - e^{-2\kappa z}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  e^{-\kappa z} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) e^{-2 \kappa z} \right]\mathbf{e}_\mathrm{z},
 \end{equation}
 where $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, $r$ is the particles radius.
+This linearization is called “Debye–Hückel approximation"\cite{Butt2018}.
+This simplification already takes into account a planar surface interacting with a curved surface such as a sphere.
+"Low" potential means, strictly speaking, a potential $e|\psi| \ll k_\mathrm{B}T$, which at room temperature comes to $\psi \leq \SI{25}{mV}$, however, in most applications, the result is still valid for potentials up to \SIrange{50}{80}{mV}, depending on the salt concentration \cite{Butt2018}.  
 The upper sign in \ref{eq:F_electrostatic} refers to the model where the surface charge density is assumed to be constant, whereas the lower sign assumes a constant surface potential of both solids \cite{WirixSpeetjens2005}.
 This differentiation is only important for distances between surfaces smaller than the double layer thickness, otherwise, the two models coincide \cite{WirixSpeetjens2005}.
 
 
 Since the surface charge is experimentally hard to determine, the zeta potential $\zeta_{\mathrm{MP}}$ and $\zeta_{\mathrm{s}}$ of \ac{MP} and substrate surfaces are commonly used as an approximation instead \cite{WirixSpeetjens2005, Ehresmann2015, Reginka2021} and is measurerd at the slipping plane, see Figure \ref{fig:double_layer}.
 
+The sum of the van der Waals force from Equation \ref{eq:van_der_waals_force} and the electrostatic force from Equation \ref{eq:F_electrostatic} gives the DLVO forces that are depicted in \ref{fig:dlvo_dlvo_force_and_energy_vs_gap}. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Abbildungen/Theory/dlvo_dlvo_force_and_energy_vs_gap.pdf}
+    \caption{
+            The lower panel shows the DLVO potential energy curves for three different salt concentrations.
+            Solid lines depict the constant potential curve that stems from the lower sign $(-)$ of Equation \ref{eq:F_electrostatic}, while the dashed curve depicts the constant charge of the upper sign.
+            As described in the text, they coincide at larger surface-surface distances.
+            Triangles pointing up show the energy barrier while triangles pointing down the secondary minimum which 
+            The upper panel depicts the negative spatial derivative of the energy, which results in the DLVO force.
+            }
+    \label{fig:dlvo_dlvo_force_and_energy_vs_gap}
+\end{figure}
+
+\subsubsection{Surface-surface distance}
+From an electrostatic point of view, that is, not taking magnetic forces into account just yet, the surface-surface distance of the \ac{MP} and the substrate surface entirely relies on the electrostatic repulsion between them.
+Since the system consists of 
 
 \section{Traveling wave magnetophoresis}
 In this section, the theoretical background of traveling wave magnetophoresis and its implications are explained.
@@ -228,7 +260,7 @@ For the present system, which is depicted in Figure \ref{fig:exp_setup}, the \ac
 \end{equation}
 where $k = \nicefrac{2\pi}{d}$ is the reciprocal lattice number of the periodic \ac{MFL}, periodic in one dimension with period length $d$, $\omega=2\pi\nu$ the angular freqnecy of the external rotating field, 
 \begin{equation}\label{Eq:heuristic_A}    
-A=\nicefrac{\sigma_0}{2}\exp(-2\pi \beta)
+A=\nicefrac{\sigma_0}{2}e^{-2\pi \beta}
 \end{equation}
 is a heuristic expression containing $\beta = \nicefrac{r}{d}$ the ratio between the underlying period $d$ and the radius of the \ac{MP} $r$, and $\nicefrac{\sigma_0}{2}$, which describes the stray field amplitude $H_\mathrm{MFL}(0,z)=0$ at the surface of the \ac{FM} layer (Figure \ref{fig:exp_setup}), with the exponential decrease of the fields with height $z$ \cite{Yellen2007, Ehresmann2026}.  
 In other terms, $A(0,0,z_0)$ denotes the amplitude of the periodic \ac{MFL} at a distance $z_0$ of the \ac{MP} center to the surface of the \ac{FM} layer, when \ac{MP} radii $r\gg z_0$, which is true when the spacer layer thickness $t_\mathrm{spacer}< \SI{1}{\micro\m}$ (see Figure \ref{fig:exp_setup}).
@@ -378,7 +410,7 @@ where $\nu$ is the external pulsed field frequency, $\nu_\mathrm{c} = F_\mathrm{
 % Using pulsed fields rather than rotating fields as introduced in Equation \ref{eq:pulsed_dTWM_no_phase_variation}, i.e., replacing $\nu = \nicefrac{\omega}{2\pi}$, and 
 With the drag force in Equation \ref{eq:drag_force} as the sole contributor to the damping, $\nu_\mathrm{c}$ can be formulated as:
 \begin{equation}\label{eq:critical_frequency}
-    \nu_\mathrm{c}(z) = \frac{\bar{\chi} \,\mu_0 \, \sigma_0 \,H_\mathrm{eff}}{36 \pi \,\eta \, f_\mathrm{D}(z)} \left( 2 \pi \beta \right)^2 \exp(-2\pi \beta),
+    \nu_\mathrm{c}(z) = \frac{\bar{\chi} \,\mu_0 \, \sigma_0 \,H_\mathrm{eff}}{36 \pi \,\eta \, f_\mathrm{D}(z)} \left( 2 \pi \beta \right)^2 e^{-2\pi \beta},
 \end{equation}
 where $\bar{\chi}$ is the shape-corrected \ac{MP} susceptibility, $\sigma_0$ denotes the effective magnetic pole distribution within the underlying substrate, and $\beta = r/d$ is the ratio between the \ac{MP} radius $r$ and the domain periodicity $d$ \cite{Shubbak2026}.
 For \acp{MP} with a radius smaller than the period $d$, that is, the ratio $\beta \ll 1$, the critical frequency follows a quadratic relation with the \ac{MP} size \cite{Yellen2007}.
