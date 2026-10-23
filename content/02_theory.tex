@@ -128,7 +128,7 @@ From Equation \ref{eq:kappa} follows that a higher salt concentration increases 
 A graph of the potential over distance for three different salt concentrations is shown in Figure \ref{fig:potential_vs_x}
 \begin{figure}[bth]
     \centering
-    \includegraphics[width=0.5\linewidth]{Abbildungen/SimplePythonPlots/Debye_length.pdf}
+    \includegraphics[width=0.8\linewidth]{Abbildungen/Theory/dlvo_double-layer_potential_vs_distance_bare.pdf}
     \caption{
             Potential $\Psi$ over distance $x$ for a surface potential of \SI{50}{\milli\volt} for three different monovalent salt concentrations.  
                 }
@@ -148,7 +148,7 @@ An example of several Debye lengths resulting from Equation \ref{eq:Debye_length
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{Abbildungen/Theory/dlvo_debye_length_vs_ionic_strength.pdf}
+    \includegraphics[width=0.9\linewidth]{Abbildungen/Theory/dlvo_debye_length_vs_ionic_strength_bare.pdf}
     \caption{  
             $\kappa^{-1}$ from \SI{0.1}{\micro M} to \SI{1}{M} with pure distilled water, air-equilibrated water, a monovalent salt at \SI{1}{mM}, and PBS at \SI{174}{mM}.
             $\epsilon_\mathrm{r}$ is set to 80.1, the value for water at \SI{293.15}{K} (or should I use Celsius? \SI{20}{\celsius}.
@@ -194,13 +194,21 @@ Since the surface charge is experimentally hard to determine, the zeta potential
 The sum of the van der Waals force from Equation \ref{eq:van_der_waals_force} and the electrostatic force from Equation \ref{eq:F_electrostatic} gives the DLVO forces that are depicted in \ref{fig:dlvo_dlvo_force_and_energy_vs_gap}. 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{Abbildungen/Theory/dlvo_dlvo_force_and_energy_vs_gap.pdf}
+    \includegraphics[width=0.9\linewidth]{Abbildungen/Theory/dlvo_dlvo_force_and_energy_vs_gap_bare.pdf}
     \caption{
+            Energy and force diagram vs surface-surface gap of particle and substrate.
+            Particle of $r=\SI{1}{\micro m}$, $\zeta_\mathrm{P} = \SI{-45}{mV}$ in liquids of different ionic strength above a substrate with $\zeta_\mathrm{S}=\SI{-45}{mV}$ is depicted.
             The lower panel shows the DLVO potential energy curves for three different salt concentrations.
             Solid lines depict the constant potential curve that stems from the lower sign $(-)$ of Equation \ref{eq:F_electrostatic}, while the dashed curve depicts the constant charge of the upper sign.
             As described in the text, they coincide at larger surface-surface distances.
-            Triangles pointing up show the energy barrier while triangles pointing down the secondary minimum which 
             The upper panel depicts the negative spatial derivative of the energy, which results in the DLVO force.
+            Triangles pointing up in the constant potential curve show the local energy maxima, corresponding to a force at this point of exactly 0.
+            This means that below this point, van der Waals attraction is larger than electrostatic repulsion; the force is strongly attractive, while above it it is strongly repulsive. 
+            In the constant-charge model, the graph keeps growing toward zero, meaning no maximum is reached.
+            Triangles pointing down show the secondary energy minimum. 
+            This again corresponds to a force that is exactly 0.
+            However, the sign of the zero-crossing is reversed, meaning that above that point the force is attractive, while below it is repulsive.
+            This is the equilibrium point where the particle resides. 
             }
     \label{fig:dlvo_dlvo_force_and_energy_vs_gap}
 \end{figure}
