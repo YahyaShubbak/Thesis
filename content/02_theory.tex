@@ -88,8 +88,8 @@ Since the effect of retardation is important for distances $D > \SI{10}{nm}$\cit
 with the characteristic retardation length $\lambda_\mathrm{ret}$ often assuemd to be around \SI{100}{nm}\cite{WirixSpeetjens2005} and the unitvector $\mathbf{e_z}$.
 
 \subsection{Electrostatic intercations}
-The origin of the electrostatic interaction of colloidal systems such as \acp{MP} in an aqueous solution is the surface charge that builds up at the surface \cite{Butt2018}.
-This is illustrated in Figure \ref{fig:double_layer}, where an \ac{MP} is suspended in a liquid above a polymer surface as the spacing layer of the transport substrate.
+The origin of the electrostatic interaction of colloidal systems such as \acp{MP} in an aqueous solution is the surface charges that build up at the surfaces \cite{Butt2018}.
+This is illustrated in Figure \ref{fig:double_layer}, where an \ac{MP} is suspended in a liquid above a polymer surface.
 \begin{figure}
     \centering
     \includegraphics[width=.8\linewidth]{Abbildungen/Theory/ElectricalDoubleLayer.pdf}
@@ -105,25 +105,39 @@ This is illustrated in Figure \ref{fig:double_layer}, where an \ac{MP} is suspen
     \label{fig:double_layer}
 \end{figure}
 The electrical neutral plane reaching away from the surface after all charges have been compensated is called the electrical double layer and includes the Stern layer and the diffuse layer, where the former is tightly bound ions with opposing charge to the surface charge they are adsorbed to, and the latter is more loosely surrounding the first layer \cite{Butt2018,Park2011}.  
-The electric potential near a planar surface $\Psi(x)$, depending on the distance normal to the surface, can be derived from the Poisson-Boltzmann equation and will be left for the enthusiastic reader to the work of  \cite{Butt2018}.
-For now, the linearized Poisson-Boltzmann equation leads to a surface potential that decreases exponentially 
-\begin{equation}\label{eq:surface_potential}
-    \Psi = \Psi_0 e^{-\kappa x}
+
+%The electric potential near a planar surface $\Psi(x)$, depending on the distance normal to the surface, can be derived from the Poisson-Boltzmann equation and will be left for the enthusiastic reader to the work of  \cite{Butt2018}.
+Considering a planar surface where its potential is constant along the infinitely extended $x-y-$-plane, the Poisson-Boltzmann equation, connecting charge density and electrical potential, reduces to coordinate $z$ normal to the plane:
+\begin{equation}
+    \frac{\text{d}^2 \psi}{\text{d}z^2} = \frac{c_0e}{\epsilon_0\epsilon_r}\left( e^{\frac{e \psi (z)}{k_\mathrm{B}T}}- e^{-\frac{e \psi (z)}{k_\mathrm{B}T}} \right),
 \end{equation}
-containing $\kappa$ 
+with surface potential $\Psi$, the bulk concentration of the salt $c_0$, the elementary charge $e$, $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, and the Boltzmann constant $k_{\mathrm{B}}$ with temperature $T$. 
+For low surface potentials, the solution can be simplified using the linear term of the equation and neglecting higher terms to\cite{Butt2018}
+\begin{equation}
+    \Psi(z) = C_1e^{-\kappa z} + C_2e^{\kappa z} 
+\end{equation}
+containing 
 \begin{equation}\label{eq:kappa}
     \kappa = \sqrt{\frac{2 c_0 e^2}{\epsilon_{\mathrm{0}} \epsilon_{\mathrm{r}} k_{\mathrm{B}}T}} = \sqrt{\frac{2000 N_\mathrm{A} e^2 I}{\epsilon_{\mathrm{0}} \epsilon_{\mathrm{r}} k_{\mathrm{B}}T}}, 
 \end{equation}
-with the bulk concentration of the salt $c_0$, the elementary charge $e$, $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, the Boltzmann constant $k_{\mathrm{B}}$, the ionic strength $I$, the Avogadro number $N_\mathrm{A}$, and temperature $T$ \cite{Butt2018, WirixSpeetjens2005}.
+with the ionic strength $I$, and the Avogadro number $N_\mathrm{A}$, \cite{Butt2018, WirixSpeetjens2005}.
 The factor of 1000 converts from \si{mol/L} to \si{mol/\cubic\m} \cite{WirixSpeetjens2005}.
-
-The electrical double layer is depicted in Figure \ref{fig:double_layer} with a purple arrow.
-The blue arrow shows the diffuse layer, which incorporates the loosely bound ions, counteracting the Stern layer.  
-Note that the \ac{PMMA} surface also has its electrical double layer; ions constituting the Stern layer and slipping plane are depicted faintly in Figure \ref{fig:double_layer} so as not to overwhelm the scheme.  
-The inverse of $\kappa$ is called Debye length $\lambda_\mathrm{D} = \kappa^{-1}$ and describes the decay length of the potential decrease from the surface, which, for a monovalent salt such as \ch{NaCl} dissolved in distilled water and at \SI{25}{\celsius}, is \cite{Butt2018}
+$C_1$ and $C_2$ are constants defined by the boundary conditions that require the potential at the surface to be equal to the surface potential, $\Psi(z=0) = \Psi_0$, leading to $C_1 = \Psi_0$\cite{Butt2018}, and that for large distances from the surface, the potential disappears, $\Psi(z\rightarrow \infty) = 0$, leading to to $C_2=0$\cite{Butt2018}.
+This means that the linearized Poisson-Boltzmann equation leads to a surface potential that decreases exponentially 
+\begin{equation}\label{eq:surface_potential}
+    \Psi = \Psi_0 e^{-\kappa z}.
+\end{equation}
+"Low" potential means, strictly speaking, a potential $e|\psi| \ll k_\mathrm{B}T$, which at room temperature comes to $\psi \leq \SI{25}{mV}$, however, in most applications, the result is still valid for potentials up to \SIrange{50}{80}{mV}, depending on the salt concentration \cite{Butt2018}.  
+The inverse of $\kappa$ is called the Debye length $\lambda_\mathrm{D} = \kappa^{-1}$, and describes the decay length of the potential decrease from the surface, which, for a monovalent salt such as \ch{NaCl} dissolved in distilled water and at \SI{25}{\celsius}, is \cite{Butt2018}
 \begin{equation}\label{eq:Debye_length}
     \lambda_\mathrm{D} = \frac{\SI{3.04}{\angstrom}}{\sqrt{I\, \si{\liter\per\mol}}} . 
 \end{equation}
+The ionic strength $I$ can be calculated by\cite{Atkins2006}
+\begin{equation}\label{eq:Ionic_strength}
+    I=\tfrac12\sum_i c_i z_i^{2},
+\end{equation}
+with the number of charges $z$ of salt of concentration $c$.
+
 From Equation \ref{eq:kappa} follows that a higher salt concentration increases $\kappa$, which decreases the Debye length;
 A graph of the potential over distance for three different salt concentrations is shown in Figure \ref{fig:potential_vs_x}
 \begin{figure}[bth]
@@ -135,16 +149,28 @@ A graph of the potential over distance for three different salt concentrations i
     \label{fig:potential_vs_x}
 \end{figure}
 
-% , which is linked to the ionic strength $I$ via
-% \begin{equation}
-%     \frac{1}{2}\sum_i c_\mathrm{i} z_\mathrm{i}^2,
-% \end{equation}
-% with the charge $z$, increases the potential
-The ionic strength $I$ can be calculated by\cite{Atkins2006}
-\begin{equation}\label{eq:Ionic_strength}
-    I=\tfrac12\sum_i c_i z_i^{2}
+An example of several Debye lengths resulting from Equation \ref{eq:Debye_length} is depicted in Figure \ref{fig:dlvo_debye_length_vs_ionic_strength}, where, on a log-log graph, the solid blue line (gerade?) is the Debye length from \SI{0.1}{\micro M} to \SI{1}{M} with several liquids marked. 
+
+
+When two surfaces in a liquid are in such proximity that their individual electrical double layers overlap, an interaction occurs.
+Whether this interaction is attractive or repulsive depends on the sign of the charge.
+
+The electrical double layer is depicted in Figure \ref{fig:double_layer} with a purple arrow.
+The blue arrow shows the diffuse layer, which incorporates the loosely bound ions, counteracting the Stern layer.  
+Note that the \ac{PMMA} surface also has its electrical double layer; ions constituting the Stern layer and slipping plane are depicted faintly in Figure \ref{fig:double_layer} so as not to overwhelm the scheme. 
+
+With the Derjaguin approximation that slices up all contributions of the interaction energy, the two bodies at distance $D$ have, into segments, one of the plates can be replaced by a sphere.
+This linearization of the Poisson-Boltzmann equation that takes into account a planar surface interacting with a curved surface such as a sphere is called “Debye–Hückel approximation"\cite{Butt2018}.
+The resulting force is then\cite{WirixSpeetjens2005, Butt2018}
+\begin{equation}\label{eq:F_electrostatic}
+    \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} R \kappa}{1 - e^{-2\kappa z}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  e^{-\kappa z} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) e^{-2 \kappa z} \right]\mathbf{e}_\mathrm{z},
 \end{equation}
-An example of several Debye lengths resulting from Equation \ref{eq:Debye_length} is depicted in Figure \ref{fig:dlvo_debye_length_vs_ionic_strength}, where, on a log-log graph, the solid blue line (gerade?) is the Debye length from \SI{0.1}{\micro M} to \SI{1}{M} with several liquids marked.   
+with the particle radius $R$.
+
+The upper sign in \ref{eq:F_electrostatic} refers to the model where the surface charge density is assumed to be constant, whereas the lower sign assumes a constant surface potential of both solids \cite{WirixSpeetjens2005}.
+This differentiation is only important for distances between surfaces smaller than the double layer thickness, otherwise, the two models coincide \cite{WirixSpeetjens2005}.
+
+The sum of the van der Waals force from Equation \ref{eq:van_der_waals_force} and the electrostatic force from Equation \ref{eq:F_electrostatic} gives the DLVO forces that are depicted in \ref{fig:dlvo_dlvo_force_and_energy_vs_gap}. 
 
 \begin{figure}
     \centering
@@ -168,30 +194,7 @@ The used PBS solution contains \SI{0.14}{M} \ch{NaCl}, \SI{2.7}{M} \ch{KCl}, \SI
     I = \frac{1}{2} (160+4.46+142.7+1.76+10\cdot2^2)\,\si{mM} = \SI{174.46}{mM}.
 \end{align*}
 
-When both systems, that is, two particles or the particle and the substrate's surface, are in such proximity that their individual electrical double layers overlap, an interaction occurs.
-Whether this interaction is attractive or repulsive depends on the sign of the charge.
-The resulting force can be described by obtaining the exact solution of the simplified Poisson-Boltzmann equation.
-In that, an infinitely extended surface resulting in a constant potential along the plane is considered, giving \cite{Butt2018}
-\begin{equation}
-    \frac{\text{d}^2 \psi}{\text{d}x^2} = \frac{c_0e}{\epsilon_0\epsilon_r}\left( e^{\frac{e \psi (x)}{k_\mathrm{B}T}}- e^{-\frac{e \psi (x)}{k_\mathrm{B}T}} \right),
-\end{equation}
-which is valid for two planar surfaces.
-%For low surface potentials, that is, $e^{\kappa x} \gg e^{-\kappa x}$, however, the solution can be simplified using the linear term of the equation and neglecting higher terms, to\cite{WirixSpeetjens2005, Butt2018}
-For low surface potentials, however, the solution can be simplified using the linear term of the equation and neglecting higher terms, to\cite{WirixSpeetjens2005, Butt2018}
-\begin{equation}\label{eq:F_electrostatic}
-    \mathbf{F}_\mathrm{el}(z,t)= \frac{2\pi \epsilon_\mathrm{0} \epsilon_\mathrm{r} r \kappa}{1 - e^{-2\kappa z}} \left[ 2 \zeta_\mathrm{MP} \zeta_\mathrm{s}  e^{-\kappa z} \pm (\zeta_\mathrm{MP}^2 + \zeta_\mathrm{s}^2) e^{-2 \kappa z} \right]\mathbf{e}_\mathrm{z},
-\end{equation}
-where $\epsilon_\mathrm{0} \epsilon_\mathrm{r}$ is the permittivity of the liquid medium, $r$ is the particles radius.
-This linearization is called “Debye–Hückel approximation"\cite{Butt2018}.
-This simplification already takes into account a planar surface interacting with a curved surface such as a sphere.
-"Low" potential means, strictly speaking, a potential $e|\psi| \ll k_\mathrm{B}T$, which at room temperature comes to $\psi \leq \SI{25}{mV}$, however, in most applications, the result is still valid for potentials up to \SIrange{50}{80}{mV}, depending on the salt concentration \cite{Butt2018}.  
-The upper sign in \ref{eq:F_electrostatic} refers to the model where the surface charge density is assumed to be constant, whereas the lower sign assumes a constant surface potential of both solids \cite{WirixSpeetjens2005}.
-This differentiation is only important for distances between surfaces smaller than the double layer thickness, otherwise, the two models coincide \cite{WirixSpeetjens2005}.
 
-
-Since the surface charge is experimentally hard to determine, the zeta potential $\zeta_{\mathrm{MP}}$ and $\zeta_{\mathrm{s}}$ of \ac{MP} and substrate surfaces are commonly used as an approximation instead \cite{WirixSpeetjens2005, Ehresmann2015, Reginka2021} and is measurerd at the slipping plane, see Figure \ref{fig:double_layer}.
-
-The sum of the van der Waals force from Equation \ref{eq:van_der_waals_force} and the electrostatic force from Equation \ref{eq:F_electrostatic} gives the DLVO forces that are depicted in \ref{fig:dlvo_dlvo_force_and_energy_vs_gap}. 
 \begin{figure}
     \centering
     \includegraphics[width=0.9\linewidth]{Abbildungen/Theory/dlvo_dlvo_force_and_energy_vs_gap_bare.pdf}
@@ -212,6 +215,8 @@ The sum of the van der Waals force from Equation \ref{eq:van_der_waals_force} an
             }
     \label{fig:dlvo_dlvo_force_and_energy_vs_gap}
 \end{figure}
+
+Since the surface charge is experimentally hard to determine, the zeta potential $\zeta_{\mathrm{MP}}$ and $\zeta_{\mathrm{s}}$ of \ac{MP} and substrate surfaces are commonly used as an approximation instead \cite{WirixSpeetjens2005, Ehresmann2015, Reginka2021} and is measurerd at the slipping plane, see Figure \ref{fig:double_layer}.
 
 \subsubsection{Surface-surface distance}
 From an electrostatic point of view, that is, not taking magnetic forces into account just yet, the surface-surface distance of the \ac{MP} and the substrate surface entirely relies on the electrostatic repulsion between them.
