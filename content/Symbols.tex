@@ -1,0 +1,25 @@
+% 5. Kompilieren: wie bisher, latexmk genügt. Nach dem ersten Lauf ist die Liste leer, ab dem zweiten (latexmk macht ohnehin mehrere Läufe) ist sie gefüllt.
+
+% Für sehr viele Symbole wäre die Variante mit externem Sortieren schneller: \makeglossaries und \printglossary. Dafür bräuchte die latexmkrc eine zusätzliche Regel (add_cus_dep('slo','sls',0,…) mit makeglossaries), und unter MiKTeX braucht makeglossaries Perl; alternativ geht makeglossaries-lite. Für eine Thesis-Symbolliste reicht noidx völlig.
+
+% Optional, für eine Liste mit Einheiten-Spalte: in jedem Eintrag symbol={\si{\metre}} o. Ä. setzen und in der Präambel einen dreispaltigen Stil wählen, z. B. \setglossarystyle{long3col} (\usepackage{glossary-longbooktabs} mit long3col-booktabs sieht schöner aus).
+
+
+\newcommand{\wfTotal}{\Psi}
+
+\newglossaryentry{sym-Psi}{%
+  type        = symbols,
+  name        = {\ensuremath{\wfTotal}},
+  description = {Total wave function of a two-electron system},
+  sort        = {Psi}%
+}
+
+\newglossaryentry{sym-psi}{%
+    type        = symbols, 
+    name        = {\ensuremath{\psi}},
+    description = {Spatial part of the two-electron wave function}, sort        = {psi}}
+    
+\newglossaryentry{sym-chi-spin}{%
+    type        = symbols, 
+    name        = {\ensuremath{\chi}},
+    description = {Spin part of the two-electron wave function},    sort        = {chi}}

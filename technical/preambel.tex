@@ -24,8 +24,6 @@
 % just list chapters and sections in the toc, not subsections or smaller: 1, otherwise 2 or 3
 \setcounter{tocdepth}{2}
 
-% acronyms
-\usepackage{acronym}
 
 %------------------------------------------------------------------------------
 %------------------------------ Fonts, Unicode, Language ----------------------
@@ -199,6 +197,18 @@
 	%urlcolor=black,
 %]{hyperref}
 
+% acronyms
+% \usepackage{acronym} % durch glossaries-extra übernommen
+\usepackage[abbreviations,symbols,toc,nopostdot,shortcuts=ac]{glossaries-extra}
+\setabbreviationstyle{long-short}   % 1. Verwendung: "alternating current (AC)", danach "AC"
+
+%%%% Bildunterschriften: Ein \ac in einer \caption kann die „erste Verwendung“ an das Abbildungsverzeichnis verbrauchen. Dort besser \glsxtrshort{MP} (immer kurz) bzw. \glsxtrfull{MP} (Lang- und Kurzform) %%%%
+
+\makenoidxglossaries
+\input{content/Abbreviations}       % jetzt in der Präambel!
+\input{content/Symbols}
+
+
 \usepackage{bookmark}
 \usepackage[shortcuts]{extdash}
 
@@ -234,3 +244,4 @@
 {Abbildungen/05_Auswertung/},
 {Abbildungen/06_Diskussion/}
 }}
+
